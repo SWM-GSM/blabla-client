@@ -1,0 +1,9 @@
+import 'package:blabla/styles/colors.dart';
+import 'package:flutter/material.dart';
+
+class BlaTheme {
+  static final blaTheme = ThemeData(
+    fontFamily: 'Pretendard',
+    scaffoldBackgroundColor: BlaColor.white,
+  );
+}
