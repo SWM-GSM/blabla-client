@@ -42,3 +42,16 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# 추가
+### macOS ###
+.AppleDouble
+.LSOverride
+
+macos/Flutter/GeneratedPluginRegistrant.swift
+android/app/google-services.json
+ios/Runner/GoogleService-Info.plist
+
+pubspec.lock
+ios/Flutter/AppFrameworkInfo.plist
+ios/Flutter/Blabla.xcconfig
