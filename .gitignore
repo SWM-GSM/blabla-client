@@ -55,3 +55,4 @@ ios/Runner/GoogleService-Info.plist
 pubspec.lock
 ios/Flutter/AppFrameworkInfo.plist
 ios/Flutter/Blabla.xcconfig
+.env
