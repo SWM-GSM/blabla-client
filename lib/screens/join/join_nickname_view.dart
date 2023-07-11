@@ -1,3 +1,4 @@
+import 'package:blabla/screens/join/join_birthdate_view.dart';
 import 'package:blabla/screens/join/join_profile_view.dart';
 import 'package:blabla/screens/join/join_view_model.dart';
 import 'package:blabla/screens/join/widgets/join_desc_widget.dart';
@@ -146,7 +147,7 @@ class _JoinNicknameViewState extends State<JoinNicknameView> {
           if (isNickLenValid && viewModel.isNickDupValid) {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => JoinProfileView()),
+              MaterialPageRoute(builder: (context) => JoinBirthdateView()),
             );
           }
         },

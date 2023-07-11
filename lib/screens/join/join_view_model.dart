@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:blabla/services/apis/api.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 enum DefaultProfile {
@@ -59,5 +60,9 @@ class JoinViewModel with ChangeNotifier {
 
   void setNick(String input) {
     _nickname = input;
+  }
+
+  void setBirthdate(DateTime input) {
+    _birthdate = DateFormat("yyyy-MM-dd").format(input).toString();
   }
 }
