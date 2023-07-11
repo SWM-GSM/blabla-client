@@ -13,11 +13,21 @@ enum DefaultProfile {
   final String url;
 }
 
+enum Gender {
+  female("여성", "👩"),
+  male("남성", "👨"),
+  etc("기타", "✨");
+
+  final String kr;
+  final String emoji;
+  const Gender(this.kr, this.emoji);
+}
+
 class JoinViewModel with ChangeNotifier {
   late String _socialLoginType;
   late String _nickname;
   late String _birthdate;
-  late String _gender;
+  String _gender = "";
   late String _countryCode;
   late String _firstLang;
   late int _firstLangLevel;
@@ -35,13 +45,11 @@ class JoinViewModel with ChangeNotifier {
   }
 
   String get profileImg => _profileImg;
-
   bool get isNickDupValid => _isNickDupValid;
+  String get gender => _gender;
 
-  void setProfile({String? img}) {
-    
-  }
-  
+  void setProfile({String? img}) {}
+
   void changeProfile() {
     int idx = Random().nextInt(DefaultProfile.values.length);
     _profileImg = DefaultProfile.values[idx].url;
@@ -53,16 +61,23 @@ class JoinViewModel with ChangeNotifier {
     notifyListeners();
   }
 
-  void nickDupValid (String input) async {
+  void nickDupValid(String input) async {
     _isNickDupValid = await const API().getNicknameDup(input);
     notifyListeners();
   }
 
   void setNick(String input) {
     _nickname = input;
+    notifyListeners();
   }
 
   void setBirthdate(DateTime input) {
     _birthdate = DateFormat("yyyy-MM-dd").format(input).toString();
+    notifyListeners();
+  }
+
+  void setGender(String input) {
+    _gender = input;
+    notifyListeners();
   }
 }

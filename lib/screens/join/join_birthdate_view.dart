@@ -1,4 +1,4 @@
-import 'package:blabla/screens/join/join_profile_view.dart';
+import 'package:blabla/screens/join/join_gender_view.dart';
 import 'package:blabla/screens/join/join_view_model.dart';
 import 'package:blabla/screens/join/widgets/join_desc_widget.dart';
 import 'package:blabla/styles/colors.dart';
@@ -40,7 +40,7 @@ class JoinBirthdateView extends StatelessWidget {
           viewModel.setBirthdate(birthdate);
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => JoinProfileView()),
+            MaterialPageRoute(builder: (context) => JoinGenderView()),
           );
         },
         child: Container(

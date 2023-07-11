@@ -26,6 +26,7 @@ class BlaTxt {
   static final TextStyle txt12MH = txtMBase.copyWith(height: 20.0 / 12.0, fontSize: 12.0);
   static final TextStyle txt14M = txtMBase.copyWith(height: 20.0 / 14.0, fontSize: 14.0);
   static final TextStyle txt16M = txtMBase.copyWith(height: 20.0 / 16.0, fontSize: 16.0);
+  static final TextStyle txt24M = txtMBase.copyWith(height: 24.0 / 24.0, fontSize: 24.0);
 
   /* SemiBold */
   static final TextStyle txt12SB = txtSBBase.copyWith(height: 16.0 / 12.0, fontSize: 12.0);
