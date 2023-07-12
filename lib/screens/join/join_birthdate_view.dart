@@ -18,7 +18,9 @@ class JoinBirthdateView extends StatelessWidget {
 
     return Scaffold(
       body: SafeArea(
-        child: JoinDescWidget(title: "사용자의 생년월일을\n입력해주세요", step: 0.375, widgets: [
+        child: JoinDescWidget(
+        page: JoinPage.birthdate,
+        title: "사용자의 생년월일을\n입력해주세요", step: 0.375, widgets: [
           const SizedBox(height: 30),
           SizedBox(
             height: 200,

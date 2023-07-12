@@ -4,6 +4,17 @@ import 'package:blabla/services/apis/api.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
+enum JoinPage {
+  profile,
+  nickname,
+  birthdate,
+  gender,
+  country,
+  engLv,
+  korLv,
+  keyword,
+}
+
 enum DefaultProfile {
   dog("dog"),
   cat("cat"),
@@ -47,6 +58,25 @@ class JoinViewModel with ChangeNotifier {
   String get profileImg => _profileImg;
   bool get isNickDupValid => _isNickDupValid;
   String get gender => _gender;
+
+  void initPage(JoinPage page) {
+    switch (page) {
+      case JoinPage.profile:
+        changeProfile();
+        break;
+      case JoinPage.nickname:
+        initNickValid();
+        setNick("");
+        break;
+      case JoinPage.birthdate:
+        setBirthdate(DateTime(2000,1,1));
+      case JoinPage.gender:
+        _gender= "";
+      default:
+        break;
+    }
+    notifyListeners();
+  }
 
   void setProfile({String? img}) {}
 

@@ -10,16 +10,19 @@ import 'package:provider/provider.dart';
 class JoinDescWidget extends StatelessWidget {
   const JoinDescWidget({
     super.key,
+    required this.page,
     required this.title,
     required this.step,
     required this.widgets,
   });
+  final JoinPage page;
   final String title;
   final double step;
   final List<Widget> widgets;
 
   @override
   Widget build(BuildContext context) {
+    final viewModel = Provider.of<JoinViewModel>(context);
     return Column(
       children: [
         Container(
@@ -28,6 +31,7 @@ class JoinDescWidget extends StatelessWidget {
           height: 60,
           child: GestureDetector(
             onTap: () {
+              viewModel.initPage(page);
               Navigator.pop(context);
             },
             child: SvgPicture.asset(

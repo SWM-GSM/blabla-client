@@ -14,6 +14,7 @@ class JoinGenderView extends StatelessWidget {
     return Scaffold(
       body: SafeArea(
         child: JoinDescWidget(
+          page: JoinPage.gender,
           title: "사용자의 생년월일을\n입력해주세요",
           step: 0.5,
           widgets: [
