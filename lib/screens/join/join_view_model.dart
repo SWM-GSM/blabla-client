@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:blabla/models/country.dart';
 import 'package:blabla/models/interest.dart';
+import 'package:blabla/models/level.dart';
 import 'package:blabla/services/apis/api.dart';
 import 'package:blabla/styles/colors.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -46,11 +47,8 @@ class JoinViewModel with ChangeNotifier {
   late String _birthdate;
   String _gender = "";
   String _countryCode = "";
-  late String _firstLang;
-  late int _firstLangLevel;
-  late String _secondLang;
-  late int _secondLangLevel;
-  late List<String> _keywords;
+  int _korLangLevel = 0;
+  int _engLangLevel = 0;
   List<String> _keywords = [];
   late bool _pushNotification;
   late String _profileImg;
@@ -58,12 +56,14 @@ class JoinViewModel with ChangeNotifier {
   late bool _isNickDupValid;
   List<Country> _countries = [];
   List<Country> _searchCountries = [];
+  List<Level> _levels =[];
   List<Interest> _interests = [];
 
   JoinViewModel() {
     changeProfile();
     initNickValid();
     initCountries();
+    getLevels();
     getInterests();
   }
 
@@ -73,6 +73,9 @@ class JoinViewModel with ChangeNotifier {
   List<Country> get searchCountries => _searchCountries;
   String get gender => _gender;
   String get countryCode => _countryCode;
+  List<Level> get levels => _levels;
+  int get korLangLevel => _korLangLevel;
+  int get engLangLevel => _engLangLevel;
   List<Interest> get interests => _interests;
   List<String> get keywords => _keywords;
 
@@ -91,6 +94,10 @@ class JoinViewModel with ChangeNotifier {
         _gender = "";
       case JoinPage.country:
         setCountry("");
+      case JoinPage.engLv:
+        setEngLangLevel(0);
+      case JoinPage.korLv:
+        setKorLangLevel(0);
       case JoinPage.keyword:
         initNickValid();
       default:
@@ -153,6 +160,22 @@ class JoinViewModel with ChangeNotifier {
     _countryCode = code;
     notifyListeners();
   }
+
+  void getLevels() async {
+    _levels = await api.getLevels();
+    notifyListeners();
+  }
+
+  void setKorLangLevel(int level) {
+    _korLangLevel = level;
+    notifyListeners();
+  }
+
+  void setEngLangLevel(int level) {
+    _engLangLevel = level;
+    notifyListeners();
+  }
+
   void getInterests() async {
     _interests = await api.getInterests();
     notifyListeners();

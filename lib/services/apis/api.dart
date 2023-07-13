@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:blabla/models/country.dart';
 import 'package:blabla/models/interest.dart';
+import 'package:blabla/models/level.dart';
 import 'package:blabla/utils/dotenv.dart';
 import 'package:http/http.dart' as http;
 
@@ -71,6 +72,15 @@ class API {
       return (jsonDecode(res.body)["data"] as List).map((e) => Country.fromJson(e)).toList();
     } else {
       throw Exception("http error :(");
+    }
+  }
+
+  Future<List<Level>> getLevels() async { // 수정 - 설정 언어 별
+    final res = await api("$korTestUrl/common/levels", HttpMethod.get); 
+    if (res.statusCode == 200) {
+      return (jsonDecode(res.body)["data"]["levels"] as List).map((e) => Level.fromJson(e)).toList();
+    } else {
+      throw Exception("http error :()");
     }
   }
   
