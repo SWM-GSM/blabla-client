@@ -1,9 +1,12 @@
 import 'dart:convert';
-
+import 'package:blabla/models/country.dart';
 import 'package:blabla/utils/dotenv.dart';
 import 'package:http/http.dart' as http;
 
+typedef JSON = Map<String, dynamic>;
+
 get baseUrl => env["BASE_URL"];
+get countryAPI => env["COUNTRY_API"];
 
 // class Res {
 //   final http.Response httpRes;
@@ -23,8 +26,7 @@ enum HttpMethod {
 }
 
 class API {
-
-  const API();
+  API();
 
   Future<http.Response> api(String url, HttpMethod method, {String? token, Map<String, dynamic>? body}) async {
     try {
@@ -52,6 +54,15 @@ class API {
       } else {
         return false;
       } 
+    } else {
+      throw Exception("http error :(");
+    }
+  }
+
+  Future<List<Country>> getCountries() async {
+    final res = await api(countryAPI, HttpMethod.get);
+    if(res.statusCode == 200) {
+      return (jsonDecode(res.body)["data"] as List).map((e) => Country.fromJson(e)).toList();
     } else {
       throw Exception("http error :(");
     }

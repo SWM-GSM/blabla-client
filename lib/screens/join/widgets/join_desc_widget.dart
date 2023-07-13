@@ -41,33 +41,31 @@ class JoinDescWidget extends StatelessWidget {
             ),
           ),
         ),
-        Expanded(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    LinearPercentIndicator(
-                      padding: const EdgeInsets.all(0),
-                      backgroundColor: BlaColor.grey100,
-                      progressColor: BlaColor.grey900,
-                      lineHeight: 4,
-                      percent: step,
-                      barRadius: const Radius.circular(4),
-                      animation: true,
-                      addAutomaticKeepAlive: true,
-                    ),
-                    const SizedBox(height: 20),
-                    Text(title, style: BlaTxt.txt28B),
-                    ...widgets,
-                  ],
-                ),
-              ],
-            ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  LinearPercentIndicator(
+                    padding: const EdgeInsets.all(0),
+                    backgroundColor: BlaColor.grey100,
+                    progressColor: BlaColor.grey900,
+                    lineHeight: 4,
+                    percent: step,
+                    barRadius: const Radius.circular(4),
+                    animation: true,
+                    addAutomaticKeepAlive: true,
+                  ),
+                  const SizedBox(height: 20),
+                  Text(title, style: BlaTxt.txt28B),
+                  ...widgets,
+                ],
+              ),
+            ],
           ),
         ),
       ],

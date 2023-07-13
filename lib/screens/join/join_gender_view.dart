@@ -1,3 +1,4 @@
+import 'package:blabla/screens/join/join_country_view.dart';
 import 'package:blabla/screens/join/join_view_model.dart';
 import 'package:blabla/screens/join/widgets/join_desc_widget.dart';
 import 'package:blabla/styles/colors.dart';
@@ -15,7 +16,7 @@ class JoinGenderView extends StatelessWidget {
       body: SafeArea(
         child: JoinDescWidget(
           page: JoinPage.gender,
-          title: "사용자의 생년월일을\n입력해주세요",
+          title: "사용자의 성별을\n입력해주세요",
           step: 0.5,
           widgets: [
             const SizedBox(height: 30),
@@ -64,7 +65,14 @@ class JoinGenderView extends StatelessWidget {
         ),
       ),
       bottomSheet: GestureDetector(
-        onTap: () {},
+        onTap: () {
+          if (viewModel.gender.isNotEmpty) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => JoinCountryView()),
+            );
+          }
+        },
         child: Container(
           margin: EdgeInsets.fromLTRB(
               20, 0, 20, 10 + MediaQuery.of(context).viewPadding.bottom),

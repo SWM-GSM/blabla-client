@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:blabla/models/country.dart';
 import 'package:blabla/services/apis/api.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -35,11 +36,13 @@ enum Gender {
 }
 
 class JoinViewModel with ChangeNotifier {
+  final api = API();
+
   late String _socialLoginType;
   late String _nickname;
   late String _birthdate;
   String _gender = "";
-  late String _countryCode;
+  String _countryCode = "";
   late String _firstLang;
   late int _firstLangLevel;
   late String _secondLang;
@@ -49,15 +52,20 @@ class JoinViewModel with ChangeNotifier {
   late String _profileImg;
 
   late bool _isNickDupValid;
+  List<Country> _countries = [];
+  List<Country> _searchCountries = [];
 
   JoinViewModel() {
     changeProfile();
     initNickValid();
+    initCountries();
   }
 
   String get profileImg => _profileImg;
   bool get isNickDupValid => _isNickDupValid;
+  List<Country> get searchCountries => _searchCountries;
   String get gender => _gender;
+  String get countryCode => _countryCode;
 
   void initPage(JoinPage page) {
     switch (page) {
@@ -69,9 +77,9 @@ class JoinViewModel with ChangeNotifier {
         setNick("");
         break;
       case JoinPage.birthdate:
-        setBirthdate(DateTime(2000,1,1));
+        setBirthdate(DateTime(2000, 1, 1));
       case JoinPage.gender:
-        _gender= "";
+        _gender = "";
       default:
         break;
     }
@@ -92,7 +100,7 @@ class JoinViewModel with ChangeNotifier {
   }
 
   void nickDupValid(String input) async {
-    _isNickDupValid = await const API().getNicknameDup(input);
+    _isNickDupValid = await api.getNicknameDup(input);
     notifyListeners();
   }
 
@@ -108,6 +116,28 @@ class JoinViewModel with ChangeNotifier {
 
   void setGender(String input) {
     _gender = input;
+    notifyListeners();
+  }
+
+  void initCountries() async {
+    _countries = await api.getCountries();
+    getCountries("");
+    notifyListeners();
+  }
+
+  void getCountries(String keyword) {
+    if (keyword.isEmpty) {
+      _searchCountries = _countries;
+    } else {
+      _searchCountries = _countries
+          .where((e) => e.name.toLowerCase().contains(keyword.toLowerCase()))
+          .toList();
+    }
+    notifyListeners();
+  }
+
+  void setCountry(String code) {
+    _countryCode = code;
     notifyListeners();
   }
 }
