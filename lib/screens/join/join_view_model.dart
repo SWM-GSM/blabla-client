@@ -62,6 +62,7 @@ class JoinViewModel with ChangeNotifier {
   }
 
   String get profileImg => _profileImg;
+  String get nickname => _nickname;
   bool get isNickDupValid => _isNickDupValid;
   List<Country> get searchCountries => _searchCountries;
   String get gender => _gender;

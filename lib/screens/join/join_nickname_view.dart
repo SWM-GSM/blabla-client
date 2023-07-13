@@ -144,6 +144,7 @@ class _JoinNicknameViewState extends State<JoinNicknameView> {
       bottomSheet: GestureDetector(
         onTap: () {
           if (isNickLenValid && viewModel.isNickDupValid) {
+            viewModel.setNick(nick);
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => JoinBirthdateView()),
