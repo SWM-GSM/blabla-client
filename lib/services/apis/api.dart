@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:blabla/models/country.dart';
+import 'package:blabla/models/interest.dart';
 import 'package:blabla/utils/dotenv.dart';
 import 'package:http/http.dart' as http;
 
@@ -7,6 +8,11 @@ typedef JSON = Map<String, dynamic>;
 
 get baseUrl => env["BASE_URL"];
 get countryAPI => env["COUNTRY_API"];
+
+get korBaseUrl => env["KOR_BASE_URL"];
+get engBaseUrl => env["ENG_BASE_URL"];
+
+get korTestUrl => env["KOR_TEST_API"];
 
 // class Res {
 //   final http.Response httpRes;
@@ -63,6 +69,15 @@ class API {
     final res = await api(countryAPI, HttpMethod.get);
     if(res.statusCode == 200) {
       return (jsonDecode(res.body)["data"] as List).map((e) => Country.fromJson(e)).toList();
+    } else {
+      throw Exception("http error :(");
+    }
+  }
+  
+  Future<List<Interest>> getInterests() async { // 수정 - 설정 언어 별
+    final res = await api("$korTestUrl/common/keywords", HttpMethod.get);
+    if (res.statusCode == 200) {
+      return (jsonDecode(res.body)["data"]["keywords"] as List).map((e) => Interest.fromJson(e)).toList();
     } else {
       throw Exception("http error :(");
     }

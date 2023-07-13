@@ -1,9 +1,12 @@
 import 'dart:math';
 
 import 'package:blabla/models/country.dart';
+import 'package:blabla/models/interest.dart';
 import 'package:blabla/services/apis/api.dart';
+import 'package:blabla/styles/colors.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 enum JoinPage {
   profile,
@@ -48,17 +51,20 @@ class JoinViewModel with ChangeNotifier {
   late String _secondLang;
   late int _secondLangLevel;
   late List<String> _keywords;
+  List<String> _keywords = [];
   late bool _pushNotification;
   late String _profileImg;
 
   late bool _isNickDupValid;
   List<Country> _countries = [];
   List<Country> _searchCountries = [];
+  List<Interest> _interests = [];
 
   JoinViewModel() {
     changeProfile();
     initNickValid();
     initCountries();
+    getInterests();
   }
 
   String get profileImg => _profileImg;
@@ -67,6 +73,8 @@ class JoinViewModel with ChangeNotifier {
   List<Country> get searchCountries => _searchCountries;
   String get gender => _gender;
   String get countryCode => _countryCode;
+  List<Interest> get interests => _interests;
+  List<String> get keywords => _keywords;
 
   void initPage(JoinPage page) {
     switch (page) {
@@ -81,6 +89,8 @@ class JoinViewModel with ChangeNotifier {
         setBirthdate(DateTime(2000, 1, 1));
       case JoinPage.gender:
         _gender = "";
+      case JoinPage.keyword:
+        initNickValid();
       default:
         break;
     }
@@ -139,6 +149,36 @@ class JoinViewModel with ChangeNotifier {
 
   void setCountry(String code) {
     _countryCode = code;
+    notifyListeners();
+  }
+  void getInterests() async {
+    _interests = await api.getInterests();
+    notifyListeners();
+  }
+
+  void setKeywords(Keyword input) {
+    if (_keywords.contains(input.tag)) {
+      _keywords.remove(input.tag);
+    } else {
+      if (_keywords.length == 10) {
+        Fluttertoast.showToast(
+          msg: "키워드는 10개까지만 선택할 수 있습니다.",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          textColor: BlaColor.orange,
+          backgroundColor: BlaColor.lightOrange, //BlaColor.grey800,
+          fontSize: 16,
+        );
+      } else {
+        _keywords.add(input.tag);
+      }
+    }
+    notifyListeners();
+  }
+
+  void initKeywords() {
+    _keywords = [];
     notifyListeners();
   }
 }
