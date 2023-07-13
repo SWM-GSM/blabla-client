@@ -89,6 +89,8 @@ class JoinViewModel with ChangeNotifier {
         setBirthdate(DateTime(2000, 1, 1));
       case JoinPage.gender:
         _gender = "";
+      case JoinPage.country:
+        setCountry("");
       case JoinPage.keyword:
         initNickValid();
       default:

@@ -28,7 +28,7 @@ class _JoinCountryViewState extends State<JoinCountryView> {
             JoinDescWidget(
               page: JoinPage.country,
               title: "국가를\n선택해주세요",
-              step: 0.125 * JoinPage.country.index,
+              step: 0.125 * (JoinPage.country.index + 1),
               widgets: [
                 Container(
                   margin: const EdgeInsets.symmetric(vertical: 12),
