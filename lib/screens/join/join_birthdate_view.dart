@@ -3,7 +3,6 @@ import 'package:blabla/screens/join/join_view_model.dart';
 import 'package:blabla/screens/join/widgets/join_desc_widget.dart';
 import 'package:blabla/styles/colors.dart';
 import 'package:blabla/styles/txt_style.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

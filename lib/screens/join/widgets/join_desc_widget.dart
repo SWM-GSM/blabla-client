@@ -58,7 +58,7 @@ class JoinDescWidget extends StatelessWidget {
                     percent: step,
                     barRadius: const Radius.circular(4),
                     animation: true,
-                    addAutomaticKeepAlive: true,
+                    animateFromLastPercent: true,
                   ),
                   const SizedBox(height: 20),
                   Text(title, style: BlaTxt.txt28B),

@@ -1,4 +1,3 @@
-import 'package:blabla/models/country.dart';
 import 'package:blabla/screens/join/join_lang_view.dart';
 import 'package:blabla/screens/join/join_view_model.dart';
 import 'package:blabla/screens/join/widgets/join_country_widget.dart';

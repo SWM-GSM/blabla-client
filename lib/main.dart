@@ -2,9 +2,10 @@ import 'package:amplitude_flutter/amplitude.dart';
 import 'package:blabla/screens/join/join_birthdate_view.dart';
 import 'package:blabla/screens/join/join_country_view.dart';
 import 'package:blabla/screens/join/join_gender_view.dart';
+import 'package:blabla/screens/join/join_interest_view.dart';
+import 'package:blabla/screens/join/join_lang_view.dart';
 import 'package:blabla/screens/join/join_nickname_view.dart';
 import 'package:blabla/screens/join/join_profile_view.dart';
-import 'package:blabla/screens/join/join_profile2_view.dart';
 import 'package:blabla/screens/join/join_view_model.dart';
 import 'package:blabla/screens/onboarding.dart';
 import 'package:blabla/services/amplitude.dart';
@@ -42,7 +43,7 @@ class MyApp extends StatelessWidget {
         supportedLocales: context.supportedLocales,
         title: 'BlaBla',
         theme: BlaTheme.blaTheme,
-        home: JoinCountryView() //OnBoarding(),
+        home: OnBoarding(),
         );
   }
 }
