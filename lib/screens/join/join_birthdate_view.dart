@@ -19,7 +19,7 @@ class JoinBirthdateView extends StatelessWidget {
       body: SafeArea(
         child: CreateWidget(
         page: JoinPage.birthdate,
-        title: "사용자의 생년월일을\n입력해주세요", widgets: [
+        title: "생년월일을\n입력해주세요", widgets: [
           const SizedBox(height: 30),
           SizedBox(
             height: 200,

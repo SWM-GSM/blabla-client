@@ -16,7 +16,7 @@ class JoinGenderView extends StatelessWidget {
       body: SafeArea(
         child: CreateWidget(
           page: JoinPage.gender,
-          title: "사용자의 성별을\n입력해주세요",
+          title: "성별을\n입력해주세요",
           widgets: [
             const SizedBox(height: 30),
             Row(
