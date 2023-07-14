@@ -20,13 +20,27 @@ enum JoinPage {
   keyword,
 }
 
-enum DefaultProfile {
-  dog("dog"),
-  cat("cat"),
-  fox("fox");
-
-  const DefaultProfile(this.url);
-  final String url;
+enum Profile {
+  bear,
+  cat,
+  chicken,
+  cow,
+  dog,
+  dove,
+  dragon,
+  fox,
+  hamster,
+  koala,
+  lion,
+  monkey,
+  mouse,
+  panda,
+  pig,
+  polar,
+  rabbit,
+  raccoon,
+  tiger,
+  wolf,
 }
 
 enum Gender {
@@ -106,11 +120,14 @@ class JoinViewModel with ChangeNotifier {
     notifyListeners();
   }
 
-  void setProfile({String? img}) {}
+  void setProfile(String img) {
+    _profileImg = img;
+    notifyListeners();
+  }
 
   void changeProfile() {
-    int idx = Random().nextInt(DefaultProfile.values.length);
-    _profileImg = DefaultProfile.values[idx].url;
+    int idx = Random().nextInt(Profile.values.length);
+    _profileImg = Profile.values[idx].name;
     notifyListeners();
   }
 

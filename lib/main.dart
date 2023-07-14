@@ -43,7 +43,7 @@ class MyApp extends StatelessWidget {
         supportedLocales: context.supportedLocales,
         title: 'BlaBla',
         theme: BlaTheme.blaTheme,
-        home: OnBoarding(),
+        home: JoinProfileView() //OnBoarding(),
         );
   }
 }
