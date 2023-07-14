@@ -1,5 +1,5 @@
 import 'package:blabla/screens/join/join_view_model.dart';
-import 'package:blabla/screens/join/widgets/join_desc_widget.dart';
+import 'package:blabla/widgets/create_widget.dart';
 import 'package:blabla/screens/join/widgets/join_interest_widget.dart';
 import 'package:blabla/styles/colors.dart';
 import 'package:blabla/styles/txt_style.dart';
@@ -16,10 +16,9 @@ class JoinInterestView extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: [
-            JoinDescWidget(
+            CreateWidget(
               page: JoinPage.keyword,
               title: "블라블라에게\n당신을 알려주세요!",
-              step: 0.125 * (JoinPage.keyword.index + 1),
               widgets: [
                 const SizedBox(height: 12),
                 Row(

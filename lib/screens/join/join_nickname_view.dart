@@ -1,6 +1,6 @@
 import 'package:blabla/screens/join/join_birthdate_view.dart';
 import 'package:blabla/screens/join/join_view_model.dart';
-import 'package:blabla/screens/join/widgets/join_desc_widget.dart';
+import 'package:blabla/widgets/create_widget.dart';
 import 'package:blabla/styles/colors.dart';
 import 'package:blabla/styles/txt_style.dart';
 import 'package:flutter/material.dart';
@@ -25,10 +25,9 @@ class _JoinNicknameViewState extends State<JoinNicknameView> {
 
     return Scaffold(
       body: SafeArea(
-        child: JoinDescWidget(
+        child: CreateWidget(
           page: JoinPage.nickname,
           title: "사용자 이름(닉네임)을\n입력해주세요",
-          step: 0.25,
           widgets: [
             const SizedBox(height: 30),
             Row(

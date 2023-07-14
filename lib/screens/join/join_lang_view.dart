@@ -1,6 +1,6 @@
 import 'package:blabla/screens/join/join_interest_view.dart';
 import 'package:blabla/screens/join/join_view_model.dart';
-import 'package:blabla/screens/join/widgets/join_desc_widget.dart';
+import 'package:blabla/widgets/create_widget.dart';
 import 'package:blabla/screens/join/widgets/join_level_widget.dart';
 import 'package:blabla/styles/colors.dart';
 import 'package:blabla/styles/txt_style.dart';
@@ -19,13 +19,9 @@ class JoinLangView extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: [
-            JoinDescWidget(
+            CreateWidget(
               page: lang == "eng" ? JoinPage.engLv : JoinPage.korLv,
               title: "${viewModel.nickname}님의",
-              step: 0.125 *
-                  (lang == "eng"
-                      ? JoinPage.engLv.index + 1
-                      : (JoinPage.korLv.index + 1)),
               widgets: [
                 Text("${lang == "eng" ? "영어" : "한국어"} 스피킹 레벨",
                     style: BlaTxt.txt28B.copyWith(color: BlaColor.orange)),

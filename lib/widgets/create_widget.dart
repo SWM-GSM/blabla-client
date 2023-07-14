@@ -1,4 +1,5 @@
 import 'package:blabla/screens/join/join_view_model.dart';
+import 'package:blabla/screens/recruit/recruit_view_model.dart';
 import 'package:blabla/styles/colors.dart';
 import 'package:blabla/styles/txt_style.dart';
 import 'package:flutter/material.dart';
@@ -7,17 +8,15 @@ import 'package:flutter_svg/svg.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:provider/provider.dart';
 
-class JoinDescWidget extends StatelessWidget {
-  const JoinDescWidget({
+class CreateWidget extends StatelessWidget {
+  const CreateWidget({
     super.key,
     required this.page,
     required this.title,
-    required this.step,
     required this.widgets,
   });
-  final JoinPage page;
+  final dynamic page;
   final String title;
-  final double step;
   final List<Widget> widgets;
 
   @override
@@ -55,7 +54,11 @@ class JoinDescWidget extends StatelessWidget {
                     backgroundColor: BlaColor.grey100,
                     progressColor: BlaColor.grey900,
                     lineHeight: 4,
-                    percent: step,
+                    percent: 1 /
+                        (page is JoinPage
+                            ? JoinPage.values.length
+                            : RecruitPage.values.length) *
+                        (page.index + 1),
                     barRadius: const Radius.circular(4),
                     animation: true,
                     animateFromLastPercent: true,
