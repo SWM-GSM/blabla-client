@@ -48,11 +48,13 @@ class JoinLangView extends StatelessWidget {
                       desc: viewModel.levels[idx].desc,
                       selected: (() {
                         if (lang == "eng") {
-                          return viewModel.engLangLevel == viewModel.levels[idx].degree
+                          return viewModel.engLangLevel ==
+                                  viewModel.levels[idx].degree
                               ? true
                               : false;
                         } else {
-                          return viewModel.korLangLevel == viewModel.levels[idx].degree
+                          return viewModel.korLangLevel ==
+                                  viewModel.levels[idx].degree
                               ? true
                               : false;
                         }
@@ -88,10 +90,23 @@ class JoinLangView extends StatelessWidget {
           alignment: Alignment.center,
           height: 56,
           decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(12),
-              color: viewModel.countryCode.isNotEmpty // 수정
-                  ? BlaColor.orange
-                  : BlaColor.grey400),
+            borderRadius: BorderRadius.circular(12),
+            color: () {
+              if (lang == "eng") {
+                if (viewModel.engLangLevel == 0) {
+                  return BlaColor.grey400;
+                } else {
+                  return BlaColor.orange;
+                }
+              } else {
+                if (viewModel.korLangLevel == 0) {
+                  return BlaColor.grey400;
+                } else {
+                  return BlaColor.orange;
+                }
+              }
+            }(),
+          ),
           child:
               Text("다음", style: BlaTxt.txt16B.copyWith(color: BlaColor.white)),
         ),
