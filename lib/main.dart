@@ -1,14 +1,15 @@
 import 'package:amplitude_flutter/amplitude.dart';
-import 'package:blabla/screens/join/join_profile_view.dart';
 import 'package:blabla/screens/join/join_view_model.dart';
 import 'package:blabla/screens/onboarding.dart';
-import 'package:blabla/screens/recruit/recruit_profile_view.dart';
 import 'package:blabla/screens/recruit/recruit_view_model.dart';
 import 'package:blabla/services/amplitude.dart';
+import 'package:blabla/styles/colors.dart';
 import 'package:blabla/styles/theme.dart';
+import 'package:blabla/styles/txt_style.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
@@ -34,12 +35,22 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return StyledToast(
+      locale: const Locale("ko"),
+      textStyle: BlaTxt.txt16R.copyWith(color: BlaColor.white),
+      backgroundColor: BlaColor.grey800.withOpacity(0.8),
+      toastPositions: StyledToastPosition.bottom,
+      borderRadius: BorderRadius.circular(20),
+      duration: const Duration(milliseconds: 1500),
+      toastAnimation: StyledToastAnimation.fade,
+      reverseAnimation: StyledToastAnimation.fade,
+      child: MaterialApp(
         localizationsDelegates: context.localizationDelegates,
         supportedLocales: context.supportedLocales,
         title: 'BlaBla',
         theme: BlaTheme.blaTheme,
         home: OnBoarding(),
-        );
+      ),
+    );
   }
 }

@@ -5,9 +5,10 @@ import 'package:blabla/models/interest.dart';
 import 'package:blabla/models/level.dart';
 import 'package:blabla/services/apis/api.dart';
 import 'package:blabla/styles/colors.dart';
+import 'package:blabla/styles/txt_style.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 
 enum JoinPage {
   profile,
@@ -203,15 +204,7 @@ class JoinViewModel with ChangeNotifier {
       _keywords.remove(input.tag);
     } else {
       if (_keywords.length == 10) {
-        Fluttertoast.showToast(
-          msg: "키워드는 10개까지만 선택할 수 있습니다.",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          timeInSecForIosWeb: 1,
-          textColor: BlaColor.orange,
-          backgroundColor: BlaColor.lightOrange, //BlaColor.grey800,
-          fontSize: 16,
-        );
+        showToast("키워드는 10개까지만 선택할 수 있습니다.");
       } else {
         _keywords.add(input.tag);
       }
