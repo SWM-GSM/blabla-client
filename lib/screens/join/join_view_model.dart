@@ -113,7 +113,7 @@ class JoinViewModel with ChangeNotifier {
       case JoinPage.korLv:
         setKorLangLevel(0);
       case JoinPage.keyword:
-        initNickValid();
+        initKeywords();
       default:
         break;
     }
