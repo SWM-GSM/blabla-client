@@ -217,6 +217,7 @@ class JoinViewModel with ChangeNotifier {
   }
 
   Future<bool> join() async {
+
     final user = User(
         socialLoginType: _socialLoginType,
         profileImg: _profileImg,

@@ -24,8 +24,10 @@ enum CrewProfile {
 
 class RecruitViewModel with ChangeNotifier {
   late String _profileImg;
+  late String _name;
 
   String get profileImg => _profileImg;
+  String get name => _name;
 
   RecruitViewModel() {
     changeProfile();
@@ -36,6 +38,8 @@ class RecruitViewModel with ChangeNotifier {
       case RecruitPage.profile:
         changeProfile();
         break;
+      case RecruitPage.name:
+        initName();
       default:
         break;
     }
@@ -47,5 +51,13 @@ class RecruitViewModel with ChangeNotifier {
     int idx = Random().nextInt(CrewProfile.values.length);
     _profileImg = CrewProfile.values[idx].name;
     notifyListeners();
+  }
+
+  void initName() {
+    _name = "";
+  }
+
+  void setName(String input) {
+    _name = input;
   }
 }
