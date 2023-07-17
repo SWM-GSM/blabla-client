@@ -1,4 +1,3 @@
-import 'package:blabla/screens/recruit/recruit_desc_view.dart';
 import 'package:blabla/screens/recruit/recruit_view_model.dart';
 import 'package:blabla/widgets/create_widget.dart';
 import 'package:blabla/styles/colors.dart';
@@ -7,24 +6,24 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 
-class RecruitNameView extends StatefulWidget {
-  const RecruitNameView({super.key});
+class RecruitDescView extends StatefulWidget {
+  const RecruitDescView({super.key});
 
   @override
-  State<RecruitNameView> createState() => _RecruitNameViewState();
+  State<RecruitDescView> createState() => _RecruitDescViewState();
 }
 
-class _RecruitNameViewState extends State<RecruitNameView> {
-  final nameCtr = TextEditingController();
-  bool isNameLenValid = false;
-  final nameFocus = FocusNode();
+class _RecruitDescViewState extends State<RecruitDescView> {
+  final descCtr = TextEditingController();
+  bool isDescLenValid = false;
+  final descFocus = FocusNode();
 
-  nameValid() {
+  descValid() {
     setState(() {
-      if (nameCtr.text.length >= 2 && nameCtr.text.length <= 20) {
-        isNameLenValid = true;
+      if (descCtr.text.isNotEmpty && descCtr.text.length <= 300) {
+        isDescLenValid = true;
       } else {
-        isNameLenValid = false;
+        isDescLenValid = false;
       }
     });
   }
@@ -32,13 +31,13 @@ class _RecruitNameViewState extends State<RecruitNameView> {
   @override
   void initState() {
     super.initState();
-    nameCtr.addListener(nameValid);
+    descCtr.addListener(descValid);
   }
 
   @override
   void dispose() {
     super.dispose();
-    nameCtr.dispose();
+    descCtr.dispose();
   }
 
   @override
@@ -48,8 +47,8 @@ class _RecruitNameViewState extends State<RecruitNameView> {
     return Scaffold(
       body: SafeArea(
         child: CreateWidget(
-          page: RecruitPage.name,
-          title: "크루 이름을\n입력해주세요",
+          page: RecruitPage.desc,
+          title: "크루 한줄 소개를\n입력해주세요",
           widgets: [
             const SizedBox(height: 30),
             Row(
@@ -57,13 +56,14 @@ class _RecruitNameViewState extends State<RecruitNameView> {
               children: [
                 Expanded(
                   child: TextField(
-                    controller: nameCtr,
-                    focusNode: nameFocus,
+                    controller: descCtr,
+                    focusNode: descFocus,
                     scrollPadding: EdgeInsets.zero,
-                    maxLength: 20,
+                    maxLength: 300,
+                    maxLines: null,
                     style: BlaTxt.txt20R,
                     decoration: InputDecoration(
-                      hintText: "크루 이름을 입력해주세요",
+                      hintText: "크루 한줄 소개를 입력해주세요",
                       hintStyle:
                           BlaTxt.txt20R.copyWith(color: BlaColor.grey500),
                       border: InputBorder.none,
@@ -84,9 +84,9 @@ class _RecruitNameViewState extends State<RecruitNameView> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Text(
-                  "2~20자 이내",
+                  "300자 이내",
                   style: BlaTxt.txt14M.copyWith(
-                    color: isNameLenValid ? BlaColor.orange : BlaColor.grey600,
+                    color: isDescLenValid ? BlaColor.orange : BlaColor.grey600,
                   ),
                 ),
                 const SizedBox(
@@ -97,7 +97,7 @@ class _RecruitNameViewState extends State<RecruitNameView> {
                   width: 20,
                   height: 20,
                   colorFilter: ColorFilter.mode(
-                      isNameLenValid ? BlaColor.orange : BlaColor.grey600,
+                      isDescLenValid ? BlaColor.orange : BlaColor.grey600,
                       BlendMode.color),
                 ),
               ],
@@ -107,8 +107,8 @@ class _RecruitNameViewState extends State<RecruitNameView> {
       ),
       bottomSheet: GestureDetector(
         onTap: () {
-          if (isNameLenValid) {
-            viewModel.setName(nameCtr.text);
+          if (isDescLenValid) {
+            viewModel.setDesc(descCtr.text);
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => RecruitDescView()),
@@ -120,14 +120,14 @@ class _RecruitNameViewState extends State<RecruitNameView> {
               20,
               0,
               20,
-              nameFocus.hasFocus
+              descFocus.hasFocus
                   ? 20
                   : 10 + MediaQuery.of(context).viewPadding.bottom),
           alignment: Alignment.center,
           height: 56,
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(12),
-              color: isNameLenValid
+              color: isDescLenValid
                   ? BlaColor.orange
                   : BlaColor.grey400),
           child:
