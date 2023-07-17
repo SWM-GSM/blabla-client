@@ -47,6 +47,7 @@ class RecruitViewModel with ChangeNotifier {
   CrewCycle? _cycle;
   List<CrewTag> _crewTags = [];
   bool? _autoApproval;
+  int _crewNum = 0;
 
   String get profileImg => _profileImg;
   String get name => _name;
@@ -54,6 +55,7 @@ class RecruitViewModel with ChangeNotifier {
   CrewCycle? get cycle => _cycle;
   List<CrewTag> get crewTags => _crewTags;
   bool? get autoApproval => _autoApproval;
+  int get crewNum => _crewNum;
   
 
   /* 생성 시 임시로 사용됨 */
@@ -80,6 +82,8 @@ class RecruitViewModel with ChangeNotifier {
         initCrewTags();
       case RecruitPage.joinWay:
         initApproval();
+      case RecruitPage.memberNum:
+        initNum();
       default:
         break;
     }
@@ -148,6 +152,16 @@ class RecruitViewModel with ChangeNotifier {
   
   void setApproval(bool value) {
     _autoApproval = value;
+    notifyListeners();
+  }
+
+  void initNum() {
+    _crewNum = 0;
+    notifyListeners();
+  }
+
+  void setNum(int num) {
+    _crewNum = num;
     notifyListeners();
   }
 }
