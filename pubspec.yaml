@@ -50,6 +50,7 @@ dependencies:
     git:
       url: https://github.com/gabrielguedest/flutter_styled_toast
       ref: master
+  flutter_secure_storage: ^8.0.0
 
 dev_dependencies:
   flutter_test:

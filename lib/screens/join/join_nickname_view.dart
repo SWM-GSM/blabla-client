@@ -4,20 +4,47 @@ import 'package:blabla/widgets/create_widget.dart';
 import 'package:blabla/styles/colors.dart';
 import 'package:blabla/styles/txt_style.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 
 class JoinNicknameView extends StatefulWidget {
-  const JoinNicknameView({super.key});
+  final String initNick;
+  const JoinNicknameView({super.key, required this.initNick});
 
   @override
   State<JoinNicknameView> createState() => _JoinNicknameViewState();
 }
 
 class _JoinNicknameViewState extends State<JoinNicknameView> {
+  final nickCtr = TextEditingController();
   final nickFocus = FocusNode();
   bool isNickLenValid = false;
-  String nick = "";
+  bool isNickDupValid = false;
+
+  nickValid() {
+    setState(() {
+      isNickDupValid = false;
+      if (nickCtr.text.length >= 2 && nickCtr.text.length <= 12) {
+        isNickLenValid = true;
+      } else {
+        isNickLenValid = false;
+      }
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    nickCtr.addListener(nickValid);
+    nickCtr.text = widget.initNick;
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    nickCtr.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,18 +62,8 @@ class _JoinNicknameViewState extends State<JoinNicknameView> {
               children: [
                 Expanded(
                   child: TextField(
+                    controller: nickCtr,
                     focusNode: nickFocus,
-                    onChanged: (value) {
-                      viewModel.initNickValid();
-                      setState(() {
-                        nick = value;
-                        if (value.length >= 2 && value.length <= 12) {
-                          isNickLenValid = true;
-                        } else {
-                          isNickLenValid = false;
-                        }
-                      });
-                    },
                     scrollPadding: EdgeInsets.zero,
                     maxLength: 12,
                     style: BlaTxt.txt20R,
@@ -63,8 +80,14 @@ class _JoinNicknameViewState extends State<JoinNicknameView> {
                 ),
                 const SizedBox(width: 8),
                 GestureDetector(
-                  onTap: () {
-                    if (isNickLenValid) viewModel.nickDupValid(nick);
+                  onTap: () async {
+                    if (isNickLenValid) {
+                      isNickDupValid =
+                          await viewModel.nickDupValid(nickCtr.text);
+                    } else {
+                     showToast("중복된 닉네임입니다.");
+                    }
+                    setState(() {});
                   },
                   child: Container(
                     decoration: BoxDecoration(
@@ -99,9 +122,7 @@ class _JoinNicknameViewState extends State<JoinNicknameView> {
                 Text(
                   "중복 확인",
                   style: BlaTxt.txt14M.copyWith(
-                    color: viewModel.isNickDupValid
-                        ? BlaColor.orange
-                        : BlaColor.grey700,
+                    color: isNickDupValid ? BlaColor.orange : BlaColor.grey700,
                   ),
                 ),
                 const SizedBox(
@@ -112,9 +133,7 @@ class _JoinNicknameViewState extends State<JoinNicknameView> {
                   width: 20,
                   height: 20,
                   colorFilter: ColorFilter.mode(
-                      viewModel.isNickDupValid
-                          ? BlaColor.orange
-                          : BlaColor.grey600,
+                      isNickDupValid ? BlaColor.orange : BlaColor.grey600,
                       BlendMode.color),
                 ),
                 const SizedBox(width: 16),
@@ -142,8 +161,8 @@ class _JoinNicknameViewState extends State<JoinNicknameView> {
       ),
       bottomSheet: GestureDetector(
         onTap: () {
-          if (isNickLenValid && viewModel.isNickDupValid) {
-            viewModel.setNick(nick);
+          if (isNickLenValid && isNickDupValid) {
+            viewModel.setNick(nickCtr.text);
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => JoinBirthdateView()),
@@ -162,7 +181,7 @@ class _JoinNicknameViewState extends State<JoinNicknameView> {
           height: 56,
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(12),
-              color: isNickLenValid && viewModel.isNickDupValid
+              color: isNickLenValid && isNickDupValid
                   ? BlaColor.orange
                   : BlaColor.grey400),
           child:

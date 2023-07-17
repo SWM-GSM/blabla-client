@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:blabla/models/country.dart';
 import 'package:blabla/models/interest.dart';
 import 'package:blabla/models/level.dart';
+import 'package:blabla/models/user.dart';
 import 'package:blabla/services/apis/api.dart';
 import 'package:blabla/styles/colors.dart';
 import 'package:blabla/styles/txt_style.dart';
@@ -58,6 +59,7 @@ class JoinViewModel with ChangeNotifier {
   final api = API();
 
   late String _socialLoginType;
+  late String _identifier;
   late String _nickname;
   late String _birthdate;
   String _gender = "";
@@ -65,18 +67,16 @@ class JoinViewModel with ChangeNotifier {
   int _korLangLevel = 0;
   int _engLangLevel = 0;
   List<String> _keywords = [];
-  late bool _pushNotification;
+  bool _pushNotification = true;
   late String _profileImg;
 
-  late bool _isNickDupValid;
   List<Country> _countries = [];
   List<Country> _searchCountries = [];
-  List<Level> _levels =[];
+  List<Level> _levels = [];
   List<Interest> _interests = [];
 
   JoinViewModel() {
     changeProfile();
-    initNickValid();
     initCountries();
     getLevels();
     getInterests();
@@ -84,7 +84,6 @@ class JoinViewModel with ChangeNotifier {
 
   String get profileImg => _profileImg;
   String get nickname => _nickname;
-  bool get isNickDupValid => _isNickDupValid;
   List<Country> get searchCountries => _searchCountries;
   String get gender => _gender;
   String get countryCode => _countryCode;
@@ -100,7 +99,6 @@ class JoinViewModel with ChangeNotifier {
         changeProfile();
         break;
       case JoinPage.nickname:
-        initNickValid();
         setNick("");
         break;
       case JoinPage.birthdate:
@@ -121,6 +119,13 @@ class JoinViewModel with ChangeNotifier {
     notifyListeners();
   }
 
+  void initUser(String identifier, String loginType, String nickname,
+      {birthdate, gender}) {
+    _identifier = identifier;
+    _socialLoginType = loginType.toUpperCase();
+    _nickname = nickname;
+  }
+
   void setProfile(String img) {
     _profileImg = img;
     notifyListeners();
@@ -132,14 +137,8 @@ class JoinViewModel with ChangeNotifier {
     notifyListeners();
   }
 
-  void initNickValid() {
-    _isNickDupValid = false;
-    notifyListeners();
-  }
-
-  void nickDupValid(String input) async {
-    _isNickDupValid = await api.getNicknameDup(input);
-    notifyListeners();
+  Future<bool> nickDupValid(String input) async {
+    return await api.getNicknameDup(input);
   }
 
   void setNick(String input) {
@@ -215,5 +214,20 @@ class JoinViewModel with ChangeNotifier {
   void initKeywords() {
     _keywords = [];
     notifyListeners();
+  }
+
+  Future<bool> join() async {
+    final user = User(
+        socialLoginType: _socialLoginType,
+        profileImg: _profileImg,
+        nickname: _nickname,
+        birthdate: _birthdate,
+        gender: _gender,
+        countryCode: _countryCode,
+        korLevel: _korLangLevel,
+        engLevel: _engLangLevel,
+        keywords: keywords,
+        pushNotification: _pushNotification);
+    return await api.join(user);
   }
 }

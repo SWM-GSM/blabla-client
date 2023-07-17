@@ -2,7 +2,9 @@ import 'dart:convert';
 import 'package:blabla/models/country.dart';
 import 'package:blabla/models/interest.dart';
 import 'package:blabla/models/level.dart';
+import 'package:blabla/models/user.dart';
 import 'package:blabla/utils/dotenv.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 
 typedef JSON = Map<String, dynamic>;
@@ -36,10 +38,15 @@ class API {
   API();
 
   Future<http.Response> api(String url, HttpMethod method, {String? token, Map<String, dynamic>? body}) async {
+    Map<String, String>? headers;
+    if (token != null) {
+      headers = {"Authorization" : token};
+    }
+
     try {
       switch (method) {
       case HttpMethod.post:        
-        return await http.post(Uri.parse(url));
+        return await http.post(Uri.parse(url), headers: headers);
       case HttpMethod.get:
         return await http.get(Uri.parse(url));
       case HttpMethod.delete:
@@ -49,8 +56,7 @@ class API {
       }
     } catch(e) {
       return http.Response(e.toString(), 404);
-    }
-    
+    } 
   }
 
   Future<bool> getNicknameDup(String nickname) async { 
@@ -90,6 +96,30 @@ class API {
       return (jsonDecode(res.body)["data"]["keywords"] as List).map((e) => Interest.fromJson(e)).toList();
     } else {
       throw Exception("http error :(");
+    }
+  }
+
+  Future<bool> getAccessToken(token, String socialLoginType) async {
+    const storage = FlutterSecureStorage();
+    final res = await api("$baseUrl/oauth/login/$socialLoginType", HttpMethod.post, token: token);
+    if(res.statusCode == 200) {
+      print(res.body);
+      await storage.write(key: "accessToken", value: jsonDecode(res.body)["accessToken"]);
+      await storage.write(key: "refreshToken", value: jsonDecode(res.body)["refreshToken"]);
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  Future<bool> join(User user) async {
+    const storage = FlutterSecureStorage();
+    final token = await storage.read(key: "accessToken");
+    final res = await api("$baseUrl/oauth/sign-up", HttpMethod.post, token: token!);
+    if(res.statusCode == 200) {
+      return true;
+    } else {
+      return false;
     }
   }
 }

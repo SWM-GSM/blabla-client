@@ -69,7 +69,7 @@ class JoinProfileView extends StatelessWidget {
           viewModel.setProfile(viewModel.profileImg);
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => JoinNicknameView()),
+            MaterialPageRoute(builder: (context) => JoinNicknameView(initNick: viewModel.nickname)),
           );
         },
         child: Container(

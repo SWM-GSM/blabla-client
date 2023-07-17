@@ -1,17 +1,15 @@
 import 'package:blabla/screens/join/join_profile_view.dart';
-import 'package:blabla/screens/join/join_view_model.dart';
 import 'package:blabla/services/login.dart';
 import 'package:blabla/styles/colors.dart';
 import 'package:blabla/styles/txt_style.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 
 class OnBoarding extends StatelessWidget {
   const OnBoarding({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final joinViewModel = Provider.of<JoinViewModel>(context);
     return Scaffold(
         body: SafeArea(
       child: Column(
@@ -29,8 +27,23 @@ class OnBoarding extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               loginBtn("apple", BlaColor.grey900, () {
+                print("apple btn click");
               }),
               loginBtn("google", BlaColor.grey200, () async {
+                try {
+                  await Login.google.service.login(context).then((value) {
+                    if (value) {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => JoinProfileView()));
+                    } else {
+                      throw Error();
+                    }
+                  });
+                } catch (e) {
+                  showToast("로그인 실패. 다시 시도해주세요");
+                }
               }),
             ],
           ),
