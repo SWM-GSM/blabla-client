@@ -1,5 +1,7 @@
 import 'dart:math';
 
+import 'package:blabla/models/crew_tag.dart';
+import 'package:blabla/services/apis/api.dart';
 import 'package:flutter/material.dart';
 
 enum RecruitPage {
@@ -37,18 +39,27 @@ enum CrewCycle {
 }
 
 class RecruitViewModel with ChangeNotifier {
+  final api = API();
+
   late String _profileImg;
   late String _name;
   late String _desc;
   CrewCycle? _cycle;
+  List<CrewTag> _crewTags = [];
 
   String get profileImg => _profileImg;
   String get name => _name;
   String get desc => _desc;
   CrewCycle? get cycle => _cycle;
+  List<CrewTag> get crewTags => _crewTags;
+
+  /* 생성 시 임시로 사용됨 */
+  List<CrewTag> _allCrewTags = [] ;
+  List<CrewTag> get allCrewTags => _allCrewTags;
 
   RecruitViewModel() {
     changeProfile();
+    getCrewTags();
   }
 
   void initPage(RecruitPage page) {
@@ -62,6 +73,8 @@ class RecruitViewModel with ChangeNotifier {
         initDesc();
       case RecruitPage.cycle:
         initCycle();
+      case RecruitPage.tags:
+        initCrewTags();
       default:
         break;
     }
@@ -103,4 +116,24 @@ class RecruitViewModel with ChangeNotifier {
     _cycle = CrewCycle.values[idx];
     notifyListeners();
   }
+
+  void getCrewTags() async {
+    _allCrewTags = await api.getCrewTags();
+    notifyListeners();
+  }
+
+  void initCrewTags() async {
+    _crewTags = [];
+    notifyListeners();
+  }
+
+  void setCrewTag(CrewTag tag) {
+    if (_crewTags.contains(tag)) {
+      _crewTags.remove(tag);
+    } else {
+      _crewTags.add(tag);
+    }
+    notifyListeners();
+  }
+  
 }

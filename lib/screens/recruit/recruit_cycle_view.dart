@@ -1,3 +1,4 @@
+import 'package:blabla/screens/recruit/recruit_tag_view.dart';
 import 'package:blabla/screens/recruit/recruit_view_model.dart';
 import 'package:blabla/styles/colors.dart';
 import 'package:blabla/styles/txt_style.dart';
@@ -52,12 +53,14 @@ class RecruitCycleView extends StatelessWidget {
       ),
       bottomSheet: GestureDetector(
         onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => RecruitCycleView(),
-            ),
-          );
+          if (viewModel.cycle != null) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => RecruitTagView(),
+              ),
+            );
+          }
         },
         child: Container(
           margin: EdgeInsets.fromLTRB(

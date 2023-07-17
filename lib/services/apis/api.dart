@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:blabla/models/country.dart';
+import 'package:blabla/models/crew_tag.dart';
 import 'package:blabla/models/interest.dart';
 import 'package:blabla/models/level.dart';
 import 'package:blabla/models/user.dart';
@@ -37,36 +38,38 @@ enum HttpMethod {
 class API {
   API();
 
-  Future<http.Response> api(String url, HttpMethod method, {String? token, Map<String, dynamic>? body}) async {
+  Future<http.Response> api(String url, HttpMethod method,
+      {String? token, Map<String, dynamic>? body}) async {
     Map<String, String>? headers;
     if (token != null) {
-      headers = {"Authorization" : token};
+      headers = {"Authorization": token};
     }
 
     try {
       switch (method) {
-      case HttpMethod.post:        
-        return await http.post(Uri.parse(url), headers: headers);
-      case HttpMethod.get:
-        return await http.get(Uri.parse(url));
-      case HttpMethod.delete:
-        return await http.delete(Uri.parse(url));
-      case HttpMethod.patch:
-        return await http.patch(Uri.parse(url));
+        case HttpMethod.post:
+          return await http.post(Uri.parse(url), headers: headers);
+        case HttpMethod.get:
+          return await http.get(Uri.parse(url));
+        case HttpMethod.delete:
+          return await http.delete(Uri.parse(url));
+        case HttpMethod.patch:
+          return await http.patch(Uri.parse(url));
       }
-    } catch(e) {
+    } catch (e) {
       return http.Response(e.toString(), 404);
-    } 
+    }
   }
 
-  Future<bool> getNicknameDup(String nickname) async { 
-    final res = await api("$baseUrl/members/nicknames/$nickname", HttpMethod.get);
+  Future<bool> getNicknameDup(String nickname) async {
+    final res =
+        await api("$baseUrl/members/nicknames/$nickname", HttpMethod.get);
     if (res.statusCode == 200) {
       if (!jsonDecode(res.body)["data"]["isDuplicated"]) {
         return true;
       } else {
         return false;
-      } 
+      }
     } else {
       throw Exception("http error :(");
     }
@@ -74,26 +77,34 @@ class API {
 
   Future<List<Country>> getCountries() async {
     final res = await api(countryAPI, HttpMethod.get);
-    if(res.statusCode == 200) {
-      return (jsonDecode(res.body)["data"] as List).map((e) => Country.fromJson(e)).toList();
+    if (res.statusCode == 200) {
+      return (jsonDecode(res.body)["data"] as List)
+          .map((e) => Country.fromJson(e))
+          .toList();
     } else {
       throw Exception("http error :(");
     }
   }
 
-  Future<List<Level>> getLevels() async { // 수정 - 설정 언어 별
-    final res = await api("$korTestUrl/common/levels", HttpMethod.get); 
+  Future<List<Level>> getLevels() async {
+    // 수정 - 설정 언어 별
+    final res = await api("$korTestUrl/common/levels", HttpMethod.get);
     if (res.statusCode == 200) {
-      return (jsonDecode(res.body)["data"]["levels"] as List).map((e) => Level.fromJson(e)).toList();
+      return (jsonDecode(res.body)["data"]["levels"] as List)
+          .map((e) => Level.fromJson(e))
+          .toList();
     } else {
       throw Exception("http error :()");
     }
   }
-  
-  Future<List<Interest>> getInterests() async { // 수정 - 설정 언어 별
+
+  Future<List<Interest>> getInterests() async {
+    // 수정 - 설정 언어 별
     final res = await api("$korTestUrl/common/keywords", HttpMethod.get);
     if (res.statusCode == 200) {
-      return (jsonDecode(res.body)["data"]["keywords"] as List).map((e) => Interest.fromJson(e)).toList();
+      return (jsonDecode(res.body)["data"]["keywords"] as List)
+          .map((e) => Interest.fromJson(e))
+          .toList();
     } else {
       throw Exception("http error :(");
     }
@@ -101,11 +112,15 @@ class API {
 
   Future<bool> getAccessToken(token, String socialLoginType) async {
     const storage = FlutterSecureStorage();
-    final res = await api("$baseUrl/oauth/login/$socialLoginType", HttpMethod.post, token: token);
-    if(res.statusCode == 200) {
+    final res = await api(
+        "$baseUrl/oauth/login/$socialLoginType", HttpMethod.post,
+        token: token);
+    if (res.statusCode == 200) {
       print(res.body);
-      await storage.write(key: "accessToken", value: jsonDecode(res.body)["accessToken"]);
-      await storage.write(key: "refreshToken", value: jsonDecode(res.body)["refreshToken"]);
+      await storage.write(
+          key: "accessToken", value: jsonDecode(res.body)["accessToken"]);
+      await storage.write(
+          key: "refreshToken", value: jsonDecode(res.body)["refreshToken"]);
       return true;
     } else {
       return false;
@@ -115,11 +130,24 @@ class API {
   Future<bool> join(User user) async {
     const storage = FlutterSecureStorage();
     final token = await storage.read(key: "accessToken");
-    final res = await api("$baseUrl/oauth/sign-up", HttpMethod.post, token: token!);
-    if(res.statusCode == 200) {
+    final res =
+        await api("$baseUrl/oauth/sign-up", HttpMethod.post, token: token!);
+    if (res.statusCode == 200) {
       return true;
     } else {
       return false;
+    }
+  }
+
+  Future<List<CrewTag>> getCrewTags() async {
+    // 수정 - 설정 언어 별
+    final res = await api("$korBaseUrl/common/crew-tags", HttpMethod.get);
+    if (res.statusCode == 200) {
+      return (jsonDecode(utf8.decode(res.bodyBytes))["data"]["tags"] as List)
+          .map((e) => CrewTag.fromJson(e))
+          .toList();
+    } else {
+      throw Exception("http error :(");
     }
   }
 }
