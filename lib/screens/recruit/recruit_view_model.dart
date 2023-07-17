@@ -46,12 +46,15 @@ class RecruitViewModel with ChangeNotifier {
   late String _desc;
   CrewCycle? _cycle;
   List<CrewTag> _crewTags = [];
+  bool? _autoApproval;
 
   String get profileImg => _profileImg;
   String get name => _name;
   String get desc => _desc;
   CrewCycle? get cycle => _cycle;
   List<CrewTag> get crewTags => _crewTags;
+  bool? get autoApproval => _autoApproval;
+  
 
   /* 생성 시 임시로 사용됨 */
   List<CrewTag> _allCrewTags = [] ;
@@ -75,6 +78,8 @@ class RecruitViewModel with ChangeNotifier {
         initCycle();
       case RecruitPage.tags:
         initCrewTags();
+      case RecruitPage.joinWay:
+        initApproval();
       default:
         break;
     }
@@ -136,4 +141,13 @@ class RecruitViewModel with ChangeNotifier {
     notifyListeners();
   }
   
+  void initApproval() {
+    _autoApproval = null;
+    notifyListeners();
+  }
+  
+  void setApproval(bool value) {
+    _autoApproval = value;
+    notifyListeners();
+  }
 }
