@@ -39,6 +39,7 @@ class _RecruitNameViewState extends State<RecruitNameView> {
   void dispose() {
     super.dispose();
     nameCtr.dispose();
+    nameFocus.dispose();
   }
 
   @override
@@ -109,6 +110,7 @@ class _RecruitNameViewState extends State<RecruitNameView> {
         onTap: () {
           if (isNameLenValid) {
             viewModel.setName(nameCtr.text);
+            nameFocus.unfocus();
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => RecruitDescView()),

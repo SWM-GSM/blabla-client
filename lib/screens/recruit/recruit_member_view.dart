@@ -1,3 +1,4 @@
+import 'package:blabla/screens/recruit/recruit_detail_view.dart';
 import 'package:blabla/screens/recruit/recruit_view_model.dart';
 import 'package:blabla/styles/colors.dart';
 import 'package:blabla/styles/txt_style.dart';
@@ -69,7 +70,7 @@ class RecruitMemberView extends StatelessWidget {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => RecruitMemberView(),
+                builder: (context) => RecruitDetailView(),
               ),
             );
           }

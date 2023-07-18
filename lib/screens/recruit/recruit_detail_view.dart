@@ -38,6 +38,7 @@ class _RecruitDetailViewState extends State<RecruitDetailView> {
   void dispose() {
     super.dispose();
     detailCtr.dispose();
+    detailFocus.dispose();
   }
 
   @override
@@ -120,6 +121,7 @@ class _RecruitDetailViewState extends State<RecruitDetailView> {
                 // 수정 - API 연결
                 if (detailCtr.text.isNotEmpty) {
                   viewModel.setDetail(detailCtr.text);
+                  detailFocus.unfocus();
                   Navigator.push(
                     context,
                     MaterialPageRoute(

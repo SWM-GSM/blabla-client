@@ -1,3 +1,4 @@
+import 'package:blabla/screens/recruit/recruit_cycle_view.dart';
 import 'package:blabla/screens/recruit/recruit_view_model.dart';
 import 'package:blabla/widgets/create_widget.dart';
 import 'package:blabla/styles/colors.dart';
@@ -38,6 +39,7 @@ class _RecruitDescViewState extends State<RecruitDescView> {
   void dispose() {
     super.dispose();
     descCtr.dispose();
+    descFocus.dispose();
   }
 
   @override
@@ -46,62 +48,70 @@ class _RecruitDescViewState extends State<RecruitDescView> {
 
     return Scaffold(
       body: SafeArea(
-        child: CreateWidget(
-          page: RecruitPage.desc,
-          title: "크루 한줄 소개를\n입력해주세요",
-          widgets: [
-            const SizedBox(height: 30),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Expanded(
-                  child: TextField(
-                    controller: descCtr,
-                    focusNode: descFocus,
-                    scrollPadding: EdgeInsets.zero,
-                    maxLength: 300,
-                    maxLines: null,
-                    style: BlaTxt.txt20R,
-                    decoration: InputDecoration(
-                      hintText: "크루 한줄 소개를 입력해주세요",
-                      hintStyle:
-                          BlaTxt.txt20R.copyWith(color: BlaColor.grey500),
-                      border: InputBorder.none,
-                      contentPadding: EdgeInsets.zero,
-                      isDense: true,
-                      counterText: "",
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 8),
-                
+        child: Column(
+          children: [
+            const CreateWidget(
+              page: RecruitPage.desc,
+              title: "크루 한줄 소개를\n입력해주세요",
+              widgets: [
+                SizedBox(height: 30),
               ],
             ),
-            const SizedBox(
-              height: 20,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Text(
-                  "300자 이내",
-                  style: BlaTxt.txt14M.copyWith(
-                    color: isDescLenValid ? BlaColor.orange : BlaColor.grey600,
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(20, 0, 20, 96),
+                child: SingleChildScrollView(
+                  child: Wrap(
+                    runSpacing: 20,
+                    children: [
+                      TextField(
+                        controller: descCtr,
+                        focusNode: descFocus,
+                        scrollPadding: EdgeInsets.zero,
+                        maxLength: 300,
+                        maxLines: null,
+                        style: BlaTxt.txt20R,
+                        decoration: InputDecoration(
+                          hintText: "크루 한줄 소개를 입력해주세요",
+                          hintStyle:
+                              BlaTxt.txt20R.copyWith(color: BlaColor.grey500),
+                          border: InputBorder.none,
+                          contentPadding: EdgeInsets.zero,
+                          isDense: true,
+                          counterText: "",
+                        ),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Text(
+                            "300자 이내",
+                            style: BlaTxt.txt14M.copyWith(
+                              color: isDescLenValid
+                                  ? BlaColor.orange
+                                  : BlaColor.grey600,
+                            ),
+                          ),
+                          const SizedBox(
+                            width: 4,
+                          ),
+                          SvgPicture.asset(
+                            "assets/icons/ic_20_check.svg",
+                            width: 20,
+                            height: 20,
+                            colorFilter: ColorFilter.mode(
+                                isDescLenValid
+                                    ? BlaColor.orange
+                                    : BlaColor.grey600,
+                                BlendMode.color),
+                          ),
+                        ],
+                      )
+                    ],
                   ),
                 ),
-                const SizedBox(
-                  width: 4,
-                ),
-                SvgPicture.asset(
-                  "assets/icons/ic_20_check.svg",
-                  width: 20,
-                  height: 20,
-                  colorFilter: ColorFilter.mode(
-                      isDescLenValid ? BlaColor.orange : BlaColor.grey600,
-                      BlendMode.color),
-                ),
-              ],
-            )
+              ),
+            ),
           ],
         ),
       ),
@@ -109,9 +119,10 @@ class _RecruitDescViewState extends State<RecruitDescView> {
         onTap: () {
           if (isDescLenValid) {
             viewModel.setDesc(descCtr.text);
+            descFocus.unfocus();
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => RecruitDescView()),
+              MaterialPageRoute(builder: (context) => RecruitCycleView()),
             );
           }
         },
@@ -127,9 +138,7 @@ class _RecruitDescViewState extends State<RecruitDescView> {
           height: 56,
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(12),
-              color: isDescLenValid
-                  ? BlaColor.orange
-                  : BlaColor.grey400),
+              color: isDescLenValid ? BlaColor.orange : BlaColor.grey400),
           child:
               Text("다음", style: BlaTxt.txt16B.copyWith(color: BlaColor.white)),
         ),

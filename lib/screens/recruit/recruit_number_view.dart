@@ -1,8 +1,10 @@
+import 'package:blabla/screens/recruit/recruit_level_view.dart';
 import 'package:blabla/screens/recruit/recruit_view_model.dart';
 import 'package:blabla/styles/colors.dart';
 import 'package:blabla/styles/txt_style.dart';
 import 'package:blabla/widgets/create_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 class RecruitNumberView extends StatefulWidget {
@@ -14,11 +16,11 @@ class RecruitNumberView extends StatefulWidget {
 
 class _RecruitNumberViewState extends State<RecruitNumberView> {
   int inputNum = 0;
+  final numFocus = FocusNode();
 
   @override
   Widget build(BuildContext context) {
     final viewModel = Provider.of<RecruitViewModel>(context);
-    final numFocus = FocusNode();
 
     return Scaffold(
       body: SafeArea(
@@ -43,6 +45,9 @@ class _RecruitNumberViewState extends State<RecruitNumberView> {
                       });
                     },
                     keyboardType: TextInputType.number,
+                    inputFormatters: [
+                      FilteringTextInputFormatter.allow(RegExp('[0-9]'))
+                    ],
                     focusNode: numFocus,
                     scrollPadding: EdgeInsets.zero,
                     maxLength: 1,
@@ -70,11 +75,12 @@ class _RecruitNumberViewState extends State<RecruitNumberView> {
       ),
       bottomSheet: GestureDetector(
         onTap: () {
+          numFocus.unfocus();
           if (inputNum != 0) {
             viewModel.setNum(inputNum);
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => RecruitNumberView()),
+              MaterialPageRoute(builder: (context) => RecruitLevelView()),
             );
           }
         },

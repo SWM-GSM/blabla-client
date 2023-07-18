@@ -1,3 +1,4 @@
+import 'package:blabla/screens/recruit/recruit_number_view.dart';
 import 'package:blabla/screens/recruit/recruit_view_model.dart';
 import 'package:blabla/styles/colors.dart';
 import 'package:blabla/styles/txt_style.dart';
@@ -29,7 +30,7 @@ class RecruitJoinwayView extends StatelessWidget {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => RecruitJoinwayView(),
+                builder: (context) => RecruitNumberView(),
               ),
             );
           }
