@@ -48,7 +48,7 @@ class API {
     try {
       switch (method) {
         case HttpMethod.post:
-          return await http.post(Uri.parse(url), headers: headers);
+          return await http.post(Uri.parse(url), headers: headers, body: body);
         case HttpMethod.get:
           return await http.get(Uri.parse(url));
         case HttpMethod.delete:

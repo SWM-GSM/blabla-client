@@ -51,6 +51,7 @@ class RecruitViewModel with ChangeNotifier {
   int _engLv = 1;
   int _korLv = 1;
   String _memProp = "";
+  String _detail = "";
 
   String get profileImg => _profileImg;
   String get name => _name;
@@ -62,6 +63,7 @@ class RecruitViewModel with ChangeNotifier {
   int get engLv => _engLv;
   int get korLv => _korLv;
   String get memProp => _memProp;
+  String get detail => _detail;
   
   /* 생성 시 임시로 사용됨 */
   List<EmojiNameTag> _allCrewTags = [] ;
@@ -99,6 +101,8 @@ class RecruitViewModel with ChangeNotifier {
         initLv();
       case RecruitPage.memberProp:
         initMemProp();
+      case RecruitPage.detail:
+        initDetail();
       default:
         break;
     }
@@ -213,6 +217,16 @@ class RecruitViewModel with ChangeNotifier {
 
   void setMemProp(EmojiNameTag prop) async {
     _memProp = prop.tag;
+    notifyListeners();
+  }
+
+  void initDetail() {
+    _detail = "";
+    notifyListeners();
+  }
+
+  void setDetail(String input) {
+    _detail = input;
     notifyListeners();
   }
 }
