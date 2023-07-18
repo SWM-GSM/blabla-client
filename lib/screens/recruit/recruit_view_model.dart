@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:blabla/models/crew_tag.dart';
+import 'package:blabla/models/level.dart';
 import 'package:blabla/services/apis/api.dart';
 import 'package:flutter/material.dart';
 
@@ -48,6 +49,8 @@ class RecruitViewModel with ChangeNotifier {
   List<CrewTag> _crewTags = [];
   bool? _autoApproval;
   int _crewNum = 0;
+  int _engLv = 1;
+  int _korLv = 1;
 
   String get profileImg => _profileImg;
   String get name => _name;
@@ -56,15 +59,20 @@ class RecruitViewModel with ChangeNotifier {
   List<CrewTag> get crewTags => _crewTags;
   bool? get autoApproval => _autoApproval;
   int get crewNum => _crewNum;
+  int get engLv => _engLv;
+  int get korLv => _korLv;
   
 
   /* 생성 시 임시로 사용됨 */
   List<CrewTag> _allCrewTags = [] ;
   List<CrewTag> get allCrewTags => _allCrewTags;
+  List<Level> _levels = [];
+  List<Level> get levels => _levels;
 
   RecruitViewModel() {
     changeProfile();
     getCrewTags();
+    getLevels();
   }
 
   void initPage(RecruitPage page) {
@@ -84,6 +92,8 @@ class RecruitViewModel with ChangeNotifier {
         initApproval();
       case RecruitPage.memberNum:
         initNum();
+      case RecruitPage.langLv:
+        initLv();
       default:
         break;
     }
@@ -162,6 +172,27 @@ class RecruitViewModel with ChangeNotifier {
 
   void setNum(int num) {
     _crewNum = num;
+    notifyListeners();
+  }
+
+  void initLv() {
+    _engLv = 1;
+    _korLv = 1;
+    notifyListeners();
+  }
+
+  void setEngLv(int lv) {
+    _engLv = lv;
+    notifyListeners();
+  }
+
+  void setKorLv(int lv) {
+    _korLv = lv;
+    notifyListeners();
+  }
+
+  void getLevels() async {
+    _levels = await api.getLevels();
     notifyListeners();
   }
 }
