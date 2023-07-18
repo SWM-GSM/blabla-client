@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import 'package:blabla/models/crew_tag.dart';
+import 'package:blabla/models/emoji_name_tag.dart';
 import 'package:blabla/models/level.dart';
 import 'package:blabla/services/apis/api.dart';
 import 'package:flutter/material.dart';
@@ -46,7 +46,7 @@ class RecruitViewModel with ChangeNotifier {
   late String _name;
   late String _desc;
   CrewCycle? _cycle;
-  List<CrewTag> _crewTags = [];
+  List<EmojiNameTag> _crewTags = [];
   bool? _autoApproval;
   int _crewNum = 0;
   int _engLv = 1;
@@ -56,16 +56,15 @@ class RecruitViewModel with ChangeNotifier {
   String get name => _name;
   String get desc => _desc;
   CrewCycle? get cycle => _cycle;
-  List<CrewTag> get crewTags => _crewTags;
+  List<EmojiNameTag> get crewTags => _crewTags;
   bool? get autoApproval => _autoApproval;
   int get crewNum => _crewNum;
   int get engLv => _engLv;
   int get korLv => _korLv;
   
-
   /* 생성 시 임시로 사용됨 */
-  List<CrewTag> _allCrewTags = [] ;
-  List<CrewTag> get allCrewTags => _allCrewTags;
+  List<EmojiNameTag> _allCrewTags = [] ;
+  List<EmojiNameTag> get allCrewTags => _allCrewTags;
   List<Level> _levels = [];
   List<Level> get levels => _levels;
 
@@ -146,7 +145,7 @@ class RecruitViewModel with ChangeNotifier {
     notifyListeners();
   }
 
-  void setCrewTag(CrewTag tag) {
+  void setCrewTag(EmojiNameTag tag) {
     if (_crewTags.contains(tag)) {
       _crewTags.remove(tag);
     } else {

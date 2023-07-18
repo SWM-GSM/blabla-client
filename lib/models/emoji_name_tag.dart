@@ -1,16 +1,16 @@
-class CrewTag {
+class EmojiNameTag {
   final String name;
   final String emoji;
   final String tag;
   
-  const CrewTag({
+  const EmojiNameTag({
     required this.name,
     required this.emoji,
     required this.tag,
   });
 
-  factory CrewTag.fromJson(Map<String, dynamic> json) {
-    return CrewTag(
+  factory EmojiNameTag.fromJson(Map<String, dynamic> json) {
+    return EmojiNameTag(
       name: json["name"],
       emoji: json["emoji"],
       tag: json["tag"],

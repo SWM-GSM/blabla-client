@@ -139,12 +139,12 @@ class API {
     }
   }
 
-  Future<List<CrewTag>> getCrewTags() async {
+  Future<List<EmojiNameTag>> getCrewTags() async {
     // 수정 - 설정 언어 별
     final res = await api("$korBaseUrl/common/crew-tags", HttpMethod.get);
     if (res.statusCode == 200) {
       return (jsonDecode(utf8.decode(res.bodyBytes))["data"]["tags"] as List)
-          .map((e) => CrewTag.fromJson(e))
+          .map((e) => EmojiNameTag.fromJson(e))
           .toList();
     } else {
       throw Exception("http error :(");
