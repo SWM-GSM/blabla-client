@@ -16,7 +16,6 @@ enum RecruitPage {
   langLv,
   memberProp,
   detail,
-  complete
 }
 
 enum CrewProfile {
@@ -51,6 +50,7 @@ class RecruitViewModel with ChangeNotifier {
   int _crewNum = 0;
   int _engLv = 1;
   int _korLv = 1;
+  String _memProp = "";
 
   String get profileImg => _profileImg;
   String get name => _name;
@@ -61,17 +61,21 @@ class RecruitViewModel with ChangeNotifier {
   int get crewNum => _crewNum;
   int get engLv => _engLv;
   int get korLv => _korLv;
+  String get memProp => _memProp;
   
   /* 생성 시 임시로 사용됨 */
   List<EmojiNameTag> _allCrewTags = [] ;
   List<EmojiNameTag> get allCrewTags => _allCrewTags;
   List<Level> _levels = [];
   List<Level> get levels => _levels;
+  List<EmojiNameTag> _memProps = [];
+  List<EmojiNameTag> get memProps => _memProps;
 
   RecruitViewModel() {
     changeProfile();
     getCrewTags();
     getLevels();
+    getMemProps();
   }
 
   void initPage(RecruitPage page) {
@@ -93,6 +97,8 @@ class RecruitViewModel with ChangeNotifier {
         initNum();
       case RecruitPage.langLv:
         initLv();
+      case RecruitPage.memberProp:
+        initMemProp();
       default:
         break;
     }
@@ -192,6 +198,21 @@ class RecruitViewModel with ChangeNotifier {
 
   void getLevels() async {
     _levels = await api.getLevels();
+    notifyListeners();
+  }
+
+  void initMemProp() {
+    _memProp = "";
+    notifyListeners();
+  }
+
+  void getMemProps() async {
+    _memProps = await api.getMemProps();
+    notifyListeners();
+  }
+
+  void setMemProp(EmojiNameTag prop) async {
+    _memProp = prop.tag;
     notifyListeners();
   }
 }

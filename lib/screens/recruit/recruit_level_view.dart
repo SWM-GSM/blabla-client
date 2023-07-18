@@ -1,3 +1,4 @@
+import 'package:blabla/screens/recruit/recruit_member_view.dart';
 import 'package:blabla/screens/recruit/recruit_view_model.dart';
 import 'package:blabla/styles/colors.dart';
 import 'package:blabla/styles/txt_style.dart';
@@ -30,7 +31,7 @@ class RecruitLevelView extends StatelessWidget {
         onTap: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => RecruitLevelView()),
+            MaterialPageRoute(builder: (context) => RecruitMemberView()),
           );
         },
         child: Container(

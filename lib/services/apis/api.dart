@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:blabla/models/country.dart';
-import 'package:blabla/models/crew_tag.dart';
+import 'package:blabla/models/emoji_name_tag.dart';
 import 'package:blabla/models/interest.dart';
 import 'package:blabla/models/level.dart';
 import 'package:blabla/models/user.dart';
@@ -144,6 +144,19 @@ class API {
     final res = await api("$korBaseUrl/common/crew-tags", HttpMethod.get);
     if (res.statusCode == 200) {
       return (jsonDecode(utf8.decode(res.bodyBytes))["data"]["tags"] as List)
+          .map((e) => EmojiNameTag.fromJson(e))
+          .toList();
+    } else {
+      throw Exception("http error :(");
+    }
+  }
+
+  Future<List<EmojiNameTag>> getMemProps() async {
+    // 수정 - 설정 언어 별
+    final res = await api("$korBaseUrl/common/prefer-members", HttpMethod.get);
+    if (res.statusCode == 200) {
+      return (jsonDecode(utf8.decode(res.bodyBytes))["data"]["preferMembers"]
+              as List)
           .map((e) => EmojiNameTag.fromJson(e))
           .toList();
     } else {
