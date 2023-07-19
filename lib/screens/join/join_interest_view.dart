@@ -1,4 +1,4 @@
-import 'package:blabla/screens/home/home.dart';
+import 'package:blabla/screens/home/home_view.dart';
 import 'package:blabla/screens/join/join_view_model.dart';
 import 'package:blabla/widgets/create_widget.dart';
 import 'package:blabla/screens/join/widgets/join_interest_widget.dart';
@@ -63,7 +63,7 @@ class JoinInterestView extends StatelessWidget {
                   if (value) {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => Home()),
+                      MaterialPageRoute(builder: (context) => HomeView()),
                     );
                   } else {
                     showToast("회원가입에 실패했습니다. 다시 시도해주세요.");
@@ -91,7 +91,7 @@ class JoinInterestView extends StatelessWidget {
                   if (value) {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => Home()),
+                      MaterialPageRoute(builder: (context) => HomeView()),
                     );
                   } else {
                     showToast("회원가입에 실패했습니다. 다시 시도해주세요.");

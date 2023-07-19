@@ -10,13 +10,15 @@ class CrewListView extends StatelessWidget {
         body: SafeArea(
       child: SingleChildScrollView(
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             ElevatedButton(
                 onPressed: () {
-                  Navigator.push(context,
+                  Navigator.of(context, rootNavigator: true).push(
                       MaterialPageRoute(
-                        settings: RouteSettings(name: "/RecruitProfileView"),
-                        builder: (context) => RecruitProfileView()));
+                          settings: RouteSettings(name: "/RecruitProfileView"),
+                          builder: (context) => RecruitProfileView()));
                 },
                 child: Text("임시 크루 생성 버튼")),
             Text("임시크루리스트"),
