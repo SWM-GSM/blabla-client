@@ -1,6 +1,7 @@
 import 'package:blabla/screens/join/join_view_model.dart';
 import 'package:blabla/services/apis/api.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:provider/provider.dart';
 
@@ -22,16 +23,17 @@ class GoogleLoginService extends LoginService {
   @override
   Future<bool> login(BuildContext context) async {
     final viewModel = Provider.of<JoinViewModel>(context, listen: false);
-    final api = API();
+    const storage = FlutterSecureStorage();
     final account = await GoogleSignIn().signIn();
     if (account != null) {
       account.authentication.then((value) async {
-        if (await api.getAccessToken(value.accessToken, platform.name.toUpperCase())) {
-          viewModel.initUser(
-          Login.google.name, account.email, account.displayName!);
-        } else {
-          return false;
-        }
+        await Future.wait([
+          storage.write(
+              key: "platform", value: Login.google.name.toUpperCase()),
+          storage.write(key: "socialToken", value: value.accessToken),
+        ]);
+        viewModel.initUser(
+            Login.google.name, account.email, account.displayName!);
       });
       return true;
     } else {

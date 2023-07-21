@@ -5,6 +5,6 @@ class BlaTheme {
   static final blaTheme = ThemeData(
     fontFamily: 'Pretendard',
     scaffoldBackgroundColor: BlaColor.white,
-    bottomSheetTheme: const BottomSheetThemeData(backgroundColor: Colors.transparent)
+    bottomSheetTheme: const BottomSheetThemeData(backgroundColor: Colors.white)
   );
 }

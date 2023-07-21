@@ -37,18 +37,29 @@ enum HttpMethod {
 class API {
   API();
 
-  Future<http.Response> api(String url, HttpMethod method, {String? token, Map<String, dynamic>? body}) async {
-    Map<String, String>? headers;
+  Future<http.Response> api(String url, HttpMethod method,
+      {String? token, body}) async {
+    Map<String, String> headers;
+
     if (token != null) {
-      headers = {"Authorization" : token};
+      headers = {
+        "Authorization": token,
+        "Content-Type": "application/json",
+        "Accept": "application/json",
+      }; 
+    } else {
+      headers = {
+        "Content-Type": "application/json",
+        "Accept": "application/json",
+      };
     }
 
     try {
       switch (method) {
       case HttpMethod.post:        
-        return await http.post(Uri.parse(url), headers: headers);
+        return await http.post(Uri.parse(url), headers: headers, body: body);
       case HttpMethod.get:
-        return await http.get(Uri.parse(url));
+        return await http.get(Uri.parse(url), headers: headers);
       case HttpMethod.delete:
         return await http.delete(Uri.parse(url));
       case HttpMethod.patch:
@@ -82,18 +93,18 @@ class API {
   }
 
   Future<List<Level>> getLevels() async { // 수정 - 설정 언어 별
-    final res = await api("$korTestUrl/common/levels", HttpMethod.get); 
+    final res = await api("$korBaseUrl/common/levels", HttpMethod.get); 
     if (res.statusCode == 200) {
-      return (jsonDecode(res.body)["data"]["levels"] as List).map((e) => Level.fromJson(e)).toList();
+      return (jsonDecode(utf8.decode(res.bodyBytes))["data"]["levels"] as List).map((e) => Level.fromJson(e)).toList();
     } else {
       throw Exception("http error :()");
     }
   }
   
   Future<List<Interest>> getInterests() async { // 수정 - 설정 언어 별
-    final res = await api("$korTestUrl/common/keywords", HttpMethod.get);
+    final res = await api("$korBaseUrl/common/keywords", HttpMethod.get);
     if (res.statusCode == 200) {
-      return (jsonDecode(res.body)["data"]["keywords"] as List).map((e) => Interest.fromJson(e)).toList();
+      return (jsonDecode(utf8.decode(res.bodyBytes))["data"]["keywords"] as List).map((e) => Interest.fromJson(e)).toList();
     } else {
       throw Exception("http error :(");
     }
@@ -101,11 +112,14 @@ class API {
 
   Future<bool> getAccessToken(token, String socialLoginType) async {
     const storage = FlutterSecureStorage();
-    final res = await api("$baseUrl/oauth/login/$socialLoginType", HttpMethod.post, token: token);
-    if(res.statusCode == 200) {
-      print(res.body);
-      await storage.write(key: "accessToken", value: jsonDecode(res.body)["accessToken"]);
-      await storage.write(key: "refreshToken", value: jsonDecode(res.body)["refreshToken"]);
+    final res = await api(
+        "$baseUrl/oauth/login/$socialLoginType", HttpMethod.post,
+        token: token);
+    if (res.statusCode == 200) {
+      await storage.write(
+          key: "accessToken", value: jsonDecode(res.body)["accessToken"]);
+      await storage.write(
+          key: "refreshToken", value: jsonDecode(res.body)["refreshToken"]);
       return true;
     } else {
       return false;
@@ -114,9 +128,14 @@ class API {
 
   Future<bool> join(User user) async {
     const storage = FlutterSecureStorage();
-    final token = await storage.read(key: "accessToken");
-    final res = await api("$baseUrl/oauth/sign-up", HttpMethod.post, token: token!);
-    if(res.statusCode == 200) {
+    final res = await api("$baseUrl/oauth/sign-up", HttpMethod.post,
+        token: await storage.read(key: "socialToken"), body: jsonEncode(user));
+
+    if (res.statusCode == 200) {
+      await Future.wait([
+        storage.write(key: "accessToken", value: jsonDecode(res.body)["accessToken"]),
+        storage.write(key: "refreshToken", value: jsonDecode(res.body)["refreshToken"]),
+      ]);
       return true;
     } else {
       return false;
