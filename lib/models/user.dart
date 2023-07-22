@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 class User {
   final String socialLoginType;
   final String profileImg;
@@ -48,4 +50,44 @@ class User {
         "keywords": List<dynamic>.from(keywords.map((x) => x)),
         "pushNotification": pushNotification,
       };
+}
+
+class UserSimple {
+    String profileUrl;
+    String nickname;
+    int korLevel;
+    int engLevel;
+    int signedUpAfter;
+    String country;
+    String description;
+
+    UserSimple({
+        required this.profileUrl,
+        required this.nickname,
+        required this.korLevel,
+        required this.engLevel,
+        required this.signedUpAfter,
+        required this.country,
+        required this.description,
+    });
+
+    factory UserSimple.fromJson(Map<String, dynamic> json) => UserSimple(
+        profileUrl: json["profileUrl"],
+        nickname: json["nickname"],
+        korLevel: json["korLevel"],
+        engLevel: json["engLevel"],
+        signedUpAfter: json["signedUpAfter"],
+        country: json["country"],
+        description: json["description"],
+    );
+
+    Map<String, dynamic> toJson() => {
+        "profileUrl": profileUrl,
+        "nickname": nickname,
+        "korLevel": korLevel,
+        "engLevel": engLevel,
+        "signedUpAfter": signedUpAfter,
+        "country": country,
+        "description": description,
+    };
 }

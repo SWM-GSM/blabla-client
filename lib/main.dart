@@ -3,6 +3,7 @@ import 'package:blabla/providers/nav_provider.dart';
 import 'package:blabla/screens/home/crew_detail_view.dart';
 import 'package:blabla/screens/home/crew_list_view.dart';
 import 'package:blabla/screens/home/home_view.dart';
+import 'package:blabla/screens/home/home_view_model.dart';
 import 'package:blabla/screens/join/join_profile_view.dart';
 import 'package:blabla/screens/join/join_view_model.dart';
 import 'package:blabla/screens/onboarding.dart';
@@ -34,6 +35,7 @@ void main() async {
         ChangeNotifierProvider(create: (_) => JoinViewModel()),
         ChangeNotifierProvider(create: (_) => RecruitViewModel()),
         ChangeNotifierProvider(create: (_) => NavProvider()),
+        ChangeNotifierProvider(create: (_) => HomeViewModel())
       ], child: const MyApp()),
     ),
   );

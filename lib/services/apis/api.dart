@@ -1,5 +1,7 @@
 import 'dart:convert';
+import 'package:blabla/models/content.dart';
 import 'package:blabla/models/country.dart';
+import 'package:blabla/models/crew.dart';
 import 'package:blabla/models/emoji_name_tag.dart';
 import 'package:blabla/models/interest.dart';
 import 'package:blabla/models/level.dart';
@@ -16,6 +18,7 @@ get countryAPI => env["COUNTRY_API"];
 get korBaseUrl => env["KOR_BASE_URL"];
 get engBaseUrl => env["ENG_BASE_URL"];
 
+get testUrl => env["TEST_API"];
 get korTestUrl => env["KOR_TEST_API"];
 
 // class Res {
@@ -159,6 +162,43 @@ class API {
               as List)
           .map((e) => EmojiNameTag.fromJson(e))
           .toList();
+    } else {
+      throw Exception("http error :(");
+    }
+  }
+
+  /* 홈 API */
+  Future<UserSimple> getMyPrfile() async { // 수정 - 테스트 API
+    final res = await api("$testUrl/profile/1", HttpMethod.get);
+    if(res.statusCode == 200) {
+      return UserSimple.fromJson(jsonDecode(res.body)["data"]);
+    } else {
+      throw Exception("http error :(");
+    }
+  }
+
+  Future<List<CrewSimple>> getMyCrews() async { // 수정 - 테스트 API
+    final res = await api("$testUrl/crew/me", HttpMethod.get);
+    if(res.statusCode == 200) {
+      return (jsonDecode(res.body)["data"]["crews"] as List).map((e) => CrewSimple.fromJson(e)).toList();
+    } else {
+      throw Exception("http error :(");
+    } 
+  }
+
+  Future<List<CrewSimple>> getNowCrews() async { // 수정 - 테스트 API
+    final res = await api("$testUrl/crew/can-join", HttpMethod.get);
+    if(res.statusCode == 200) {
+      return (jsonDecode(res.body)["data"]["crews"] as List).map((e) => CrewSimple.fromJson(e)).toList();
+    } else {
+      throw Exception("http error :(");
+    } 
+  }
+
+  Future<Content> getTodayContent() async { // 수정 - 테스트 API
+    final res = await api("$testUrl/content/today", HttpMethod.get);
+    if(res.statusCode == 200) {
+      return Content.fromJson(jsonDecode(res.body)["data"]["content"]);
     } else {
       throw Exception("http error :(");
     }
