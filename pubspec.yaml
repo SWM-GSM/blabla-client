@@ -53,6 +53,7 @@ dependencies:
   flutter_secure_storage: ^8.0.0
   extended_image: ^8.0.2
   shimmer: ^3.0.0
+  country_flags: ^2.1.0
 
 dev_dependencies:
   flutter_test:

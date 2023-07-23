@@ -4,7 +4,8 @@ import 'package:flutter/widgets.dart';
 class BlaTxt {
   static const TextStyle txtBase = TextStyle(
     overflow: TextOverflow.ellipsis,
-    color: BlaColor.grey900
+    color: BlaColor.grey900,
+    leadingDistribution: TextLeadingDistribution.even,
   );
   static final TextStyle txtRBase = txtBase.copyWith(fontWeight: FontWeight.w400);
   static final TextStyle txtMBase = txtBase.copyWith(fontWeight: FontWeight.w500);
@@ -16,6 +17,7 @@ class BlaTxt {
   static final TextStyle txt10R = txtRBase.copyWith(height: 12.0 / 10.0, fontSize: 10.0);
   static final TextStyle txt12R = txtRBase.copyWith(height: 16.0 / 12.0, fontSize: 12.0);
   static final TextStyle txt14R = txtRBase.copyWith(height: 20.0 / 14.0, fontSize: 14.0);
+  static final TextStyle txt16RL = txtRBase.copyWith(height: 16.0 / 16.0, fontSize: 16.0);
   static final TextStyle txt16R = txtRBase.copyWith(height: 20.0 / 16.0, fontSize: 16.0);
   static final TextStyle txt20R = txtRBase.copyWith(height: 24.0 / 20.0, fontSize: 20.0);
   static final TextStyle txt20RH = txtRBase.copyWith(height: 28.0 / 20.0, fontSize: 20.0);
