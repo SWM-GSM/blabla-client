@@ -207,16 +207,9 @@ class HomeView extends StatelessWidget {
                       )
                     : list
                         .map(
-                          (e) => GestureDetector(
-                            onTap: () {
-                              Navigator.of(context, rootNavigator: true).push(
-                                  MaterialPageRoute(
-                                      builder: (context) => CrewDetailView()));
-                            },
-                            child: CrewTileWidget(
-                              crew: e,
-                              tileType: CrewTileType.home,
-                            ),
+                          (e) => CrewTileWidget(
+                            crew: e,
+                            tileType: CrewTileType.home,
                           ),
                         )
                         .toList()),

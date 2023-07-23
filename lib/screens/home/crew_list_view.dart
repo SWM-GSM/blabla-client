@@ -1,4 +1,3 @@
-import 'package:blabla/screens/home/crew_detail_view.dart';
 import 'package:blabla/screens/home/crew_view_model.dart';
 import 'package:blabla/screens/home/widget/crew_tile_widget.dart';
 import 'package:blabla/screens/recruit/recruit_profile_view.dart';
@@ -44,16 +43,8 @@ class CrewListView extends StatelessWidget {
                                 crew: null, tileType: CrewTileType.list))
                         : viewModel.crewList
                             .map(
-                              (e) => GestureDetector(
-                                onTap: () {
-                                  Navigator.of(context, rootNavigator: true)
-                                      .push(MaterialPageRoute(
-                                          builder: (context) =>
-                                              CrewDetailView()));
-                                },
-                                child: CrewTileWidget(
-                                    crew: e, tileType: CrewTileType.list),
-                              ),
+                              (e) => CrewTileWidget(
+                                  crew: e, tileType: CrewTileType.list),
                             )
                             .toList()),
               ),

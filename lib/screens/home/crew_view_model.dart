@@ -6,10 +6,12 @@ class CrewViewModel with ChangeNotifier {
   final api = API();
 
   bool _isLoading = true;
-  List<Crew> _crewList =[];
+  List<Crew> _crewList = [];
+  CrewDetail? _crew;
 
   bool get isLoading => _isLoading;
-  List<Crew> get crewList => _crewList; 
+  List<Crew> get crewList => _crewList;
+  CrewDetail? get crew => _crew;
 
   CrewViewModel() {
     init();
@@ -24,6 +26,11 @@ class CrewViewModel with ChangeNotifier {
 
   Future<void> getCrews() async {
     _crewList = await api.getCrews();
+    notifyListeners();
+  }
+
+  Future<void> getCrewDetail(int crewId) async {
+    _crew = await api.getCrewDetail();
     notifyListeners();
   }
 }
