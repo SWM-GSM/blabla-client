@@ -53,41 +53,41 @@ class User {
 }
 
 class UserSimple {
-    String profileUrl;
+    String profileImage;
     String nickname;
     int korLevel;
     int engLevel;
     int signedUpAfter;
-    String country;
+    String countryCode;
     String description;
 
     UserSimple({
-        required this.profileUrl,
+        required this.profileImage,
         required this.nickname,
         required this.korLevel,
         required this.engLevel,
         required this.signedUpAfter,
-        required this.country,
+        required this.countryCode,
         required this.description,
     });
 
     factory UserSimple.fromJson(Map<String, dynamic> json) => UserSimple(
-        profileUrl: json["profileUrl"],
+        profileImage: json["profileImage"],
         nickname: json["nickname"],
         korLevel: json["korLevel"],
         engLevel: json["engLevel"],
         signedUpAfter: json["signedUpAfter"],
-        country: json["country"],
+        countryCode: json["countryCode"],
         description: json["description"],
     );
 
     Map<String, dynamic> toJson() => {
-        "profileUrl": profileUrl,
+        "profileImage": profileImage,
         "nickname": nickname,
         "korLevel": korLevel,
         "engLevel": engLevel,
         "signedUpAfter": signedUpAfter,
-        "country": country,
+        "countryCode": countryCode,
         "description": description,
     };
 }
