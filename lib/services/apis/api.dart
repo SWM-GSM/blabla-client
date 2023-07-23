@@ -203,4 +203,14 @@ class API {
       throw Exception("http error :(");
     }
   }
+
+  /* 홈 - 크루 API */
+  Future<List<Crew>> getCrews() async { // 수정 - 테스트 API & page, sort
+    final res = await api("$korTestUrl/crews", HttpMethod.get);
+    if(res.statusCode == 200) {
+      return (jsonDecode(res.body)["data"]["crews"] as List).map((e) => Crew.fromJson(e)).toList();
+    } else {
+      throw Exception("http error :(");
+    } 
+  }
 }

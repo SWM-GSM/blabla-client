@@ -35,7 +35,8 @@ void main() async {
         ChangeNotifierProvider(create: (_) => JoinViewModel()),
         ChangeNotifierProvider(create: (_) => RecruitViewModel()),
         ChangeNotifierProvider(create: (_) => NavProvider()),
-        ChangeNotifierProvider(create: (_) => HomeViewModel())
+        ChangeNotifierProvider(create: (_) => HomeViewModel()),
+        ChangeNotifierProvider(create: (_) => CrewViewModel()),
       ], child: const MyApp()),
     ),
   );

@@ -1,4 +1,5 @@
 import 'package:blabla/models/crew.dart';
+import 'package:blabla/screens/home/crew_detail_view.dart';
 import 'package:blabla/screens/home/crew_list_view.dart';
 import 'package:blabla/screens/home/home_view_model.dart';
 import 'package:blabla/screens/home/widget/crew_tile_widget.dart';
@@ -29,7 +30,7 @@ class HomeView extends StatelessWidget {
                   children: [
                     viewModel.isLoading
                         ? SkeletonBoxWidget(
-                          child: Container(
+                            child: Container(
                               height: 72,
                               width: 72,
                               margin: const EdgeInsets.fromLTRB(8, 0, 24, 0),
@@ -37,7 +38,7 @@ class HomeView extends StatelessWidget {
                                   borderRadius: BorderRadius.circular(36),
                                   color: BlaColor.black),
                             ),
-                        )
+                          )
                         : Container(
                             height: 72,
                             width: 72,
@@ -56,8 +57,7 @@ class HomeView extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         viewModel.isLoading
-                            ? SkeletonTxtWidget(
-                                style: BlaTxt.txt12R, width: 80)
+                            ? SkeletonTxtWidget(style: BlaTxt.txt12R, width: 80)
                             : Text(
                                 "블라블라 ${viewModel.user!.signedUpAfter}일째",
                                 style: BlaTxt.txt12M
@@ -198,11 +198,26 @@ class HomeView extends StatelessWidget {
             scrollDirection: Axis.horizontal,
             child: Row(
                 children: viewModel.isLoading
-                    ? List.generate(5,
-                        (index) => const CrewTileWidget(name: null, img: null))
+                    ? List.generate(
+                        5,
+                        (index) => const CrewTileWidget(
+                          crew: null,
+                          tileType: CrewTileType.home,
+                        ),
+                      )
                     : list
                         .map(
-                          (e) => CrewTileWidget(name: e.name, img: e.coverUrl),
+                          (e) => GestureDetector(
+                            onTap: () {
+                              Navigator.of(context, rootNavigator: true).push(
+                                  MaterialPageRoute(
+                                      builder: (context) => CrewDetailView()));
+                            },
+                            child: CrewTileWidget(
+                              crew: e,
+                              tileType: CrewTileType.home,
+                            ),
+                          ),
                         )
                         .toList()),
           ),
