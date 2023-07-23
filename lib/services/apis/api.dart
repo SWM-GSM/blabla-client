@@ -91,7 +91,7 @@ class API {
 
   Future<List<Level>> getLevels() async {
     // 수정 - 설정 언어 별
-    final res = await api("$korTestUrl/common/levels", HttpMethod.get);
+    final res = await api("$korBaseUrl/common/levels", HttpMethod.get);
     if (res.statusCode == 200) {
       return (jsonDecode(res.body)["data"]["levels"] as List)
           .map((e) => Level.fromJson(e))
@@ -103,7 +103,7 @@ class API {
 
   Future<List<Interest>> getInterests() async {
     // 수정 - 설정 언어 별
-    final res = await api("$korTestUrl/common/keywords", HttpMethod.get);
+    final res = await api("$korBaseUrl/common/keywords", HttpMethod.get);
     if (res.statusCode == 200) {
       return (jsonDecode(res.body)["data"]["keywords"] as List)
           .map((e) => Interest.fromJson(e))
