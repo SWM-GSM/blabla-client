@@ -46,6 +46,11 @@ class API {
     Map<String, String>? headers;
     if (token != null) {
       headers = {"Authorization": token};
+    } else {
+      headers = {
+        "Content-Type": "application/json",
+        "Accept": "application/json"
+      };
     }
 
     try {
@@ -53,11 +58,11 @@ class API {
         case HttpMethod.post:
           return await http.post(Uri.parse(url), headers: headers, body: body);
         case HttpMethod.get:
-          return await http.get(Uri.parse(url));
+          return await http.get(Uri.parse(url), headers: headers);
         case HttpMethod.delete:
-          return await http.delete(Uri.parse(url));
+          return await http.delete(Uri.parse(url), headers: headers);
         case HttpMethod.patch:
-          return await http.patch(Uri.parse(url));
+          return await http.patch(Uri.parse(url), headers: headers);
       }
     } catch (e) {
       return http.Response(e.toString(), 404);
@@ -93,7 +98,7 @@ class API {
     // 수정 - 설정 언어 별
     final res = await api("$korBaseUrl/common/levels", HttpMethod.get);
     if (res.statusCode == 200) {
-      return (jsonDecode(res.body)["data"]["levels"] as List)
+      return (jsonDecode(utf8.decode(res.bodyBytes))["data"]["levels"] as List)
           .map((e) => Level.fromJson(e))
           .toList();
     } else {
@@ -105,7 +110,8 @@ class API {
     // 수정 - 설정 언어 별
     final res = await api("$korBaseUrl/common/keywords", HttpMethod.get);
     if (res.statusCode == 200) {
-      return (jsonDecode(res.body)["data"]["keywords"] as List)
+      return (jsonDecode(utf8.decode(res.bodyBytes))["data"]["keywords"]
+              as List)
           .map((e) => Interest.fromJson(e))
           .toList();
     } else {
@@ -168,49 +174,70 @@ class API {
   }
 
   /* 홈 API */
-  Future<UserSimple> getMyPrfile() async { // 수정 - 테스트 API
-    final res = await api("$testUrl/profile/1", HttpMethod.get);
-    if(res.statusCode == 200) {
-      return UserSimple.fromJson(jsonDecode(res.body)["data"]);
+  Future<UserSimple> getMyPrfile() async {
+    // 수정 - 테스트 API
+    final res = await api("$korTestUrl/profile/1", HttpMethod.get);
+    if (res.statusCode == 200) {
+      return UserSimple.fromJson(jsonDecode(utf8.decode(res.bodyBytes))["data"]);
     } else {
       throw Exception("http error :(");
     }
   }
 
-  Future<List<CrewSimple>> getMyCrews() async { // 수정 - 테스트 API
-    final res = await api("$testUrl/crew/me", HttpMethod.get);
-    if(res.statusCode == 200) {
-      return (jsonDecode(res.body)["data"]["crews"] as List).map((e) => CrewSimple.fromJson(e)).toList();
+  Future<List<CrewSimple>> getMyCrews() async {
+    // 수정 - 테스트 API
+    final res = await api("$testUrl/crews/me", HttpMethod.get);
+    if (res.statusCode == 200) {
+      return (jsonDecode(utf8.decode(res.bodyBytes))["data"]["crews"] as List)
+          .map((e) => CrewSimple.fromJson(e))
+          .toList();
     } else {
       throw Exception("http error :(");
-    } 
+    }
   }
 
-  Future<List<CrewSimple>> getNowCrews() async { // 수정 - 테스트 API
-    final res = await api("$testUrl/crew/can-join", HttpMethod.get);
-    if(res.statusCode == 200) {
-      return (jsonDecode(res.body)["data"]["crews"] as List).map((e) => CrewSimple.fromJson(e)).toList();
+  Future<List<CrewSimple>> getNowCrews() async {
+    // 수정 - 테스트 API
+    final res = await api("$testUrl/crews/me/can-join", HttpMethod.get);
+    if (res.statusCode == 200) {
+      return (jsonDecode(utf8.decode(res.bodyBytes))["data"]["crews"] as List)
+          .map((e) => CrewSimple.fromJson(e))
+          .toList();
     } else {
       throw Exception("http error :(");
-    } 
+    }
   }
 
-  Future<Content> getTodayContent() async { // 수정 - 테스트 API
+  Future<Content> getTodayContent() async {
+    // 수정 - 테스트 API
     final res = await api("$testUrl/content/today", HttpMethod.get);
-    if(res.statusCode == 200) {
-      return Content.fromJson(jsonDecode(res.body)["data"]["content"]);
+    if (res.statusCode == 200) {
+      return Content.fromJson(jsonDecode(utf8.decode(res.bodyBytes))["data"]["content"]);
     } else {
       throw Exception("http error :(");
     }
   }
 
   /* 홈 - 크루 API */
-  Future<List<Crew>> getCrews() async { // 수정 - 테스트 API & page, sort
+  Future<List<Crew>> getCrews() async {
+    // 수정 - 테스트 API & page, sort
     final res = await api("$korTestUrl/crews", HttpMethod.get);
-    if(res.statusCode == 200) {
-      return (jsonDecode(res.body)["data"]["crews"] as List).map((e) => Crew.fromJson(e)).toList();
+    if (res.statusCode == 200) {
+      return (jsonDecode(utf8.decode(res.bodyBytes))["data"]["content"] as List)
+          .map((e) => Crew.fromJson(e))
+          .toList();
     } else {
       throw Exception("http error :(");
-    } 
+    }
+  }
+
+  Future<CrewDetail> getCrewDetail() async {
+    // 수정 - 테스트 API & crewId, 한글
+    final res = await api("$korTestUrl/crews/1", HttpMethod.get);
+    if (res.statusCode == 200) {
+      return (CrewDetail.fromJson(jsonDecode(utf8.decode(res.bodyBytes))["data"]));
+    } else {
+      throw Exception("http error :(");
+    }
   }
 }
