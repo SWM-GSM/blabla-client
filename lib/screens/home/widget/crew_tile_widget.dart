@@ -22,8 +22,11 @@ class CrewTileWidget extends StatelessWidget {
         onTap: () async {
           if (crew != null) {
             await viewModel.getCrewDetail(crew.id).then((value) =>
-                Navigator.of(context, rootNavigator: true).push(
-                    MaterialPageRoute(builder: (context) => CrewDetailView())));
+                Navigator.of(context, rootNavigator: true)
+                    .push(MaterialPageRoute(
+                        builder: (context) => CrewDetailView(
+                              imgWidth: MediaQuery.of(context).size.width,
+                            ))));
           }
         },
         child: Container(
@@ -74,8 +77,11 @@ class CrewTileWidget extends StatelessWidget {
         onTap: () async {
           if (crew != null) {
             await viewModel.getCrewDetail(crew.id).then((value) =>
-                Navigator.of(context, rootNavigator: true).push(
-                    MaterialPageRoute(builder: (context) => CrewDetailView())));
+                Navigator.of(context, rootNavigator: true)
+                    .push(MaterialPageRoute(
+                        builder: (context) => CrewDetailView(
+                              imgWidth: MediaQuery.of(context).size.width,
+                            ))));
           }
         },
         child: Container(

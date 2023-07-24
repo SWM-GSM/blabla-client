@@ -50,7 +50,9 @@ class RecruitCompleteView extends StatelessWidget {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => CrewDetailView()));
+                            builder: (context) => CrewDetailView(
+                                  imgWidth: MediaQuery.of(context).size.width,
+                                )));
                   },
                   child: Container(
                     margin:
