@@ -1,13 +1,16 @@
+import 'package:blabla/screens/crew_space/crews_view_model.dart';
 import 'package:blabla/styles/colors.dart';
 import 'package:blabla/styles/txt_style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:provider/provider.dart';
 
-class CrewJoinedView extends StatelessWidget {
-  const CrewJoinedView({super.key});
+class CrewsJoinedView extends StatelessWidget {
+  const CrewsJoinedView({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final viewModel = Provider.of<CrewsViewModel>(context);
     return Scaffold(
         appBar: AppBar(
           toolbarHeight: 60,
@@ -28,7 +31,7 @@ class CrewJoinedView extends StatelessWidget {
               crossAxisCount: 2,
               childAspectRatio: 170 / 220,
               children: List.generate(
-                  9,
+                  viewModel.myCrewList.length,
                   (idx) => Stack(
                         children: [
                           Container(
@@ -36,7 +39,7 @@ class CrewJoinedView extends StatelessWidget {
                               borderRadius: BorderRadius.circular(12),
                               image: DecorationImage(
                                 image: AssetImage(
-                                  "assets/imgs/img_360_crew_exercise.png",
+                                  "assets/imgs/img_360_crew_${viewModel.myCrewList[idx].coverImage}.png",
                                 ),
                                 fit: BoxFit.cover,
                               ),
@@ -68,7 +71,7 @@ class CrewJoinedView extends StatelessWidget {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    "겁나 길고 길고 길고 길고 길고 긴 길고 긴 길고 장문 테스트",
+                                    viewModel.myCrewList[idx].name,
                                     maxLines: 2,
                                     style: BlaTxt.txt14SB
                                         .copyWith(color: BlaColor.white),
@@ -85,12 +88,12 @@ class CrewJoinedView extends StatelessWidget {
                                       ),
                                       const SizedBox(width: 4),
                                       Text(
-                                        "5",
+                                        viewModel.myCrewList[idx].currentNum.toString(),
                                         style: BlaTxt.txt12SB
                                             .copyWith(color: BlaColor.white),
                                       ),
                                       Text(
-                                        " / 8",
+                                        " / ${viewModel.myCrewList[idx].maxNum}",
                                         style: BlaTxt.txt12R.copyWith(
                                             color: BlaColor.white
                                                 .withOpacity(0.6)),

@@ -1,5 +1,7 @@
 import 'package:amplitude_flutter/amplitude.dart';
 import 'package:blabla/providers/nav_provider.dart';
+import 'package:blabla/screens/crew_space/crews_joined_view.dart';
+import 'package:blabla/screens/crew_space/crews_view_model.dart';
 import 'package:blabla/screens/home/crew_detail_view.dart';
 import 'package:blabla/screens/home/crew_list_view.dart';
 import 'package:blabla/screens/home/home_view.dart';
@@ -37,6 +39,7 @@ void main() async {
         ChangeNotifierProvider(create: (_) => NavProvider()),
         ChangeNotifierProvider(create: (_) => HomeViewModel()),
         ChangeNotifierProvider(create: (_) => CrewViewModel()),
+        ChangeNotifierProvider(create: (_) => CrewsViewModel()),
       ], child: const MyApp()),
     ),
   );
@@ -73,14 +76,14 @@ class Main extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final navProvider = Provider.of<NavProvider>(context);
-    final navKeyList = List.generate(5, (idx) => GlobalKey<NavigatorState>());
+    final navKeyList = List.generate(5, (idx) => GlobalKey<NavigatorState>()); 
     final botNavList = ["home", "team", "play", "notepad", "person"];
     final pageList = [
       HomeView(),
-      HomeView(),
-      HomeView(),
-      HomeView(),
-      HomeView(),
+      CrewsJoinedView(),
+      MySpace(),
+      Report(),
+      MyPage(),
     ];
 
     return Scaffold(
@@ -122,5 +125,32 @@ class Main extends StatelessWidget {
             .toList(),
       ),
     );
+  }
+}
+
+class MySpace extends StatelessWidget {
+  const MySpace({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Placeholder();
+  }
+}
+
+class Report extends StatelessWidget {
+  const Report({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Placeholder();
+  }
+}
+
+class MyPage extends StatelessWidget {
+  const MyPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Placeholder();
   }
 }
