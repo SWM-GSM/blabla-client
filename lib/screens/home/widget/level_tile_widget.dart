@@ -50,7 +50,7 @@ class LevelTileWidget extends StatelessWidget {
           child: Slider(
               inactiveColor: BlaColor.grey100,
               thumbColor: BlaColor.orange,
-              value: 3,
+              value: level.degree.toDouble(),
               min: 1,
               max: 5,
               divisions: 4,

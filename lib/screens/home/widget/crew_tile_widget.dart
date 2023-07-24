@@ -86,6 +86,7 @@ class CrewTileWidget extends StatelessWidget {
         },
         child: Container(
           padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
+          color: BlaColor.white,
           child: Row(
             children: [
               crew == null

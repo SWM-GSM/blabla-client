@@ -190,7 +190,7 @@ class _CrewDetailViewState extends State<CrewDetailView> {
                   ),
                   qaColumn("어떤 크루원들과 함께하고 싶나요?", viewModel.crew!.preferMember),
                   qaColumn("얼마나 자주 모이고 싶나요?", viewModel.crew!.meetingCycle),
-                  qaColumn("어떤 크루원들과 함께하고 싶나요?", viewModel.crew!.detail),
+                 if (viewModel.crew!.detail != "") qaColumn("크루에 대한 더 자세한 소개", viewModel.crew!.detail),
                 ],
               ),
             ),
@@ -246,7 +246,7 @@ class _CrewDetailViewState extends State<CrewDetailView> {
                         style: BlaTxt.txt14M.copyWith(color: BlaColor.grey700),
                       ),
                 Padding(
-                  padding: EdgeInsets.only(top: 16, bottom: 12),
+                  padding: const EdgeInsets.only(top: 16, bottom: 12),
                   child: GestureDetector(
                     onTap: () {},
                     child: Container(
