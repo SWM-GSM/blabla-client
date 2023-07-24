@@ -1,3 +1,4 @@
+import 'package:blabla/models/level.dart';
 import 'package:blabla/models/member.dart';
 
 class CrewSimple {
@@ -84,10 +85,8 @@ class CrewDetail {
     String meetingCycle;
     int maxNum;
     int currentNum;
-    int korLevel;
-    String korLevelText;
-    int engLevel;
-    String engLevelText;
+    Level korLevel;
+    Level engLevel;
     String preferMember;
     String detail;
     bool autoApproval;
@@ -102,9 +101,7 @@ class CrewDetail {
         required this.maxNum,
         required this.currentNum,
         required this.korLevel,
-        required this.korLevelText,
         required this.engLevel,
-        required this.engLevelText,
         required this.preferMember,
         required this.detail,
         required this.autoApproval,
@@ -113,16 +110,14 @@ class CrewDetail {
         required this.tags,
     });
 
-    factory CrewDetail.fromJson(Map<String, dynamic> json) => CrewDetail(
+    factory CrewDetail.fromJson(Map<dynamic, dynamic> json) => CrewDetail(
         name: json["name"],
         description: json["description"],
         meetingCycle: json["meetingCycle"],
         maxNum: json["maxNum"],
         currentNum: json["currentNum"],
-        korLevel: json["korLevel"],
-        korLevelText: json["korLevelText"],
-        engLevel: json["engLevel"],
-        engLevelText: json["engLevelText"],
+        korLevel: Level(degree: json["korLevel"], desc: json["korLevelText"],),
+        engLevel: Level(degree: json["engLevel"], desc: json["engLevelText"],),
         preferMember: json["preferMember"],
         detail: json["detail"],
         autoApproval: json["autoApproval"],
@@ -130,22 +125,4 @@ class CrewDetail {
         members: List<Member>.from(json["members"].map((x) => Member.fromJson(x))),
         tags: List<String>.from(json["tags"].map((x) => x)),
     );
-
-    Map<String, dynamic> toJson() => {
-        "name": name,
-        "description": description,
-        "meetingCycle": meetingCycle,
-        "maxNum": maxNum,
-        "currentNum": currentNum,
-        "korLevel": korLevel,
-        "korLevelText": korLevelText,
-        "engLevel": engLevel,
-        "engLevelText": engLevelText,
-        "preferMember": preferMember,
-        "detail": detail,
-        "autoApproval": autoApproval,
-        "coverImage": coverImage,
-        "members": List<dynamic>.from(members.map((x) => x.toJson())),
-        "tags": List<dynamic>.from(tags.map((x) => x)),
-    };
 }
