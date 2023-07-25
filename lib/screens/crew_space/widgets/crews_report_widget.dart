@@ -1,11 +1,15 @@
+import 'package:blabla/models/report.dart';
 import 'package:blabla/styles/colors.dart';
 import 'package:blabla/styles/txt_style.dart';
 import 'package:blabla/widgets/profile_widget.dart';
+import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
 
 class CrewsReportWidget extends StatelessWidget {
-  const CrewsReportWidget({super.key, required this.reportType});
+  const CrewsReportWidget(
+      {super.key, required this.reportType, required this.report});
   final bool reportType; // 임시 생성 중
+  final Report report;
 
   @override
   Widget build(BuildContext context) {
@@ -28,39 +32,32 @@ class CrewsReportWidget extends StatelessWidget {
                     Wrap(
                       spacing: -8,
                       direction: Axis.horizontal,
-                      children: [
-                        const ProfileWidget(
-                          profileSize: 16,
-                          profile: "cat",
-                          bgSize: 32,
-                          bgColor: Color(0xFFFFF6DE),
-                        ),
-                        const ProfileWidget(
-                          profileSize: 16,
-                          profile: "dog",
-                          bgSize: 32,
-                          bgColor: Color(0xFFEDE5E4),
-                        ),
-                        const ProfileWidget(
-                          profileSize: 16,
-                          profile: "chicken",
-                          bgSize: 32,
-                          bgColor: Color(0xFFF8F7F9),
-                        ),
-                        Container(
-                            width: 32,
-                            height: 32,
-                            alignment: Alignment.center,
-                            padding: const EdgeInsets.symmetric(vertical: 8),
-                            decoration: const BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: BlaColor.grey300),
-                            child: Text(
-                              "+9",
-                              style: BlaTxt.txt12B
-                                  .copyWith(color: BlaColor.grey700),
-                            )),
-                      ],
+                      children: List.generate(report.members.length, (idx) {
+                        if (idx < 3) {
+                          return ProfileWidget(
+                            profileSize: 16,
+                            profile: report.members[idx].profileImage,
+                            bgSize: 32,
+                            bgColor: Color(0xFFFFF6DE),
+                          );
+                        } else if (idx == 3) {
+                          return Container(
+                              width: 32,
+                              height: 32,
+                              alignment: Alignment.center,
+                              padding: const EdgeInsets.symmetric(vertical: 8),
+                              decoration: const BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: BlaColor.grey300),
+                              child: Text(
+                                "+${report.members.length - 3}",
+                                style: BlaTxt.txt12B
+                                    .copyWith(color: BlaColor.grey700),
+                              ));
+                        } else {
+                          return SizedBox();
+                        }
+                      }),
                     ),
                   ],
                 ),
@@ -70,7 +67,7 @@ class CrewsReportWidget extends StatelessWidget {
                   style: BlaTxt.txt12R.copyWith(color: BlaColor.grey700),
                 ),
                 const SizedBox(height: 4),
-                Text("00:23:40", style: BlaTxt.txt12M),
+                Text(report.durationTime, style: BlaTxt.txt12M),
                 const SizedBox(
                   height: 12,
                 ),
@@ -79,7 +76,10 @@ class CrewsReportWidget extends StatelessWidget {
                   style: BlaTxt.txt12R.copyWith(color: BlaColor.grey700),
                 ),
                 const SizedBox(height: 4),
-                Text("2023.05.30 16:00", style: BlaTxt.txt12M),
+                Text(
+                    formatDate(report.createdAt,
+                        [yyyy, ".", mm, ".", dd, " ", HH, ":", nn]),
+                    style: BlaTxt.txt12M),
               ],
             )
           : Container(

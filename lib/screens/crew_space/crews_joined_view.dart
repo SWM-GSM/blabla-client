@@ -34,13 +34,18 @@ class CrewsJoinedView extends StatelessWidget {
                 children: List.generate(
                     viewModel.myCrewList.length,
                     (idx) => GestureDetector(
-                      onTap: () {
-                        Navigator.of(context, rootNavigator: true).push(
-                            MaterialPageRoute(
-                                settings: const RouteSettings(name: "/CrewsMainView"),
-                                builder: (context) => CrewsMainView()));
-                      },
-                      child: Stack(
+                          onTap: () async {
+                            await viewModel
+                                .initCrew(viewModel.myCrewList[idx].id)
+                                .then((value) {
+                              Navigator.of(context, rootNavigator: true).push(
+                                  MaterialPageRoute(
+                                      settings: const RouteSettings(
+                                          name: "/CrewsMainView"),
+                                      builder: (context) => CrewsMainView()));
+                            });
+                          },
+                          child: Stack(
                             children: [
                               Container(
                                 decoration: BoxDecoration(
@@ -76,7 +81,8 @@ class CrewsJoinedView extends StatelessWidget {
                                   child: Column(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         viewModel.myCrewList[idx].name,
@@ -92,14 +98,15 @@ class CrewsJoinedView extends StatelessWidget {
                                             width: 16,
                                             height: 16,
                                             colorFilter: const ColorFilter.mode(
-                                                BlaColor.white, BlendMode.srcIn),
+                                                BlaColor.white,
+                                                BlendMode.srcIn),
                                           ),
                                           const SizedBox(width: 4),
                                           Text(
                                             viewModel.myCrewList[idx].currentNum
                                                 .toString(),
-                                            style: BlaTxt.txt12SB
-                                                .copyWith(color: BlaColor.white),
+                                            style: BlaTxt.txt12SB.copyWith(
+                                                color: BlaColor.white),
                                           ),
                                           Text(
                                             " / ${viewModel.myCrewList[idx].maxNum}",
@@ -115,6 +122,6 @@ class CrewsJoinedView extends StatelessWidget {
                               ),
                             ],
                           ),
-                    )))));
+                        )))));
   }
 }

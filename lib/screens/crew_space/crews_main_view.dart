@@ -1,15 +1,18 @@
+import 'package:blabla/screens/crew_space/crews_view_model.dart';
 import 'package:blabla/screens/crew_space/widgets/crews_report_widget.dart';
 import 'package:blabla/styles/colors.dart';
 import 'package:blabla/styles/txt_style.dart';
 import 'package:blabla/widgets/profile_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:provider/provider.dart';
 
 class CrewsMainView extends StatelessWidget {
   const CrewsMainView({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final viewModel = Provider.of<CrewsViewModel>(context);
     return Scaffold(
         appBar: AppBar(
           toolbarHeight: 64,
@@ -137,11 +140,10 @@ class CrewsMainView extends StatelessWidget {
                       alignment: WrapAlignment.center,
                       children: [
                         const ProfileWidget(
-                          profileSize: 36,
-                          profile: "cat",
-                          bgSize: 60,
-                          bgColor: BlaColor.lightOrange
-                        ),
+                            profileSize: 36,
+                            profile: "cat",
+                            bgSize: 60,
+                            bgColor: BlaColor.lightOrange),
                         const ProfileWidget(
                           profileSize: 36,
                           profile: "dog",
@@ -222,18 +224,17 @@ class CrewsMainView extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 20),
-                    const SingleChildScrollView(
+                  SingleChildScrollView(
                         scrollDirection: Axis.horizontal,
-                        padding: EdgeInsets.symmetric(horizontal: 20),
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
                         child: Wrap(
-                          direction: Axis.horizontal,
-                          spacing: 16,
-                          children: [
-                            CrewsReportWidget(reportType: false,),
-                            CrewsReportWidget(reportType: true,),
-                            CrewsReportWidget(reportType: true,),
-                          ],
-                        )),
+                            direction: Axis.horizontal,
+                            spacing: 16,
+                            children: List.generate(
+                                viewModel.reportList.length,
+                                (idx) => CrewsReportWidget(
+                                    reportType: true,
+                                    report: viewModel.reportList[idx])))),
                   ],
                 ),
               )

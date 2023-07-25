@@ -5,6 +5,7 @@ import 'package:blabla/models/crew.dart';
 import 'package:blabla/models/emoji_name_tag.dart';
 import 'package:blabla/models/interest.dart';
 import 'package:blabla/models/level.dart';
+import 'package:blabla/models/report.dart';
 import 'package:blabla/models/user.dart';
 import 'package:blabla/utils/dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -236,6 +237,18 @@ class API {
     final res = await api("$korTestUrl/crews/1", HttpMethod.get);
     if (res.statusCode == 200) {
       return (CrewDetail.fromJson(jsonDecode(utf8.decode(res.bodyBytes))["data"]));
+    } else {
+      throw Exception("http error :(");
+    }
+  }
+
+  /* 크루 스페이스 */
+  Future<List<Report>> getReports(int crewId) async {
+    final res = await api("$testUrl/crews/$crewId/reports", HttpMethod.get);
+    if (res.statusCode == 200) {
+      return (jsonDecode(utf8.decode(res.bodyBytes))["data"]["reports"] as List)
+          .map((e) => Report.fromJson(e))
+          .toList();
     } else {
       throw Exception("http error :(");
     }
