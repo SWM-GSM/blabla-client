@@ -1,3 +1,4 @@
+import 'package:blabla/screens/crew_space/crews_main_view.dart';
 import 'package:blabla/screens/crew_space/crews_view_model.dart';
 import 'package:blabla/styles/colors.dart';
 import 'package:blabla/styles/txt_style.dart';
@@ -32,80 +33,88 @@ class CrewsJoinedView extends StatelessWidget {
                 childAspectRatio: 170 / 220,
                 children: List.generate(
                     viewModel.myCrewList.length,
-                    (idx) => Stack(
-                          children: [
-                            Container(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(12),
-                                image: DecorationImage(
-                                  image: AssetImage(
-                                    "assets/imgs/img_360_crew_${viewModel.myCrewList[idx].coverImage}.png",
+                    (idx) => GestureDetector(
+                      onTap: () {
+                        Navigator.of(context, rootNavigator: true).push(
+                            MaterialPageRoute(
+                                settings: const RouteSettings(name: "/CrewsMainView"),
+                                builder: (context) => CrewsMainView()));
+                      },
+                      child: Stack(
+                            children: [
+                              Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(12),
+                                  image: DecorationImage(
+                                    image: AssetImage(
+                                      "assets/imgs/img_360_crew_${viewModel.myCrewList[idx].coverImage}.png",
+                                    ),
+                                    fit: BoxFit.cover,
                                   ),
-                                  fit: BoxFit.cover,
                                 ),
                               ),
-                            ),
-                            Positioned(
-                              bottom: 0,
-                              left: 0,
-                              right: 0,
-                              child: Container(
-                                height: 96,
-                                padding: const EdgeInsets.all(16),
-                                decoration: BoxDecoration(
-                                  borderRadius: const BorderRadius.only(
-                                      bottomLeft: Radius.circular(12),
-                                      bottomRight: Radius.circular(12)),
-                                  gradient: LinearGradient(
-                                    begin: Alignment.bottomCenter,
-                                    end: Alignment.topCenter,
-                                    colors: [
-                                      BlaColor.black.withOpacity(0.7),
-                                      BlaColor.black.withOpacity(0.0),
+                              Positioned(
+                                bottom: 0,
+                                left: 0,
+                                right: 0,
+                                child: Container(
+                                  height: 96,
+                                  padding: const EdgeInsets.all(16),
+                                  decoration: BoxDecoration(
+                                    borderRadius: const BorderRadius.only(
+                                        bottomLeft: Radius.circular(12),
+                                        bottomRight: Radius.circular(12)),
+                                    gradient: LinearGradient(
+                                      begin: Alignment.bottomCenter,
+                                      end: Alignment.topCenter,
+                                      colors: [
+                                        BlaColor.black.withOpacity(0.7),
+                                        BlaColor.black.withOpacity(0.0),
+                                      ],
+                                    ),
+                                  ),
+                                  child: Column(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        viewModel.myCrewList[idx].name,
+                                        maxLines: 2,
+                                        style: BlaTxt.txt14SB
+                                            .copyWith(color: BlaColor.white),
+                                      ),
+                                      const SizedBox(height: 8),
+                                      Row(
+                                        children: [
+                                          SvgPicture.asset(
+                                            "assets/icons/ic_16_team.svg",
+                                            width: 16,
+                                            height: 16,
+                                            colorFilter: const ColorFilter.mode(
+                                                BlaColor.white, BlendMode.srcIn),
+                                          ),
+                                          const SizedBox(width: 4),
+                                          Text(
+                                            viewModel.myCrewList[idx].currentNum
+                                                .toString(),
+                                            style: BlaTxt.txt12SB
+                                                .copyWith(color: BlaColor.white),
+                                          ),
+                                          Text(
+                                            " / ${viewModel.myCrewList[idx].maxNum}",
+                                            style: BlaTxt.txt12R.copyWith(
+                                                color: BlaColor.white
+                                                    .withOpacity(0.6)),
+                                          ),
+                                        ],
+                                      ),
                                     ],
                                   ),
                                 ),
-                                child: Column(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      viewModel.myCrewList[idx].name,
-                                      maxLines: 2,
-                                      style: BlaTxt.txt14SB
-                                          .copyWith(color: BlaColor.white),
-                                    ),
-                                    const SizedBox(height: 8),
-                                    Row(
-                                      children: [
-                                        SvgPicture.asset(
-                                          "assets/icons/ic_16_team.svg",
-                                          width: 16,
-                                          height: 16,
-                                          colorFilter: const ColorFilter.mode(
-                                              BlaColor.white, BlendMode.srcIn),
-                                        ),
-                                        const SizedBox(width: 4),
-                                        Text(
-                                          viewModel.myCrewList[idx].currentNum
-                                              .toString(),
-                                          style: BlaTxt.txt12SB
-                                              .copyWith(color: BlaColor.white),
-                                        ),
-                                        Text(
-                                          " / ${viewModel.myCrewList[idx].maxNum}",
-                                          style: BlaTxt.txt12R.copyWith(
-                                              color: BlaColor.white
-                                                  .withOpacity(0.6)),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
                               ),
-                            ),
-                          ],
-                        )))));
+                            ],
+                          ),
+                    )))));
   }
 }
