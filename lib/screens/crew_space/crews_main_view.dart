@@ -1,4 +1,5 @@
 import 'package:blabla/screens/crew_space/crews_view_model.dart';
+import 'package:blabla/screens/crew_space/crews_voiceroom_view.dart';
 import 'package:blabla/screens/crew_space/widgets/crews_report_widget.dart';
 import 'package:blabla/styles/colors.dart';
 import 'package:blabla/styles/txt_style.dart';
@@ -184,7 +185,12 @@ class CrewsMainView extends StatelessWidget {
                     ),
                   ),
                   GestureDetector(
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => CrewsVoiceroomView()));
+                    },
                     child: Container(
                       width: double.infinity,
                       height: 48,
