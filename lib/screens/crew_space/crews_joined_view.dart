@@ -14,7 +14,7 @@ class CrewsJoinedView extends StatelessWidget {
     final viewModel = Provider.of<CrewsViewModel>(context);
     return Scaffold(
         appBar: AppBar(
-          toolbarHeight: 60,
+          toolbarHeight: 64,
           title: Text(
             "가입한 크루",
             style: BlaTxt.txt18B,

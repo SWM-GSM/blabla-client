@@ -1,4 +1,5 @@
 import 'package:blabla/models/crew.dart';
+import 'package:blabla/providers/nav_provider.dart';
 import 'package:blabla/screens/home/crew_detail_view.dart';
 import 'package:blabla/screens/home/crew_list_view.dart';
 import 'package:blabla/screens/home/home_view_model.dart';
@@ -17,6 +18,7 @@ class HomeView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final navProvider = Provider.of<NavProvider>(context);
     final viewModel = Provider.of<HomeViewModel>(context);
     return Scaffold(
       body: SafeArea(
@@ -95,7 +97,7 @@ class HomeView extends StatelessWidget {
                 ),
               ),
               crewList(context, viewModel.myCrewList, "나의 크루", () {
-                print('zz');
+                navProvider.changeIdx(1);
               }),
               crewList(context, viewModel.nowCrewList, "지금 참여 가능한 크루", () {
                 Navigator.push(
