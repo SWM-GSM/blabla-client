@@ -3,6 +3,7 @@ import 'package:blabla/screens/crew_space/widgets/crews_report_widget.dart';
 import 'package:blabla/styles/colors.dart';
 import 'package:blabla/styles/txt_style.dart';
 import 'package:blabla/widgets/profile_widget.dart';
+import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
@@ -70,12 +71,28 @@ class CrewsMainView extends StatelessWidget {
                     Row(
                       children: [
                         Text(
-                          "D-30",
+                          "D-${viewModel.upcomingSchedule.dday}",
                           style: BlaTxt.txt16B.copyWith(color: BlaColor.orange),
                         ),
                         const SizedBox(width: 8),
                         Text(
-                          "6월 30일 금요일 오후 6:00",
+                          formatDate(
+                              viewModel.upcomingSchedule.meetingTime,
+                              [
+                                m,
+                                "월 ",
+                                d,
+                                "일 ",
+                                D,
+                                "요일 ",
+                                am,
+                                " ",
+                                hh,
+                                ":",
+                                nn
+                              ],
+                              locale:
+                                  const KoreanDateLocale()), // 수정 - 한글/영어 택하게 수정
                           style:
                               BlaTxt.txt16R.copyWith(color: BlaColor.grey700),
                         ),
@@ -84,33 +101,25 @@ class CrewsMainView extends StatelessWidget {
                     Padding(
                         padding: const EdgeInsets.symmetric(vertical: 8),
                         child: Text(
-                          "OT - 자기소개(Self Introduction)",
+                          viewModel.upcomingSchedule.title,
                           style: BlaTxt.txt16B,
                           maxLines: 1,
                         )),
-                    const Wrap(
-                      direction: Axis.horizontal,
-                      spacing: 8,
-                      children: [
-                        ProfileWidget(
-                          profileSize: 24,
-                          profile: "cat",
-                          bgSize: 48,
-                          bgColor: Color(0xFFFFF6DE),
+                    SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Wrap(
+                        direction: Axis.horizontal,
+                        spacing: 8,
+                        children: List.generate(
+                          viewModel.upcomingSchedule.profiles.length,
+                          (idx) => ProfileWidget(
+                            profileSize: 24,
+                            profile: viewModel.upcomingSchedule.profiles[idx],
+                            bgSize: 48,
+                            bgColor: Color(0xFFFFF6DE),
+                          ),
                         ),
-                        ProfileWidget(
-                          profileSize: 24,
-                          profile: "dog",
-                          bgSize: 48,
-                          bgColor: Color(0xFFEDE5E4),
-                        ),
-                        ProfileWidget(
-                          profileSize: 24,
-                          profile: "chicken",
-                          bgSize: 48,
-                          bgColor: Color(0xFFF8F7F9),
-                        ),
-                      ],
+                      ),
                     ),
                   ],
                 ),
@@ -224,7 +233,7 @@ class CrewsMainView extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 20),
-                  SingleChildScrollView(
+                    SingleChildScrollView(
                         scrollDirection: Axis.horizontal,
                         padding: const EdgeInsets.symmetric(horizontal: 20),
                         child: Wrap(

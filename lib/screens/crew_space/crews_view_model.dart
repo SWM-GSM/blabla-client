@@ -1,16 +1,22 @@
 import 'package:blabla/models/crew.dart';
 import 'package:blabla/models/report.dart';
+import 'package:blabla/models/schedule.dart';
 import 'package:blabla/services/apis/api.dart';
 import 'package:flutter/material.dart';
 
 class CrewsViewModel with ChangeNotifier {
   final api = API();
+  
   List<CrewSimple> _myCrewList = [];
+  List<CrewSimple> get myCrewList => _myCrewList;
+
+  /* 개별 크루 스페이스 */
   late int _crewId;
   List<Report> _reportList = [];
+  late ScheduleSimple _upcomingSchedule;
 
-  List<CrewSimple> get myCrewList => _myCrewList;
   List<Report> get reportList => _reportList;
+  ScheduleSimple get upcomingSchedule => _upcomingSchedule;
   
   CrewsViewModel() {
     init();
@@ -30,6 +36,7 @@ class CrewsViewModel with ChangeNotifier {
     await Future.wait([
       setCrewId(input),
       getReports(),
+      getUpcomingSchedule(),
     ]);
   }
 
@@ -40,6 +47,11 @@ class CrewsViewModel with ChangeNotifier {
 
   Future<void> getReports() async {
     _reportList = await api.getReports(_crewId);
+    notifyListeners();
+  }
+
+  Future<void> getUpcomingSchedule() async {
+    _upcomingSchedule = await api.getUpcomingSchedule(_crewId);
     notifyListeners();
   }
 }

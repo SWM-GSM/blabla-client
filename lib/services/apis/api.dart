@@ -6,6 +6,7 @@ import 'package:blabla/models/emoji_name_tag.dart';
 import 'package:blabla/models/interest.dart';
 import 'package:blabla/models/level.dart';
 import 'package:blabla/models/report.dart';
+import 'package:blabla/models/schedule.dart';
 import 'package:blabla/models/user.dart';
 import 'package:blabla/utils/dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -179,7 +180,8 @@ class API {
     // 수정 - 테스트 API
     final res = await api("$korTestUrl/profile/1", HttpMethod.get);
     if (res.statusCode == 200) {
-      return UserSimple.fromJson(jsonDecode(utf8.decode(res.bodyBytes))["data"]);
+      return UserSimple.fromJson(
+          jsonDecode(utf8.decode(res.bodyBytes))["data"]);
     } else {
       throw Exception("http error :(");
     }
@@ -213,7 +215,8 @@ class API {
     // 수정 - 테스트 API
     final res = await api("$testUrl/content/today", HttpMethod.get);
     if (res.statusCode == 200) {
-      return Content.fromJson(jsonDecode(utf8.decode(res.bodyBytes))["data"]["content"]);
+      return Content.fromJson(
+          jsonDecode(utf8.decode(res.bodyBytes))["data"]["content"]);
     } else {
       throw Exception("http error :(");
     }
@@ -236,7 +239,8 @@ class API {
     // 수정 - 테스트 API & crewId, 한글
     final res = await api("$korTestUrl/crews/1", HttpMethod.get);
     if (res.statusCode == 200) {
-      return (CrewDetail.fromJson(jsonDecode(utf8.decode(res.bodyBytes))["data"]));
+      return (CrewDetail.fromJson(
+          jsonDecode(utf8.decode(res.bodyBytes))["data"]));
     } else {
       throw Exception("http error :(");
     }
@@ -249,6 +253,17 @@ class API {
       return (jsonDecode(utf8.decode(res.bodyBytes))["data"]["reports"] as List)
           .map((e) => Report.fromJson(e))
           .toList();
+    } else {
+      throw Exception("http error :(");
+    }
+  }
+
+  Future<ScheduleSimple> getUpcomingSchedule(int crewId) async {
+    final res =
+        await api("$testUrl/crews/$crewId/schedules/upcoming", HttpMethod.get);
+    if (res.statusCode == 200) {
+      return ScheduleSimple.fromJson(
+          jsonDecode(utf8.decode(res.bodyBytes))["data"]);
     } else {
       throw Exception("http error :(");
     }

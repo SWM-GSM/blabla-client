@@ -82,7 +82,7 @@ class Main extends StatelessWidget {
       HomeView(),
       CrewsJoinedView(),
       MySpace(),
-      Report(),
+      ReportPage(),
       MyPage(),
     ];
 
@@ -137,8 +137,8 @@ class MySpace extends StatelessWidget {
   }
 }
 
-class Report extends StatelessWidget {
-  const Report({super.key});
+class ReportPage extends StatelessWidget {
+  const ReportPage({super.key});
 
   @override
   Widget build(BuildContext context) {
