@@ -1,3 +1,4 @@
+import 'package:blabla/screens/crew_space/crews_reports_view.dart';
 import 'package:blabla/screens/crew_space/crews_view_model.dart';
 import 'package:blabla/screens/crew_space/crews_voiceroom_view.dart';
 import 'package:blabla/screens/crew_space/widgets/crews_report_widget.dart';
@@ -219,7 +220,13 @@ class CrewsMainView extends StatelessWidget {
                         children: [
                           Text("크루 리포트", style: BlaTxt.txt20B),
                           GestureDetector(
-                            onTap: () {},
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          const CrewsReportsView()));
+                            },
                             child: Row(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
