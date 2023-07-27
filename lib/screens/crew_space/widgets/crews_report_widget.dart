@@ -1,4 +1,5 @@
 import 'package:blabla/models/report.dart';
+import 'package:blabla/screens/crew_space/crews_report_detail_view.dart';
 import 'package:blabla/styles/colors.dart';
 import 'package:blabla/styles/txt_style.dart';
 import 'package:blabla/widgets/profile_widget.dart';
@@ -21,8 +22,9 @@ class CrewsReportWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        if (!reportStatus) {
-          
+        if (reportStatus) {
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => CrewsReportDetailView()));
         }
       },
       child: switch (reportType) {
@@ -45,7 +47,8 @@ class CrewsReportWidget extends StatelessWidget {
                           Wrap(
                             spacing: -8,
                             direction: Axis.horizontal,
-                            children: List.generate(report.members.length, (idx) {
+                            children:
+                                List.generate(report.members.length, (idx) {
                               if (idx < 3) {
                                 return ProfileWidget(
                                   profileSize: 16,
@@ -116,7 +119,8 @@ class CrewsReportWidget extends StatelessWidget {
                         const SizedBox(height: 16),
                         Text(
                           "리포트 생성중...",
-                          style: BlaTxt.txt12SB.copyWith(color: BlaColor.grey700),
+                          style:
+                              BlaTxt.txt12SB.copyWith(color: BlaColor.grey700),
                         ),
                       ],
                     ),
@@ -159,10 +163,11 @@ class CrewsReportWidget extends StatelessWidget {
                               children: List.generate(
                                   report.members.length,
                                   (idx) => ProfileWidget(
-                                      profileSize: 24,
-                                      profile: report.members[idx].profileImage,
-                                      bgSize: 48,
-                                      bgColor: BlaColor.lightOrange,
+                                        profileSize: 24,
+                                        profile:
+                                            report.members[idx].profileImage,
+                                        bgSize: 48,
+                                        bgColor: BlaColor.lightOrange,
                                       ))),
                         ),
                       ),
