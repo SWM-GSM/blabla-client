@@ -94,8 +94,8 @@ class CrewsReportWidget extends StatelessWidget {
                       ),
                       const SizedBox(height: 4),
                       Text(
-                          formatDate(report.createdAt,
-                              [yyyy, ".", mm, ".", dd, " ", HH, ":", nn]),
+                          datetimeToStr(
+                              report.createdAt, StrDatetimeType.dotDelimiter),
                           style: BlaTxt.txt12M),
                     ],
                   )
@@ -186,17 +186,8 @@ class CrewsReportWidget extends StatelessWidget {
                                   height: 4,
                                 ),
                                 Text(
-                                  formatDate(report.createdAt, [
-                                    yyyy,
-                                    ".",
-                                    mm,
-                                    ".",
-                                    dd,
-                                    " ",
-                                    HH,
-                                    ":",
-                                    nn
-                                  ]),
+                                  datetimeToStr(report.createdAt,
+                                      StrDatetimeType.dotDelimiter),
                                   style: BlaTxt.txt12M,
                                 ),
                               ],

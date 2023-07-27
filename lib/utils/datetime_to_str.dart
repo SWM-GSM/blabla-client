@@ -1,0 +1,17 @@
+import 'package:date_format/date_format.dart';
+
+enum StrDatetimeType {
+  strDelimiter,
+  dotDelimiter,
+}
+
+datetimeToStr(DateTime datetime, StrDatetimeType type) {
+  switch (type) {
+    case StrDatetimeType.strDelimiter:
+      return formatDate(
+          datetime, [m, "월 ", d, "일 ", D, "요일 ", am, " ", hh, ":", nn],
+          locale: const KoreanDateLocale()); // 수정 - 한글/영어 택하게 수정
+    case StrDatetimeType.dotDelimiter:
+      return formatDate(datetime, [yyyy, ".", mm, ".", dd, " ", HH, ":", nn]);
+  }
+}
