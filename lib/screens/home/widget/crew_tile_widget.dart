@@ -33,6 +33,7 @@ class CrewTileWidget extends StatelessWidget {
           margin: const EdgeInsets.only(left: 20),
           width: 140,
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               crew == null
                   ? SkeletonBoxWidget(
@@ -67,6 +68,7 @@ class CrewTileWidget extends StatelessWidget {
                       crew.name!,
                       style: BlaTxt.txt14R,
                       maxLines: 2,
+                      textAlign: TextAlign.start,
                     ),
             ],
           ),
