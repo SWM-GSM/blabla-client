@@ -13,9 +13,12 @@ class CrewsViewModel with ChangeNotifier {
   /* 개별 크루 스페이스 */
   late int _crewId;
   List<Report> _reportList = [];
+  late ReportDetail _report; 
+  
   late ScheduleSimple _upcomingSchedule;
 
   List<Report> get reportList => _reportList;
+  ReportDetail get report => _report;
   ScheduleSimple get upcomingSchedule => _upcomingSchedule;
   
   CrewsViewModel() {
@@ -52,6 +55,11 @@ class CrewsViewModel with ChangeNotifier {
 
   Future<void> getUpcomingSchedule() async {
     _upcomingSchedule = await api.getUpcomingSchedule(_crewId);
+    notifyListeners();
+  }
+
+  Future<void> setReport(int reportId) async {
+    _report = await api.getDetailReport(_crewId, reportId);
     notifyListeners();
   }
 }

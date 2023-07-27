@@ -1,10 +1,13 @@
 import 'package:blabla/models/report.dart';
 import 'package:blabla/screens/crew_space/crews_report_detail_view.dart';
+import 'package:blabla/screens/crew_space/crews_view_model.dart';
 import 'package:blabla/styles/colors.dart';
 import 'package:blabla/styles/txt_style.dart';
+import 'package:blabla/utils/datetime_to_str.dart';
 import 'package:blabla/widgets/profile_widget.dart';
 import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 enum ReportType { small, big }
 
@@ -20,11 +23,14 @@ class CrewsReportWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final viewModel = Provider.of<CrewsViewModel>(context);
     return GestureDetector(
       onTap: () {
         if (reportStatus) {
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => CrewsReportDetailView()));
+          viewModel.setReport(report.id).then((value) => Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => CrewsReportDetailView())));
         }
       },
       child: switch (reportType) {

@@ -268,4 +268,13 @@ class API {
       throw Exception("http error :(");
     }
   }
+  /* 크루 리포트 */
+  Future<ReportDetail> getDetailReport(int crewId, int reportId) async {
+    final res = await api("$testUrl/crews/$crewId/reports/$reportId", HttpMethod.get);
+    if (res.statusCode == 200) {
+      return ReportDetail.fromJson(jsonDecode(utf8.decode(res.bodyBytes))["data"]);
+    } else {
+      throw Exception("http error :(");
+    }
+  }
 }

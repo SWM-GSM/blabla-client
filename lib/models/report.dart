@@ -27,7 +27,7 @@ class ReportDetail {
   String durationTime;
   List<MemberSimple> members;
   String bubbleChart;
-  List<Word> keywords;
+  List<Word> words;
   double korRatio;
   double engRatio;
   List<Feedback> feedbacks;
@@ -37,7 +37,7 @@ class ReportDetail {
     required this.durationTime,
     required this.members,
     required this.bubbleChart,
-    required this.keywords,
+    required this.words,
     required this.korRatio,
     required this.engRatio,
     required this.feedbacks,
@@ -49,8 +49,8 @@ class ReportDetail {
         members: List<MemberSimple>.from(
             json["members"].map((x) => MemberSimple.fromJson(x))),
         bubbleChart: json["bubbleChart"],
-        keywords: List<Word>.from(
-            json["keywords"].map((x) => Word.fromJson(x))),
+        words: List<Word>.from(
+            json["keyword"].map((x) => Word.fromJson(x))),
         korRatio: json["languageRatio"]["korean"],
         engRatio: json["languageRatio"]["english"],
         feedbacks: List<Feedback>.from(

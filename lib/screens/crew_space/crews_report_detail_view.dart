@@ -1,15 +1,28 @@
+import 'package:blabla/models/member.dart';
+import 'package:blabla/screens/crew_space/crews_view_model.dart';
 import 'package:blabla/screens/crew_space/widgets/crews_feedback_widget.dart';
 import 'package:blabla/styles/colors.dart';
 import 'package:blabla/styles/txt_style.dart';
+import 'package:blabla/utils/datetime_to_str.dart';
 import 'package:blabla/widgets/profile_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
 
 class CrewsReportDetailView extends StatelessWidget {
   const CrewsReportDetailView({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final viewModel = Provider.of<CrewsViewModel>(context);
+    final bubbleColors = [
+      BlaColor.coral500,
+      BlaColor.coral400,
+      BlaColor.coral300,
+      BlaColor.coral200,
+      BlaColor.coral100
+    ];
+
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 64,
@@ -62,7 +75,8 @@ class CrewsReportDetailView extends StatelessWidget {
                               BlaTxt.txt14M.copyWith(color: BlaColor.grey700),
                         ),
                         Text(
-                          "2023.05.30 16:00",
+                          datetimeToStr(viewModel.report.createdAt,
+                              StrDatetimeType.dotDelimiter),
                           style: BlaTxt.txt16SB,
                         )
                       ],
@@ -74,12 +88,12 @@ class CrewsReportDetailView extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          "소요 시간",
+                          viewModel.report.durationTime,
                           style:
                               BlaTxt.txt14M.copyWith(color: BlaColor.grey700),
                         ),
                         Text(
-                          "00:23:40",
+                          viewModel.report.durationTime,
                           style: BlaTxt.txt16SB,
                         )
                       ],
@@ -99,7 +113,7 @@ class CrewsReportDetailView extends StatelessWidget {
                           style: BlaTxt.txt20B,
                         ),
                         Text(
-                          " 8명",
+                          " ${viewModel.report.members.length}명",
                           style:
                               BlaTxt.txt20R.copyWith(color: BlaColor.grey700),
                         )
@@ -110,8 +124,8 @@ class CrewsReportDetailView extends StatelessWidget {
                     ),
                     Wrap(
                         runSpacing: 20,
-                        children:
-                            List.generate(8, (index) => profileWithName())),
+                        children: List.generate(viewModel.report.members.length,
+                            (idx) => profileWithName(viewModel.report.members[idx]))),
                   ],
                 ),
               ),
@@ -137,26 +151,21 @@ class CrewsReportDetailView extends StatelessWidget {
                       ),
                     ),
                     Column(
-                      children: [
-                        chartLabel(BlaColor.coral500, "미국 유머", 38),
-                        const SizedBox(
-                          height: 16,
-                        ),
-                        chartLabel(BlaColor.coral400, "여자친구", 32),
-                        const SizedBox(
-                          height: 16,
-                        ),
-                        chartLabel(BlaColor.coral300, "음악", 27),
-                        const SizedBox(
-                          height: 16,
-                        ),
-                        chartLabel(BlaColor.coral200, "먹방", 18),
-                        const SizedBox(
-                          height: 16,
-                        ),
-                        chartLabel(BlaColor.coral100, "넷플릭스", 9),
-                      ],
-                    )
+                        children: List.generate(
+                      viewModel.report.words.length,
+                      (idx) => Column(
+                        children: [
+                          chartLabel(
+                              bubbleColors[idx],
+                              viewModel.report.words[idx].name,
+                              viewModel.report.words[idx].count),
+                          if (idx - 1 != viewModel.report.words.length)
+                            const SizedBox(
+                              height: 16,
+                            )
+                        ],
+                      ),
+                    ))
                   ],
                 ),
               ),
@@ -173,7 +182,9 @@ class CrewsReportDetailView extends StatelessWidget {
                       height: 8,
                     ),
                     Text(
-                      "한국어를 영어보다 더 많이 사용하고 있어요!",
+                      viewModel.report.korRatio > viewModel.report.engRatio
+                          ? "한국어를 영어보다 더 많이 사용하고 있어요!"
+                          : "영어를 한국어보다 더 많이 사용하고 있어요!",
                       style: BlaTxt.txt12R.copyWith(color: BlaColor.grey700),
                     ),
                     const SizedBox(
@@ -182,7 +193,7 @@ class CrewsReportDetailView extends StatelessWidget {
                     Row(
                       children: [
                         Flexible(
-                            flex: 6,
+                            flex: viewModel.report.korRatio.toInt(),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -222,7 +233,7 @@ class CrewsReportDetailView extends StatelessWidget {
                                   height: 4,
                                 ),
                                 Text(
-                                  "60%",
+                                  "${viewModel.report.korRatio}%",
                                   style: BlaTxt.txt14B,
                                 ),
                               ],
@@ -231,7 +242,7 @@ class CrewsReportDetailView extends StatelessWidget {
                           width: 4,
                         ),
                         Flexible(
-                          flex: 4,
+                          flex: viewModel.report.engRatio.toInt(),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -271,7 +282,7 @@ class CrewsReportDetailView extends StatelessWidget {
                                 height: 4,
                               ),
                               Text(
-                                "40%",
+                                "${viewModel.report.engRatio}%",
                                 style: BlaTxt.txt14B,
                               ),
                             ],
@@ -291,11 +302,16 @@ class CrewsReportDetailView extends StatelessWidget {
                           "크루원 피드백",
                           style: BlaTxt.txt20B,
                         ),
-                        const SizedBox(height: 12,),
-                        CrewsFeedbackWidget(profile: "cat"),
-                        CrewsFeedbackWidget(profile: "dog"),
-                        CrewsFeedbackWidget(profile: "chicken"),
-                        CrewsFeedbackWidget(profile: "fox"),
+                        const SizedBox(
+                          height: 12,
+                        ),
+                        Column(
+                          children: List.generate(
+                            viewModel.report.feedbacks.length,
+                            (idx) => CrewsFeedbackWidget(
+                                feedback: viewModel.report.feedbacks[idx]),
+                          ),
+                        )
                       ])),
             ],
           ),
@@ -304,7 +320,7 @@ class CrewsReportDetailView extends StatelessWidget {
     );
   }
 
-  Widget profileWithName() {
+  Widget profileWithName(MemberSimple member) {
     return Container(
       height: 72,
       width: 62,
@@ -313,14 +329,14 @@ class CrewsReportDetailView extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            const ProfileWidget(
+            ProfileWidget(
               profileSize: 24,
-              profile: "cat",
+              profile: member.profileImage,
               bgSize: 48,
               bgColor: BlaColor.lightOrange,
             ),
             Text(
-              "Bernardo",
+              member.nickname,
               style: BlaTxt.txt12M.copyWith(color: BlaColor.grey800),
             )
           ]),
