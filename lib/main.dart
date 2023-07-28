@@ -4,6 +4,7 @@ import 'package:blabla/screens/crew_space/crews_joined_view.dart';
 import 'package:blabla/screens/crew_space/crews_view_model.dart';
 import 'package:blabla/screens/home/crew_detail_view.dart';
 import 'package:blabla/screens/home/crew_list_view.dart';
+import 'package:blabla/screens/home/crew_view_model.dart';
 import 'package:blabla/screens/home/home_view.dart';
 import 'package:blabla/screens/home/home_view_model.dart';
 import 'package:blabla/screens/join/join_profile_view.dart';
@@ -11,6 +12,8 @@ import 'package:blabla/screens/join/join_view_model.dart';
 import 'package:blabla/screens/onboarding.dart';
 import 'package:blabla/screens/recruit/recruit_profile_view.dart';
 import 'package:blabla/screens/recruit/recruit_view_model.dart';
+import 'package:blabla/screens/report/report_main_view.dart';
+import 'package:blabla/screens/report/report_view_model.dart';
 import 'package:blabla/services/amplitude.dart';
 import 'package:blabla/styles/colors.dart';
 import 'package:blabla/styles/theme.dart';
@@ -40,6 +43,7 @@ void main() async {
         ChangeNotifierProvider(create: (_) => HomeViewModel()),
         ChangeNotifierProvider(create: (_) => CrewViewModel()),
         ChangeNotifierProvider(create: (_) => CrewsViewModel()),
+        ChangeNotifierProvider(create: (_) => ReportViewModel()),
       ], child: const MyApp()),
     ),
   );
@@ -82,7 +86,7 @@ class Main extends StatelessWidget {
       HomeView(),
       CrewsJoinedView(),
       MySpace(),
-      ReportPage(),
+      ReportMainView(),
       MyPage(),
     ];
 
@@ -130,15 +134,6 @@ class Main extends StatelessWidget {
 
 class MySpace extends StatelessWidget {
   const MySpace({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Placeholder();
-  }
-}
-
-class ReportPage extends StatelessWidget {
-  const ReportPage({super.key});
 
   @override
   Widget build(BuildContext context) {
