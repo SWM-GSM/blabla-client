@@ -10,6 +10,7 @@ import 'package:blabla/screens/home/home_view_model.dart';
 import 'package:blabla/screens/join/join_profile_view.dart';
 import 'package:blabla/screens/join/join_view_model.dart';
 import 'package:blabla/screens/onboarding.dart';
+import 'package:blabla/screens/profile/profile_main_view.dart';
 import 'package:blabla/screens/recruit/recruit_profile_view.dart';
 import 'package:blabla/screens/recruit/recruit_view_model.dart';
 import 'package:blabla/screens/report/report_main_view.dart';
@@ -87,7 +88,7 @@ class Main extends StatelessWidget {
       CrewsJoinedView(),
       MySpace(),
       ReportMainView(),
-      MyPage(),
+      ProfileMainView(),
     ];
 
     return Scaffold(
