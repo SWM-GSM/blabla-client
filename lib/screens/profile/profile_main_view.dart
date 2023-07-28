@@ -1,4 +1,5 @@
 import 'package:blabla/models/interest.dart';
+import 'package:blabla/screens/profile/profile_modify_main_view.dart';
 import 'package:blabla/styles/colors.dart';
 import 'package:blabla/styles/txt_style.dart';
 import 'package:blabla/widgets/keyword_widget.dart';
@@ -80,25 +81,26 @@ class ProfileMainView extends StatelessWidget {
                   )
                 ],
               ),
-              const SizedBox(
-                height: 12,
-              ),
               GestureDetector(
-                  onTap: () {
-                    print("프로필 수정 버튼 클릭");
-                  },
-                  child: Container(
-                    height: 48,
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(12),
-                      color: BlaColor.grey100,
-                    ),
-                    child: Text(
-                      "프로필 수정",
-                      style: BlaTxt.txt14M.copyWith(color: BlaColor.grey800),
-                    ),
-                  )),
+                onTap: () {
+                  Navigator.of(context, rootNavigator: true).push(
+                      MaterialPageRoute(
+                          builder: (context) => ProfileModifyMainView()));
+                },
+                child: Container(
+                  height: 48,
+                  margin: const EdgeInsets.symmetric(vertical: 20),
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(12),
+                    color: BlaColor.grey100,
+                  ),
+                  child: Text(
+                    "프로필 수정",
+                    style: BlaTxt.txt14M.copyWith(color: BlaColor.grey800),
+                  ),
+                ),
+              ),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 20),
                 child: Row(
@@ -153,7 +155,7 @@ class ProfileMainView extends StatelessWidget {
                       height: 8,
                     ),
                     Text(
-                      "함께 개발 이야기 나누고 게임도 같이해요! \nHello Nice yo meet you!\n개피곤해개피곤해개피곤해개피곤해개피곤해개피곤해개피곤해개피곤해개피곤해개피곤해개피곤해개피곤해개피곤해개피곤해개피곤해개피곤해개피곤해개피곤해",
+                      "함께 개발 이야기 나누고 게임도 같이해요! \nHello Nice yo meet you!",
                       style: BlaTxt.txt14R.copyWith(
                           color: BlaColor.grey800,
                           overflow: TextOverflow.visible),
