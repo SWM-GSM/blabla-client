@@ -10,7 +10,7 @@ class ProfileModifyWidget extends StatelessWidget {
       required this.subTitle,
       required this.actionTap,
       required this.widget,
-      this.leadingTap
+      required this.leadingTap
       });
   final String title;
   final String subTitle;

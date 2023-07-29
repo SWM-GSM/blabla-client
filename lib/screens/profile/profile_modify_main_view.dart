@@ -1,3 +1,4 @@
+import 'package:blabla/screens/profile/profile_modify_birthdate_view.dart';
 import 'package:blabla/screens/profile/profile_modify_nickname_view.dart';
 import 'package:blabla/screens/profile/profile_modify_view_model.dart';
 import 'package:blabla/styles/colors.dart';
@@ -85,7 +86,8 @@ class ProfileModifyMainView extends StatelessWidget {
                 width: 104,
                 alignment: Alignment.center,
                 margin: const EdgeInsets.fromLTRB(0, 12, 0, 24),
-                padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
+                padding:
+                    const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(24),
                     color: BlaColor.grey100),
@@ -104,8 +106,12 @@ class ProfileModifyMainView extends StatelessWidget {
                                   initNick: viewModel.tempNickname,
                                 )));
                   }),
-                  infoRow("생년월일", "2001.09.24", () {
-                    print("생년월일 클릭!");
+                  infoRow("생년월일", viewModel.tempBirthdate, () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                ProfileModifyBirthdateView()));
                   }),
                   infoRow("성별", "👩 여성", () {
                     print("성별 클릭!");

@@ -59,6 +59,7 @@ class ProfileModifyViewModel with ChangeNotifier {
 
   void revert() {
     revertNickname();
+    revertBirthdate();
   }
 
   bool isProfileChanged() {
@@ -85,6 +86,16 @@ class ProfileModifyViewModel with ChangeNotifier {
   //   _nickname = _tempNickname;
   //   notifyListeners();
   // }
+
+  void setBirthdate(String input) {
+    _tempBirthdate = input;
+    notifyListeners();
+  }
+
+  void revertBirthdate() {
+    _tempBirthdate = _birthdate;
+    notifyListeners();
+  }
 
   Future<bool> nickDupValid(String input) async {
     return await api.getNicknameDup(input);
