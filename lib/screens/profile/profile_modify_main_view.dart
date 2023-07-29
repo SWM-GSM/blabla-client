@@ -1,14 +1,19 @@
+import 'package:blabla/screens/profile/profile_modify_nickname_view.dart';
+import 'package:blabla/screens/profile/profile_modify_view_model.dart';
 import 'package:blabla/styles/colors.dart';
 import 'package:blabla/styles/txt_style.dart';
 import 'package:blabla/widgets/profile_widget.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:provider/provider.dart';
 
 class ProfileModifyMainView extends StatelessWidget {
   const ProfileModifyMainView({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final viewModel = Provider.of<ProfileModifyViewModel>(context);
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 64,
@@ -20,7 +25,39 @@ class ProfileModifyMainView extends StatelessWidget {
         elevation: 0,
         centerTitle: true,
         leading: GestureDetector(
-          onTap: () => Navigator.pop(context),
+          onTap: () {
+            viewModel.isProfileChanged()
+                ? showCupertinoDialog(
+                    context: context,
+                    builder: (context) => CupertinoAlertDialog(
+                          title: Text(
+                            "화면을 나가면\n변경사항이 저장되지 않습니다.\n나가시겠습니까?",
+                            style: BlaTxt.txt14R,
+                          ),
+                          actions: [
+                            CupertinoDialogAction(
+                              child: Text(
+                                "취소",
+                                style: BlaTxt.txt14R,
+                              ),
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                            ),
+                            CupertinoDialogAction(
+                              child: Text("나가기",
+                                  style: BlaTxt.txt14R
+                                      .copyWith(color: BlaColor.red)),
+                              onPressed: () {
+                                viewModel.revert();
+                                Navigator.pop(context);
+                                Navigator.pop(context);
+                              },
+                            ),
+                          ],
+                        ))
+                : Navigator.pop(context);
+          },
           child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: SvgPicture.asset(
@@ -33,53 +70,59 @@ class ProfileModifyMainView extends StatelessWidget {
         ),
         leadingWidth: 64,
       ),
-      body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 20),
-        child: Column(
-          children: [
-            ProfileWidget(
-              profileSize: 72,
-              profile: "cat",
-              bgSize: 120,
-              bgColor: BlaColor.lightOrange,
-            ),
-            Container(
-              width: 104,
-              alignment: Alignment.center,
-              margin: const EdgeInsets.fromLTRB(0, 12, 0, 24),
-              padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(24),
-                  color: BlaColor.grey100),
-              child: Text(
-                "이미지 수정",
-                style: BlaTxt.txt14SB.copyWith(color: BlaColor.grey800),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: Column(
+            children: [
+              ProfileWidget(
+                profileSize: 72,
+                profile: "cat",
+                bgSize: 120,
+                bgColor: BlaColor.lightOrange,
               ),
-            ),
-            const SizedBox(height: 20),
-            Column(
-              children: [
-                infoRow("닉네임", "점심나가서먹을것같아", () {
-                  print("닉네임 클릭!");
-                }),
-                infoRow("생년월일", "2001.09.24", () {
-                  print("생년월일 클릭!");
-                }),
-                infoRow("성별", "👩 여성", () {
-                  print("성별 클릭!");
-                }),
-                infoRow("국적", "🇰🇷 South Korea", () {
-                  print("국적 클릭!");
-                }),
-                infoRow("한국어 스킬", "Lv. 1", () {
-                  print("한국어 스킬 클릭!");
-                }),
-                infoRow("영어 스킬", "Lv. 2", () {
-                  print("영어 스킬 클릭!");
-                }),
-              ],
-            ),
-          ],
+              Container(
+                width: 104,
+                alignment: Alignment.center,
+                margin: const EdgeInsets.fromLTRB(0, 12, 0, 24),
+                padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(24),
+                    color: BlaColor.grey100),
+                child: Text(
+                  "이미지 수정",
+                  style: BlaTxt.txt14SB.copyWith(color: BlaColor.grey800),
+                ),
+              ),
+              Column(
+                children: [
+                  infoRow("닉네임", viewModel.tempNickname, () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => ProfileModifyNicknameView(
+                                  initNick: viewModel.tempNickname,
+                                )));
+                  }),
+                  infoRow("생년월일", "2001.09.24", () {
+                    print("생년월일 클릭!");
+                  }),
+                  infoRow("성별", "👩 여성", () {
+                    print("성별 클릭!");
+                  }),
+                  infoRow("국적", "🇰🇷 South Korea", () {
+                    print("국적 클릭!");
+                  }),
+                  infoRow("한국어 스킬", "Lv. 1", () {
+                    print("한국어 스킬 클릭!");
+                  }),
+                  infoRow("영어 스킬", "Lv. 2", () {
+                    print("영어 스킬 클릭!");
+                  }, div: false),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
       bottomSheet: GestureDetector(
@@ -104,12 +147,14 @@ class ProfileModifyMainView extends StatelessWidget {
       child: Container(
         height: 52,
         decoration: BoxDecoration(
-          border: Border(
-            bottom: BorderSide(
-              color: BlaColor.grey300,
-              width: div ? 1 : 0,
-            ),
-          ),
+          border: div
+              ? const Border(
+                  bottom: BorderSide(
+                    color: BlaColor.grey300,
+                    width: 1,
+                  ),
+                )
+              : null,
         ),
         child: Row(
           children: [

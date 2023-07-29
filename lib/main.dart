@@ -11,6 +11,7 @@ import 'package:blabla/screens/join/join_profile_view.dart';
 import 'package:blabla/screens/join/join_view_model.dart';
 import 'package:blabla/screens/onboarding.dart';
 import 'package:blabla/screens/profile/profile_main_view.dart';
+import 'package:blabla/screens/profile/profile_modify_view_model.dart';
 import 'package:blabla/screens/recruit/recruit_profile_view.dart';
 import 'package:blabla/screens/recruit/recruit_view_model.dart';
 import 'package:blabla/screens/report/report_main_view.dart';
@@ -45,6 +46,7 @@ void main() async {
         ChangeNotifierProvider(create: (_) => CrewViewModel()),
         ChangeNotifierProvider(create: (_) => CrewsViewModel()),
         ChangeNotifierProvider(create: (_) => ReportViewModel()),
+        ChangeNotifierProvider(create: (_) => ProfileModifyViewModel()),
       ], child: const MyApp()),
     ),
   );
