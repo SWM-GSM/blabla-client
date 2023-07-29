@@ -12,6 +12,8 @@ class ProfileModifyViewModel with ChangeNotifier {
   late int _engLangLevel;
   late List<String> _keywords;
 
+  String get gender => _gender;
+
   late String _tempNickname;
   late String _tempBirthdate;
   late String _tempGender;
@@ -29,7 +31,7 @@ class ProfileModifyViewModel with ChangeNotifier {
   List<String> get tempKeywords => _tempKeywords;
 
   ProfileModifyViewModel() {
-    init("닉네임", '2000.09.14', "여성", "KR", 5, 2, ["SING", "DANCE"]);
+    init("닉네임", '2000.09.14', "female", "KR", 5, 2, ["SING", "DANCE"]);
   }
 
   void init(
@@ -60,6 +62,7 @@ class ProfileModifyViewModel with ChangeNotifier {
   void revert() {
     revertNickname();
     revertBirthdate();
+    revertGender();
   }
 
   bool isProfileChanged() {
@@ -82,10 +85,9 @@ class ProfileModifyViewModel with ChangeNotifier {
     notifyListeners();
   }
 
-  // void changeNickname() {
-  //   _nickname = _tempNickname;
-  //   notifyListeners();
-  // }
+  Future<bool> nickDupValid(String input) async {
+    return await api.getNicknameDup(input);
+  }
 
   void setBirthdate(String input) {
     _tempBirthdate = input;
@@ -97,9 +99,14 @@ class ProfileModifyViewModel with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<bool> nickDupValid(String input) async {
-    return await api.getNicknameDup(input);
+  void setGender(String input) {
+    _tempGender = input;
+    notifyListeners();
   }
 
-
+  void revertGender() {
+    _tempGender = _gender;
+    notifyListeners();
+  }
+  
 }

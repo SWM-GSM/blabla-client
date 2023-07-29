@@ -8,14 +8,14 @@ class ProfileModifyWidget extends StatelessWidget {
       {super.key,
       required this.title,
       required this.subTitle,
+      required this.leadingTap,
       required this.actionTap,
       required this.widget,
-      required this.leadingTap
       });
   final String title;
   final String subTitle;
-  final dynamic actionTap;
   final dynamic leadingTap;
+  final dynamic actionTap;
   final Widget widget;
 
   @override

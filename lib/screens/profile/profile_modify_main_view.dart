@@ -1,4 +1,6 @@
+import 'package:blabla/screens/join/join_view_model.dart';
 import 'package:blabla/screens/profile/profile_modify_birthdate_view.dart';
+import 'package:blabla/screens/profile/profile_modify_gender_view.dart';
 import 'package:blabla/screens/profile/profile_modify_nickname_view.dart';
 import 'package:blabla/screens/profile/profile_modify_view_model.dart';
 import 'package:blabla/styles/colors.dart';
@@ -113,8 +115,13 @@ class ProfileModifyMainView extends StatelessWidget {
                             builder: (context) =>
                                 ProfileModifyBirthdateView()));
                   }),
-                  infoRow("성별", "👩 여성", () {
-                    print("성별 클릭!");
+                  infoRow("성별",
+                      "${Gender.getByStr(viewModel.tempGender).emoji} ${Gender.getByStr(viewModel.tempGender).kr}",
+                      () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => ProfileModifyGenderView()));
                   }),
                   infoRow("국적", "🇰🇷 South Korea", () {
                     print("국적 클릭!");

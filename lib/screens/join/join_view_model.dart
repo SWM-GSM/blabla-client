@@ -53,6 +53,10 @@ enum Gender {
   final String kr;
   final String emoji;
   const Gender(this.kr, this.emoji);
+  
+  factory Gender.getByStr(String str) {
+    return Gender.values.firstWhere((e) => e.toString().split(".")[1] == str);
+  }
 }
 
 class JoinViewModel with ChangeNotifier {
@@ -217,7 +221,6 @@ class JoinViewModel with ChangeNotifier {
   }
 
   Future<bool> join() async {
-
     final user = User(
         socialLoginType: _socialLoginType,
         profileImg: _profileImg,
