@@ -1,3 +1,4 @@
+import 'package:blabla/models/country.dart';
 import 'package:blabla/services/apis/api.dart';
 import 'package:flutter/material.dart';
 
@@ -13,6 +14,7 @@ class ProfileModifyViewModel with ChangeNotifier {
   late List<String> _keywords;
 
   String get gender => _gender;
+  String get countryCode => _countryCode;
 
   late String _tempNickname;
   late String _tempBirthdate;
@@ -30,8 +32,14 @@ class ProfileModifyViewModel with ChangeNotifier {
   int get tempEngLangLevel => _tempEngLangLevel;
   List<String> get tempKeywords => _tempKeywords;
 
+  List<Country> _countryList = [];
+  List<Country> get countryList => _countryList;
+  List<Country> _searchCountryList = [];
+  List<Country> get searchCountryList => _searchCountryList;
+
   ProfileModifyViewModel() {
     init("닉네임", '2000.09.14', "female", "KR", 5, 2, ["SING", "DANCE"]);
+    initCountryList();
   }
 
   void init(
@@ -108,5 +116,31 @@ class ProfileModifyViewModel with ChangeNotifier {
     _tempGender = _gender;
     notifyListeners();
   }
-  
+
+  void setCountry(String code) {
+    _tempCountryCode = code;
+    notifyListeners();
+  }
+
+  void revertCountry() {
+    _tempCountryCode = _countryCode;
+    notifyListeners();
+  }
+
+  void initCountryList() async {
+    _countryList = await api.getCountries();
+    getSearchCountryList("");
+    notifyListeners();
+  }
+
+  void getSearchCountryList(String keyword) {
+    if (keyword.isEmpty) {
+      _searchCountryList = _countryList;
+    } else {
+      _searchCountryList = _countryList
+          .where((e) => e.name.toLowerCase().contains(keyword.toLowerCase()))
+          .toList();
+    }
+    notifyListeners();
+  }
 }

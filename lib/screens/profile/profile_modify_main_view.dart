@@ -1,5 +1,6 @@
 import 'package:blabla/screens/join/join_view_model.dart';
 import 'package:blabla/screens/profile/profile_modify_birthdate_view.dart';
+import 'package:blabla/screens/profile/profile_modify_country_view.dart';
 import 'package:blabla/screens/profile/profile_modify_gender_view.dart';
 import 'package:blabla/screens/profile/profile_modify_nickname_view.dart';
 import 'package:blabla/screens/profile/profile_modify_view_model.dart';
@@ -10,6 +11,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
+import 'package:country_code/country_code.dart';
 
 class ProfileModifyMainView extends StatelessWidget {
   const ProfileModifyMainView({super.key});
@@ -123,8 +125,11 @@ class ProfileModifyMainView extends StatelessWidget {
                         MaterialPageRoute(
                             builder: (context) => ProfileModifyGenderView()));
                   }),
-                  infoRow("국적", "🇰🇷 South Korea", () {
-                    print("국적 클릭!");
+                  infoRow("국적", CountryCode.tryParse(viewModel.tempCountryCode)!.symbol, () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => ProfileModifyCountryView()));
                   }),
                   infoRow("한국어 스킬", "Lv. 1", () {
                     print("한국어 스킬 클릭!");
