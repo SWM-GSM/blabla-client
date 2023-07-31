@@ -10,6 +10,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
@@ -36,21 +37,20 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StyledToast(
-      locale: const Locale("ko"),
-      textStyle: BlaTxt.txt16R.copyWith(color: BlaColor.white),
-      backgroundColor: BlaColor.grey800.withOpacity(0.8),
-      toastPositions: StyledToastPosition.bottom,
-      borderRadius: BorderRadius.circular(20),
-      duration: const Duration(milliseconds: 1500),
-      toastAnimation: StyledToastAnimation.fade,
-      reverseAnimation: StyledToastAnimation.fade,
-      child: MaterialApp(
-        localizationsDelegates: context.localizationDelegates,
-        supportedLocales: context.supportedLocales,
-        title: 'BlaBla',
-        theme: BlaTheme.blaTheme,
-        home: OnBoarding(),
-      ),
-    );
+        locale: const Locale("ko"),
+        textStyle: BlaTxt.txt16R.copyWith(color: BlaColor.white),
+        backgroundColor: BlaColor.grey800.withOpacity(0.8),
+        toastPositions: StyledToastPosition.bottom,
+        borderRadius: BorderRadius.circular(20),
+        duration: const Duration(milliseconds: 1500),
+        toastAnimation: StyledToastAnimation.fade,
+        reverseAnimation: StyledToastAnimation.fade,
+        child: MaterialApp(
+          localizationsDelegates: context.localizationDelegates,
+          supportedLocales: context.supportedLocales,
+          title: 'BlaBla',
+          theme: BlaTheme.blaTheme,
+          home: OnBoarding(),
+        ));
   }
 }

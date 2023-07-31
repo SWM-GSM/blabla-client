@@ -21,7 +21,7 @@ class GoogleLoginService extends LoginService {
   Login get platform => Login.google;
 
   @override
-  Future<bool> login(BuildContext context) async {
+  Future<bool> socialLogin(BuildContext context) async {
     final viewModel = Provider.of<JoinViewModel>(context, listen: false);
     const storage = FlutterSecureStorage();
     final account = await GoogleSignIn().signIn();
@@ -40,6 +40,12 @@ class GoogleLoginService extends LoginService {
       return false;
     }
   }
+  
+  @override
+  Future<bool> login() async {
+    final api = API();
+    return await api.login(Login.google.name.toUpperCase());
+  }
 
   @override
   Future<void> logout() {
@@ -57,7 +63,9 @@ abstract class LoginService {
 
   Login get platform;
 
-  Future<bool> login(BuildContext context);
+  Future<bool> socialLogin(BuildContext context);
+
+  Future<bool> login();
 
   Future<void> logout();
 
