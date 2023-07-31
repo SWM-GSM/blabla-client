@@ -7,8 +7,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 
 class ProfileModifyLevelView extends StatelessWidget {
-  const ProfileModifyLevelView({super.key, required this.lang});
-  final lang;
+  const ProfileModifyLevelView({super.key, required this.lang, required this.initLevel});
+  final String lang;
+  final int initLevel;
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +19,7 @@ class ProfileModifyLevelView extends StatelessWidget {
         subTitle: "${lang == "eng" ? "영어" : "한국어"} 레벨을\n선택해주세요",
         leadingTap: () {
           if (lang == "eng") {
-            viewModel.tempEngLangLevel == viewModel.engLanglevel
+            viewModel.tempEngLangLevel == initLevel
                 ? Navigator.pop(context)
                 : showCupertinoDialog(
                     context: context,
@@ -42,7 +43,7 @@ class ProfileModifyLevelView extends StatelessWidget {
                                   style: BlaTxt.txt14R
                                       .copyWith(color: BlaColor.red)),
                               onPressed: () {
-                                viewModel.revertEngLangLevel();
+                                viewModel.setEngLangLevel(initLevel);
                                 Navigator.pop(context);
                                 Navigator.pop(context);
                               },
@@ -50,7 +51,7 @@ class ProfileModifyLevelView extends StatelessWidget {
                           ],
                         ));
           } else {
-            viewModel.tempKorLangLevel == viewModel.korLanglevel
+            viewModel.tempKorLangLevel == initLevel
                 ? Navigator.pop(context)
                 : showCupertinoDialog(
                     context: context,
@@ -74,7 +75,7 @@ class ProfileModifyLevelView extends StatelessWidget {
                                   style: BlaTxt.txt14R
                                       .copyWith(color: BlaColor.red)),
                               onPressed: () {
-                                viewModel.revertKorLangLevel();
+                                viewModel.setKorLangLevel(initLevel);
                                 Navigator.pop(context);
                                 Navigator.pop(context);
                               },

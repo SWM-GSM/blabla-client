@@ -124,7 +124,9 @@ class ProfileModifyMainView extends StatelessWidget {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => ProfileModifyGenderView()));
+                            builder: (context) => ProfileModifyGenderView(
+                                  initGender: viewModel.tempGender,
+                                )));
                   }),
                   infoRow("국적",
                       CountryCode.tryParse(viewModel.tempCountryCode)!.symbol,
@@ -132,21 +134,27 @@ class ProfileModifyMainView extends StatelessWidget {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => ProfileModifyCountryView()));
+                            builder: (context) => ProfileModifyCountryView(
+                                  initCountryCode: viewModel.tempCountryCode,
+                                )));
                   }),
                   infoRow("한국어 스킬", "Lv. ${viewModel.tempKorLangLevel}", () {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) =>
-                                ProfileModifyLevelView(lang: "ko")));
+                            builder: (context) => ProfileModifyLevelView(
+                                  lang: "ko",
+                                  initLevel: viewModel.tempKorLangLevel,
+                                )));
                   }),
                   infoRow("영어 스킬", "Lv. ${viewModel.tempEngLangLevel}", () {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) =>
-                                ProfileModifyLevelView(lang: "eng")));
+                            builder: (context) => ProfileModifyLevelView(
+                                  lang: "eng",
+                                  initLevel: viewModel.tempEngLangLevel,
+                                )));
                   }, div: false),
                 ],
               ),

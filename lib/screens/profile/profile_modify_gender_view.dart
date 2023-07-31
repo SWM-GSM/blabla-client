@@ -8,7 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class ProfileModifyGenderView extends StatelessWidget {
-  const ProfileModifyGenderView({super.key});
+  const ProfileModifyGenderView({super.key, required this.initGender});
+  final String initGender;
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +18,7 @@ class ProfileModifyGenderView extends StatelessWidget {
       title: "성별",
       subTitle: "성별을 선택해주세요",
       leadingTap: () {
-        viewModel.tempGender == viewModel.gender
+        viewModel.tempGender == initGender
             ? Navigator.pop(context)
             : showCupertinoDialog(
                 context: context,
@@ -41,7 +42,7 @@ class ProfileModifyGenderView extends StatelessWidget {
                               style:
                                   BlaTxt.txt14R.copyWith(color: BlaColor.red)),
                           onPressed: () {
-                            viewModel.revertGender();
+                            viewModel.setGender(initGender);
                             Navigator.pop(context);
                             Navigator.pop(context);
                           },

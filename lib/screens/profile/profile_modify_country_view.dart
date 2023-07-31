@@ -9,7 +9,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 
 class ProfileModifyCountryView extends StatefulWidget {
-  const ProfileModifyCountryView({super.key});
+  const ProfileModifyCountryView({super.key, required this.initCountryCode});
+  final String initCountryCode;
 
   @override
   State<ProfileModifyCountryView> createState() =>
@@ -25,7 +26,7 @@ class _ProfileModifyCountryViewState extends State<ProfileModifyCountryView> {
         title: "국적",
         subTitle: "국가를 선택해주세요",
         leadingTap: () {
-          viewModel.tempCountryCode == viewModel.countryCode
+          viewModel.tempCountryCode == widget.initCountryCode
               ? Navigator.pop(context)
               : showCupertinoDialog(
                   context: context,
@@ -49,7 +50,7 @@ class _ProfileModifyCountryViewState extends State<ProfileModifyCountryView> {
                                 style: BlaTxt.txt14R
                                     .copyWith(color: BlaColor.red)),
                             onPressed: () {
-                              viewModel.revertCountry();
+                              viewModel.setCountry(widget.initCountryCode);
                               Navigator.pop(context);
                               Navigator.pop(context);
                             },
