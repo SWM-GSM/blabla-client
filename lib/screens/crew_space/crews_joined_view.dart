@@ -36,7 +36,7 @@ class CrewsJoinedView extends StatelessWidget {
                     (idx) => GestureDetector(
                           onTap: () async {
                             await viewModel
-                                .initCrew(viewModel.myCrewList[idx].id)
+                                .initCrew(viewModel.myCrewList[idx].id, viewModel.myCrewList[idx].name)
                                 .then((value) {
                               Navigator.of(context, rootNavigator: true).push(
                                   MaterialPageRoute(

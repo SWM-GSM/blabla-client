@@ -6,7 +6,6 @@ import 'package:blabla/styles/colors.dart';
 import 'package:blabla/styles/txt_style.dart';
 import 'package:blabla/utils/datetime_to_str.dart';
 import 'package:blabla/widgets/profile_widget.dart';
-import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
@@ -23,7 +22,7 @@ class CrewsMainView extends StatelessWidget {
           backgroundColor: BlaColor.white,
           elevation: 0,
           title: Text(
-            "일요일마다 언어교환 어쩌구",
+            viewModel.crewName,
             style: BlaTxt.txt18B,
           ),
           centerTitle: true,
@@ -61,8 +60,35 @@ class CrewsMainView extends StatelessWidget {
             child: SingleChildScrollView(
           child: Column(
             children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(20, 12, 20, 0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text("다가오는 일정", style: BlaTxt.txt20B),
+                    GestureDetector(
+                      onTap: () {
+                       
+                      },
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text(
+                            "더보기",
+                            style: BlaTxt.txt14ML
+                                .copyWith(color: BlaColor.grey600),
+                          ),
+                          SvgPicture.asset("assets/icons/ic_16_arrow_right.svg",
+                              width: 16, height: 16)
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
               Container(
-                margin: const EdgeInsets.fromLTRB(20, 12, 20, 20),
+                margin: const EdgeInsets.fromLTRB(20, 16, 20, 20),
                 padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(12),
