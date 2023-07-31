@@ -4,6 +4,7 @@ import 'package:blabla/screens/crew_space/crews_voiceroom_view.dart';
 import 'package:blabla/screens/crew_space/widgets/crews_report_widget.dart';
 import 'package:blabla/styles/colors.dart';
 import 'package:blabla/styles/txt_style.dart';
+import 'package:blabla/utils/datetime_to_str.dart';
 import 'package:blabla/widgets/profile_widget.dart';
 import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
@@ -78,23 +79,8 @@ class CrewsMainView extends StatelessWidget {
                         ),
                         const SizedBox(width: 8),
                         Text(
-                          formatDate(
-                              viewModel.upcomingSchedule.meetingTime,
-                              [
-                                m,
-                                "월 ",
-                                d,
-                                "일 ",
-                                D,
-                                "요일 ",
-                                am,
-                                " ",
-                                hh,
-                                ":",
-                                nn
-                              ],
-                              locale:
-                                  const KoreanDateLocale()), // 수정 - 한글/영어 택하게 수정
+                          datetimeToStr(viewModel.upcomingSchedule.meetingTime,
+                              StrDatetimeType.strDelimiter),
                           style:
                               BlaTxt.txt16R.copyWith(color: BlaColor.grey700),
                         ),
@@ -255,7 +241,8 @@ class CrewsMainView extends StatelessWidget {
                             children: List.generate(
                                 viewModel.reportList.length,
                                 (idx) => CrewsReportWidget(
-                                    reportType: true,
+                                    reportType: ReportType.small,
+                                    reportStatus: true,
                                     report: viewModel.reportList[idx])))),
                   ],
                 ),
