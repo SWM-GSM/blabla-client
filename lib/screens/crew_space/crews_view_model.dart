@@ -15,12 +15,12 @@ class CrewsViewModel with ChangeNotifier {
   late String _crewName;
   List<Report> _reportList = [];
   late ReportDetail _report; 
-  late ScheduleSimple _upcomingSchedule;
+  late ScheduleSimple? _upcomingSchedule;
 
   String get crewName => _crewName;
   List<Report> get reportList => _reportList;
   ReportDetail get report => _report;
-  ScheduleSimple get upcomingSchedule => _upcomingSchedule;
+  ScheduleSimple? get upcomingSchedule => _upcomingSchedule;
   
   CrewsViewModel() {
     init();
