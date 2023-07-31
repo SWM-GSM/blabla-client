@@ -1,4 +1,3 @@
-import 'package:blabla/models/schedule.dart';
 import 'package:blabla/styles/colors.dart';
 import 'package:blabla/styles/txt_style.dart';
 import 'package:blabla/utils/datetime_to_str.dart';
@@ -15,7 +14,7 @@ class CrewsScheduleWidget extends StatelessWidget {
   const CrewsScheduleWidget(
       {super.key, required this.type, required this.schedule});
   final ScheduleWidgetType type;
-  final ScheduleSimple? schedule;
+  final dynamic schedule;
 
   @override
   Widget build(BuildContext context) {
@@ -99,7 +98,72 @@ class CrewsScheduleWidget extends StatelessWidget {
           ),
         );
       case ScheduleWidgetType.join:
-        return Container();
+        return Container(
+          margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 20),
+          padding: const EdgeInsets.all(20),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(12),
+            color: BlaColor.grey100,
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Text(
+                    "D-${schedule!.dday}",
+                    style: BlaTxt.txt16B.copyWith(color: BlaColor.orange),
+                  ),
+                  const SizedBox(width: 8),
+                  Text(
+                    datetimeToStr(
+                        schedule!.meetingTime, StrDatetimeType.strDelimiter),
+                    style: BlaTxt.txt16R.copyWith(color: BlaColor.grey700),
+                  ),
+                ],
+              ),
+              Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8),
+                  child: Text(
+                    schedule!.title,
+                    style: BlaTxt.txt16B,
+                    maxLines: 1,
+                  )),
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Wrap(
+                  direction: Axis.horizontal,
+                  spacing: 8,
+                  children: List.generate(
+                    schedule!.members.length,
+                    (idx) => ProfileWidget(
+                      profileSize: 24,
+                      profile: schedule!.members[idx].profileImage,
+                      bgSize: 48,
+                      bgColor: Color(0xFFFFF6DE),
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(
+                height: 16,
+              ),
+              GestureDetector(
+                  child: Container(
+                height: 48,
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                  color: BlaColor.lightOrange,
+                ),
+                child: Text(
+                  "참여하기",
+                  style: BlaTxt.txt14B.copyWith(color: BlaColor.orange),
+                ),
+              ))
+            ],
+          ),
+        );
     }
   }
 }
