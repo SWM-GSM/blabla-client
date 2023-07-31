@@ -8,6 +8,7 @@ import 'package:blabla/models/level.dart';
 import 'package:blabla/models/report.dart';
 import 'package:blabla/models/schedule.dart';
 import 'package:blabla/models/user.dart';
+import 'package:blabla/models/voice_info.dart';
 import 'package:blabla/utils/dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
@@ -213,10 +214,10 @@ class API {
 
   Future<Content> getTodayContent() async {
     // 수정 - 테스트 API
-    final res = await api("$testUrl/content/today", HttpMethod.get);
+    final res = await api("$korTestUrl/contents/today", HttpMethod.get);
     if (res.statusCode == 200) {
       return Content.fromJson(
-          jsonDecode(utf8.decode(res.bodyBytes))["data"]["content"]);
+          jsonDecode(utf8.decode(res.bodyBytes))["data"]);
     } else {
       throw Exception("http error :(");
     }

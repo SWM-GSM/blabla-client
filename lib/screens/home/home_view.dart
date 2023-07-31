@@ -126,7 +126,7 @@ class HomeView extends StatelessWidget {
                                 ),
                               ))
                             : ExtendedImage.network(
-                                viewModel.todayContent!.contentUrl,
+                                viewModel.todayContent!.thumbnailUrl,
                                 fit: BoxFit.cover,
                                 shape: BoxShape.rectangle,
                                 borderRadius: BorderRadius.circular(12),
@@ -199,6 +199,7 @@ class HomeView extends StatelessWidget {
             padding: const EdgeInsets.only(right: 20),
             scrollDirection: Axis.horizontal,
             child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
                 children: viewModel.isLoading
                     ? List.generate(
                         5,
