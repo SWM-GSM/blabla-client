@@ -2,6 +2,7 @@ import 'package:blabla/screens/join/join_view_model.dart';
 import 'package:blabla/screens/profile/profile_modify_birthdate_view.dart';
 import 'package:blabla/screens/profile/profile_modify_country_view.dart';
 import 'package:blabla/screens/profile/profile_modify_gender_view.dart';
+import 'package:blabla/screens/profile/profile_modify_level_view.dart';
 import 'package:blabla/screens/profile/profile_modify_nickname_view.dart';
 import 'package:blabla/screens/profile/profile_modify_view_model.dart';
 import 'package:blabla/styles/colors.dart';
@@ -125,17 +126,27 @@ class ProfileModifyMainView extends StatelessWidget {
                         MaterialPageRoute(
                             builder: (context) => ProfileModifyGenderView()));
                   }),
-                  infoRow("국적", CountryCode.tryParse(viewModel.tempCountryCode)!.symbol, () {
+                  infoRow("국적",
+                      CountryCode.tryParse(viewModel.tempCountryCode)!.symbol,
+                      () {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
                             builder: (context) => ProfileModifyCountryView()));
                   }),
-                  infoRow("한국어 스킬", "Lv. 1", () {
-                    print("한국어 스킬 클릭!");
+                  infoRow("한국어 스킬", "Lv. ${viewModel.tempKorLangLevel}", () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                ProfileModifyLevelView(lang: "ko")));
                   }),
-                  infoRow("영어 스킬", "Lv. 2", () {
-                    print("영어 스킬 클릭!");
+                  infoRow("영어 스킬", "Lv. ${viewModel.tempEngLangLevel}", () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                ProfileModifyLevelView(lang: "eng")));
                   }, div: false),
                 ],
               ),

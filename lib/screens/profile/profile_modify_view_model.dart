@@ -1,4 +1,5 @@
 import 'package:blabla/models/country.dart';
+import 'package:blabla/models/level.dart';
 import 'package:blabla/services/apis/api.dart';
 import 'package:flutter/material.dart';
 
@@ -15,6 +16,8 @@ class ProfileModifyViewModel with ChangeNotifier {
 
   String get gender => _gender;
   String get countryCode => _countryCode;
+  int get korLanglevel => _korLangLevel;
+  int get engLanglevel => _engLangLevel;
 
   late String _tempNickname;
   late String _tempBirthdate;
@@ -32,14 +35,19 @@ class ProfileModifyViewModel with ChangeNotifier {
   int get tempEngLangLevel => _tempEngLangLevel;
   List<String> get tempKeywords => _tempKeywords;
 
+  /* static 데이터 받아오기 */
   List<Country> _countryList = [];
-  List<Country> get countryList => _countryList;
   List<Country> _searchCountryList = [];
+  List<Level> _levelList = [];
+
+  List<Country> get countryList => _countryList;
   List<Country> get searchCountryList => _searchCountryList;
+  List<Level> get levelList => _levelList;
 
   ProfileModifyViewModel() {
     init("닉네임", '2000.09.14', "female", "KR", 5, 2, ["SING", "DANCE"]);
     initCountryList();
+    initLevelList();
   }
 
   void init(
@@ -141,6 +149,31 @@ class ProfileModifyViewModel with ChangeNotifier {
           .where((e) => e.name.toLowerCase().contains(keyword.toLowerCase()))
           .toList();
     }
+    notifyListeners();
+  }
+
+  void setKorLangLevel(int level) {
+    _tempKorLangLevel = level;
+    notifyListeners();
+  }
+
+  void revertKorLangLevel() {
+    _tempKorLangLevel = _korLangLevel;
+    notifyListeners();
+  }
+
+  void setEngLangLevel(int level) {
+    _tempEngLangLevel = level;
+    notifyListeners();
+  }
+
+  void revertEngLangLevel() {
+    _tempEngLangLevel = _engLangLevel;
+    notifyListeners();
+  }
+
+  void initLevelList() async {
+    _levelList = await api.getLevels();
     notifyListeners();
   }
 }
