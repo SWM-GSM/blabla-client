@@ -1,39 +1,41 @@
+import 'dart:math';
 import 'package:blabla/models/country.dart';
 import 'package:blabla/models/level.dart';
+import 'package:blabla/screens/join/join_view_model.dart';
 import 'package:blabla/services/apis/api.dart';
 import 'package:flutter/material.dart';
 
 class ProfileModifyViewModel with ChangeNotifier {
   final api = API();
 
+  late String _profileImage;
   late String _nickname;
   late String _birthdate;
   late String _gender;
   late String _countryCode;
   late int _korLangLevel;
   late int _engLangLevel;
-  late List<String> _keywords;
 
   String get gender => _gender;
   String get countryCode => _countryCode;
   int get korLanglevel => _korLangLevel;
   int get engLanglevel => _engLangLevel;
 
+  late String _tempProfileImage;
   late String _tempNickname;
   late String _tempBirthdate;
   late String _tempGender;
   late String _tempCountryCode;
   late int _tempKorLangLevel = 0;
   late int _tempEngLangLevel = 0;
-  late List<String> _tempKeywords = [];
 
+  String get tempProfileImage => _tempProfileImage;
   String get tempNickname => _tempNickname;
   String get tempBirthdate => _tempBirthdate;
   String get tempGender => _tempGender;
   String get tempCountryCode => _tempCountryCode;
   int get tempKorLangLevel => _tempKorLangLevel;
   int get tempEngLangLevel => _tempEngLangLevel;
-  List<String> get tempKeywords => _tempKeywords;
 
   /* static 데이터 받아오기 */
   List<Country> _countryList = [];
@@ -45,50 +47,66 @@ class ProfileModifyViewModel with ChangeNotifier {
   List<Level> get levelList => _levelList;
 
   ProfileModifyViewModel() {
-    init("닉네임", '2000.09.14', "female", "KR", 5, 2, ["SING", "DANCE"]);
+    init("cat", "닉네임", '2000.09.14', "female", "KR", 5, 2);
     initCountryList();
     initLevelList();
   }
 
   void init(
+      String profileImage,
       String nickname,
       String birthdate,
       String gender,
       String countryCode,
       int korLangLevel,
-      int engLangLevel,
-      List<String> keywords) {
+      int engLangLevel,) {
+    _profileImage = profileImage;
     _nickname = nickname;
     _birthdate = birthdate;
     _gender = gender;
     _countryCode = countryCode;
     _korLangLevel = korLangLevel;
     _engLangLevel = engLangLevel;
-    _keywords = keywords;
 
+    _tempProfileImage = profileImage;
     _tempNickname = nickname;
     _tempBirthdate = birthdate;
     _tempGender = gender;
     _tempCountryCode = countryCode;
     _tempKorLangLevel = korLangLevel;
     _tempEngLangLevel = engLangLevel;
-    _tempKeywords = keywords;
   }
 
   void revert() {
+    revertProfileImage();
     revertNickname();
     revertBirthdate();
     revertGender();
+    revertCountry();
+    revertKorLangLevel();
+    revertEngLangLevel();
   }
 
   bool isProfileChanged() {
-    return (_nickname != _tempNickname ||
+    return (
+        _profileImage != _tempProfileImage ||
+        _nickname != _tempNickname ||
         _birthdate != _tempBirthdate ||
         _gender != _tempGender ||
         _countryCode != _tempCountryCode ||
         _korLangLevel != _tempKorLangLevel ||
-        _engLangLevel != _tempEngLangLevel ||
-        _keywords != _tempKeywords);
+        _engLangLevel != _tempEngLangLevel);
+  }
+
+  void setProfileImage() {
+    int idx = Random().nextInt(Profile.values.length);
+    _tempProfileImage = Profile.values[idx].name;
+    notifyListeners();
+  }
+
+  void revertProfileImage() {
+    _tempProfileImage = _profileImage;
+    notifyListeners();
   }
 
   void setNickname(String input) {

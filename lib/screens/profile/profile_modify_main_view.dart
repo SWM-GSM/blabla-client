@@ -83,22 +83,27 @@ class ProfileModifyMainView extends StatelessWidget {
             children: [
               ProfileWidget(
                 profileSize: 72,
-                profile: "cat",
+                profile: viewModel.tempProfileImage,
                 bgSize: 120,
                 bgColor: BlaColor.lightOrange,
               ),
-              Container(
-                width: 104,
-                alignment: Alignment.center,
-                margin: const EdgeInsets.fromLTRB(0, 12, 0, 24),
-                padding:
-                    const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(24),
-                    color: BlaColor.grey100),
-                child: Text(
-                  "이미지 수정",
-                  style: BlaTxt.txt14SB.copyWith(color: BlaColor.grey800),
+              GestureDetector(
+                onTap: () {
+                  viewModel.setProfileImage();
+                },
+                child: Container(
+                  width: 104,
+                  alignment: Alignment.center,
+                  margin: const EdgeInsets.fromLTRB(0, 12, 0, 24),
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(24),
+                      color: BlaColor.grey100),
+                  child: Text(
+                    "이미지 변경",
+                    style: BlaTxt.txt14SB.copyWith(color: BlaColor.grey800),
+                  ),
                 ),
               ),
               Column(
