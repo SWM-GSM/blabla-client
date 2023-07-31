@@ -69,11 +69,13 @@ class CrewsMainView extends StatelessWidget {
                   children: [
                     Text("다가오는 일정", style: BlaTxt.txt20B),
                     GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => CrewsCalendarView()));
+                      onTap: () async {
+                        await viewModel.getSchedules().then((value) {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => CrewsCalendarView()));
+                        });
                       },
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.center,

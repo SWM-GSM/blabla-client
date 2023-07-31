@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 
 class CrewsViewModel with ChangeNotifier {
   final api = API();
-  
+
   List<CrewSimple> _myCrewList = [];
   List<CrewSimple> get myCrewList => _myCrewList;
 
@@ -14,14 +14,23 @@ class CrewsViewModel with ChangeNotifier {
   late int _crewId;
   late String _crewName;
   List<Report> _reportList = [];
-  late ReportDetail _report; 
+  late ReportDetail _report;
   late ScheduleSimple? _upcomingSchedule;
+  late List<Schedule> _schedules;
+  final Map<DateTime, List<Schedule>> _schedulesForCalendar = {};
+  DateTime _selectedDate = DateTime.now();
 
   String get crewName => _crewName;
   List<Report> get reportList => _reportList;
   ReportDetail get report => _report;
   ScheduleSimple? get upcomingSchedule => _upcomingSchedule;
-  
+  Map<DateTime, List<Schedule>> get schedulesForCalendar =>
+      _schedulesForCalendar;
+  DateTime get selectedDate => _selectedDate;
+  List<Schedule>? get selectedDateSchedules =>
+      schedulesForCalendar[
+          DateTime(selectedDate.year, selectedDate.month, selectedDate.day)];
+
   CrewsViewModel() {
     init();
   }
@@ -29,7 +38,6 @@ class CrewsViewModel with ChangeNotifier {
   void init() async {
     await getMyCrews();
   }
-
 
   Future<void> getMyCrews() async {
     _myCrewList = await api.getMyCrews();
@@ -67,6 +75,28 @@ class CrewsViewModel with ChangeNotifier {
 
   Future<void> setReport(int reportId) async {
     _report = await api.getDetailReport(_crewId, reportId);
+    notifyListeners();
+  }
+
+  Future<void> getSchedules() async {
+    _schedules = await api.getSchedules(_crewId);
+    for (var e in _schedules) {
+      if (_schedulesForCalendar[DateTime(
+              e.meetingTime.year, e.meetingTime.month, e.meetingTime.day)] ==
+          null) {
+        _schedulesForCalendar[DateTime(
+            e.meetingTime.year, e.meetingTime.month, e.meetingTime.day)] = [e];
+      } else {
+        _schedulesForCalendar[DateTime(
+                e.meetingTime.year, e.meetingTime.month, e.meetingTime.day)]!
+            .add(e);
+      }
+    }
+    notifyListeners();
+  }
+
+  void setSelectedDate(DateTime input) {
+    _selectedDate = input;
     notifyListeners();
   }
 }

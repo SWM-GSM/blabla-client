@@ -216,8 +216,7 @@ class API {
     // 수정 - 테스트 API
     final res = await api("$korTestUrl/contents/today", HttpMethod.get);
     if (res.statusCode == 200) {
-      return Content.fromJson(
-          jsonDecode(utf8.decode(res.bodyBytes))["data"]);
+      return Content.fromJson(jsonDecode(utf8.decode(res.bodyBytes))["data"]);
     } else {
       throw Exception("http error :(");
     }
@@ -269,11 +268,26 @@ class API {
       throw Exception("http error :(");
     }
   }
+
+  Future<List<Schedule>> getSchedules(int crewId) async {
+    final res = await api("$testUrl/crews/$crewId/schedules", HttpMethod.get);
+    if (res.statusCode == 200) {
+      return (jsonDecode(utf8.decode(res.bodyBytes))["data"]
+              as List)
+          .map((e) => Schedule.fromJson(e))
+          .toList();
+    } else {
+      throw Exception("http error :(");
+    }
+  }
+
   /* 크루 리포트 */
   Future<ReportDetail> getDetailReport(int crewId, int reportId) async {
-    final res = await api("$testUrl/crews/$crewId/reports/$reportId", HttpMethod.get);
+    final res =
+        await api("$testUrl/crews/$crewId/reports/$reportId", HttpMethod.get);
     if (res.statusCode == 200) {
-      return ReportDetail.fromJson(jsonDecode(utf8.decode(res.bodyBytes))["data"]);
+      return ReportDetail.fromJson(
+          jsonDecode(utf8.decode(res.bodyBytes))["data"]);
     } else {
       throw Exception("http error :(");
     }

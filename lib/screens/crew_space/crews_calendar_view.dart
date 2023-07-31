@@ -1,10 +1,10 @@
-import 'package:blabla/models/member.dart';
-import 'package:blabla/models/schedule.dart';
+import 'package:blabla/screens/crew_space/crews_view_model.dart';
 import 'package:blabla/screens/crew_space/widgets/crews_schedule_widget.dart';
 import 'package:blabla/styles/colors.dart';
 import 'package:blabla/styles/txt_style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 class CrewsCalendarView extends StatelessWidget {
@@ -12,20 +12,7 @@ class CrewsCalendarView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Map<DateTime, List<Schedule>> schedules = {
-      DateTime(2023, 8, 5): [
-        Schedule(
-            id: 1,
-            title: "배고파",
-            meetingTime: DateTime(2023, 8, 1),
-            members: List.generate(
-              1,
-              (index) =>
-                  MemberSimple(id: 1, nickname: "김민지", profileImage: "cat"),
-            ),
-            dday: 1)
-      ],
-    };
+    final viewModel = Provider.of<CrewsViewModel>(context);
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 64,
@@ -97,20 +84,31 @@ class CrewsCalendarView extends StatelessWidget {
                       color: BlaColor.black,
                       shape: BoxShape.circle,
                     ),
+                    selectedTextStyle: BlaTxt.txt16B.copyWith(color: BlaColor.white),
                     defaultTextStyle: BlaTxt.txt16R,
                     weekendTextStyle: BlaTxt.txt16R,
                   ),
-                  focusedDay: DateTime(2023, 8, 1),
+                  focusedDay: DateTime(2023, 8, 20),
                   firstDay: DateTime(2023, 1, 1),
                   lastDay: DateTime(2030, 12, 31),
+                  selectedDayPredicate: (day) => isSameDay(
+                    day,
+                    viewModel.selectedDate,
+                  ),
+                  onDaySelected: (selectedDay, focusedDay) {
+                    viewModel.setSelectedDate(selectedDay);
+                  },
                   eventLoader: (day) =>
-                      schedules[DateTime(day.year, day.month, day.day)] ?? [],
+                      viewModel.schedulesForCalendar[
+                          DateTime(day.year, day.month, day.day)] ??
+                      [],
                   calendarBuilders: CalendarBuilders(
                     markerBuilder: (context, date, events) {
-                      if (events.isNotEmpty) {
+                      if (events.isNotEmpty &&
+                          !isSameDay(date, viewModel.selectedDate)) {
                         return Container(
                             width: (MediaQuery.of(context).size.width - 40) / 7,
-                            padding: const EdgeInsets.all(4),
+                            margin: const EdgeInsets.all(4),
                             alignment: Alignment.center,
                             decoration: const BoxDecoration(
                               color: BlaColor.lightOrange,
@@ -131,24 +129,19 @@ class CrewsCalendarView extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 8),
-          Expanded(
-            child: ListView.builder(
-              itemCount: 5,
-              itemBuilder: (context, idx) {
-                return CrewsScheduleWidget(
-                    type: ScheduleWidgetType.join,
-                    schedule: Schedule(
-                        id: 1,
-                        title: "배고파",
-                        meetingTime: DateTime(2023, 8, 1),
-                        members: List.generate(
-                          1,
-                          (index) => MemberSimple(
-                              id: 1, nickname: "김민지", profileImage: "cat"),
-                        ),
-                        dday: 1));
-              },
+          if (viewModel.selectedDateSchedules != null)
+            Expanded(
+              child: ListView.builder(
+                itemCount: viewModel.selectedDateSchedules!.length,
+                itemBuilder: (context, idx) {
+                  return CrewsScheduleWidget(
+                      type: ScheduleWidgetType.join,
+                      schedule: viewModel.selectedDateSchedules![idx]);
+                },
+              ),
             ),
+          SizedBox(
+            height: 80 + MediaQuery.of(context).padding.bottom,
           ),
         ],
       ),
