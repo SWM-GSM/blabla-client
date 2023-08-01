@@ -16,8 +16,8 @@ class CrewsViewModel with ChangeNotifier {
   List<Report> _reportList = [];
   late ReportDetail _report;
   late ScheduleSimple? _upcomingSchedule;
-  late List<Schedule> _schedules;
-  final Map<DateTime, List<Schedule>> _schedulesForCalendar = {};
+  List<Schedule> _schedules = [];
+  Map<DateTime, List<Schedule>> _schedulesForCalendar = {};
   DateTime _selectedDate = DateTime.now();
 
   String get crewName => _crewName;
@@ -27,9 +27,8 @@ class CrewsViewModel with ChangeNotifier {
   Map<DateTime, List<Schedule>> get schedulesForCalendar =>
       _schedulesForCalendar;
   DateTime get selectedDate => _selectedDate;
-  List<Schedule>? get selectedDateSchedules =>
-      schedulesForCalendar[
-          DateTime(selectedDate.year, selectedDate.month, selectedDate.day)];
+  List<Schedule>? get selectedDateSchedules => schedulesForCalendar[
+      DateTime(selectedDate.year, selectedDate.month, selectedDate.day)];
 
   CrewsViewModel() {
     init();
@@ -50,6 +49,7 @@ class CrewsViewModel with ChangeNotifier {
     await Future.wait([
       getReports(),
       getUpcomingSchedule(),
+      getSchedules(),
     ]);
   }
 
@@ -80,6 +80,7 @@ class CrewsViewModel with ChangeNotifier {
 
   Future<void> getSchedules() async {
     _schedules = await api.getSchedules(_crewId);
+    _schedulesForCalendar = {};
     for (var e in _schedules) {
       if (_schedulesForCalendar[DateTime(
               e.meetingTime.year, e.meetingTime.month, e.meetingTime.day)] ==
