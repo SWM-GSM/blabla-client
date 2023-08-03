@@ -119,7 +119,7 @@ class JoinViewModel with ChangeNotifier {
     notifyListeners();
   }
 
-  void initUser(String identifier, String loginType, String nickname,
+  void initUser(String loginType, String identifier, String nickname,
       {birthdate, gender}) {
     _identifier = identifier;
     _socialLoginType = loginType.toUpperCase();
@@ -220,9 +220,9 @@ class JoinViewModel with ChangeNotifier {
 
     final user = User(
         socialLoginType: _socialLoginType,
-        profileImg: _profileImg,
+        profileImage: _profileImg,
         nickname: _nickname,
-        birthdate: _birthdate,
+        birthDate: _birthdate,
         gender: _gender,
         countryCode: _countryCode,
         korLevel: _korLangLevel,

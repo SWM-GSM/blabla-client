@@ -84,8 +84,9 @@ class _JoinNicknameViewState extends State<JoinNicknameView> {
                     if (isNickLenValid) {
                       isNickDupValid =
                           await viewModel.nickDupValid(nickCtr.text);
-                    } else {
-                     showToast("중복된 닉네임입니다.");
+                      if (!isNickDupValid) {
+                        showToast("중복된 닉네임입니다.");
+                      }
                     }
                     setState(() {});
                   },

@@ -25,14 +25,14 @@ class JoinGenderView extends StatelessWidget {
                   (idx) => Expanded(
                         child: GestureDetector(
                           onTap: () {
-                            viewModel.setGender(Gender.values[idx].toString());
+                            viewModel.setGender(Gender.values[idx].name);
                           },
                           child: Container(
                             margin: EdgeInsets.only(right: idx != 2 ? 10 : 0),
                             height: 52,
                             alignment: Alignment.center,
                             decoration: BoxDecoration(
-                                color: Gender.values[idx].toString() ==
+                                color: Gender.values[idx].name ==
                                         viewModel.gender
                                     ? BlaColor.lightOrange
                                     : BlaColor.grey100,
@@ -48,7 +48,7 @@ class JoinGenderView extends StatelessWidget {
                                   ),
                                   Text(
                                     Gender.values[idx].kr,
-                                    style: Gender.values[idx].toString() ==
+                                    style: Gender.values[idx].name ==
                                             viewModel.gender
                                         ? BlaTxt.txt16B
                                             .copyWith(color: BlaColor.orange)

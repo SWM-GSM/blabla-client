@@ -8,7 +8,6 @@ import 'package:blabla/models/level.dart';
 import 'package:blabla/models/report.dart';
 import 'package:blabla/models/schedule.dart';
 import 'package:blabla/models/user.dart';
-import 'package:blabla/models/voice_info.dart';
 import 'package:blabla/utils/dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
@@ -24,16 +23,6 @@ get engBaseUrl => env["ENG_BASE_URL"];
 get testUrl => env["TEST_API"];
 get korTestUrl => env["KOR_TEST_API"];
 
-// class Res {
-//   final http.Response httpRes;
-//   final String success;
-//   final String code;
-//   final String msg;
-//   final dynamic data;
-
-//   Res({required this.httpRes, required this.success, required this.code, required this.msg, required this.data});
-// }
-
 enum HttpMethod {
   post,
   get,
@@ -45,14 +34,19 @@ class API {
   API();
 
   Future<http.Response> api(String url, HttpMethod method,
-      {String? token, Map<String, dynamic>? body}) async {
-    Map<String, String>? headers;
+      {String? token, body}) async {
+    Map<String, String> headers;
+
     if (token != null) {
-      headers = {"Authorization": token};
+      headers = {
+        "Authorization": token,
+        "Content-Type": "application/json",
+        "Accept": "application/json",
+      };
     } else {
       headers = {
         "Content-Type": "application/json",
-        "Accept": "application/json"
+        "Accept": "application/json",
       };
     }
 
@@ -122,17 +116,17 @@ class API {
     }
   }
 
-  Future<bool> getAccessToken(token, String socialLoginType) async {
+  Future<bool> login(String loginType) async {
     const storage = FlutterSecureStorage();
-    final res = await api(
-        "$baseUrl/oauth/login/$socialLoginType", HttpMethod.post,
-        token: token);
-    if (res.statusCode == 200) {
-      print(res.body);
-      await storage.write(
-          key: "accessToken", value: jsonDecode(res.body)["accessToken"]);
-      await storage.write(
-          key: "refreshToken", value: jsonDecode(res.body)["refreshToken"]);
+    final res = await api("$baseUrl/oauth/login/$loginType", HttpMethod.post,
+        token: await storage.read(key: "socialToken"));
+    if (res.statusCode == 200 && await storage.read(key: "accessToken") != null) {
+      await Future.wait([
+        storage.write(
+            key: "accessToken", value: jsonDecode(res.body)["data"]["accessToken"]),
+        storage.write(
+            key: "refreshToken", value: jsonDecode(res.body)["data"]["refreshToken"]),
+      ]);
       return true;
     } else {
       return false;
@@ -141,10 +135,16 @@ class API {
 
   Future<bool> join(User user) async {
     const storage = FlutterSecureStorage();
-    final token = await storage.read(key: "accessToken");
-    final res =
-        await api("$baseUrl/oauth/sign-up", HttpMethod.post, token: token!);
+    final res = await api("$baseUrl/oauth/sign-up", HttpMethod.post,
+        token: await storage.read(key: "socialToken"), body: jsonEncode(user));
+    
     if (res.statusCode == 200) {
+      await Future.wait([
+        storage.write(
+            key: "accessToken", value: jsonDecode(res.body)["data"]["accessToken"]),
+        storage.write(
+            key: "refreshToken", value: jsonDecode(res.body)["data"]["refreshToken"]),
+      ]);
       return true;
     } else {
       return false;

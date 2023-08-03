@@ -2,9 +2,9 @@ import 'dart:convert';
 
 class User {
   final String socialLoginType;
-  final String profileImg;
+  final String profileImage;
   final String nickname;
-  final String birthdate;
+  final String birthDate;
   final String gender;
   final String countryCode;
   final int korLevel;
@@ -14,9 +14,9 @@ class User {
 
   const User({
     required this.socialLoginType,
-    required this.profileImg,
+    required this.profileImage,
     required this.nickname,
-    required this.birthdate,
+    required this.birthDate,
     required this.gender,
     required this.countryCode,
     required this.korLevel,
@@ -27,9 +27,9 @@ class User {
 
   factory User.fromJson(Map<String, dynamic> json) => User(
         socialLoginType: json["socialLoginType"],
-        profileImg: json["profileImage"],
+        profileImage: json["profileImage"],
         nickname: json["nickname"],
-        birthdate: json["birthDate"],
+        birthDate: json["birthDate"],
         gender: json["gender"],
         countryCode: json["countryCode"],
         korLevel: json["korLevel"],
@@ -40,9 +40,9 @@ class User {
 
   Map<String, dynamic> toJson() => {
         "socialLoginType": socialLoginType,
-        "profileImage": profileImg,
+        "profileImage": profileImage,
         "nickname": nickname,
-        "birthDate": birthdate,
+        "birthDate": birthDate,
         "gender": gender,
         "countryCode": countryCode,
         "korLevel": korLevel,
