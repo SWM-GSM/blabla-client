@@ -114,14 +114,12 @@ class API {
     const storage = FlutterSecureStorage();
     final res = await api("$baseUrl/oauth/login/$loginType", HttpMethod.post,
         token: await storage.read(key: "socialToken"));
-    if (res.statusCode == 200 && jsonDecode(res.body)["accessToken"] != null) {
-      print(jsonDecode(res.body)["accessToken"]);
-      print(jsonDecode(res.body)["refreshToken"]);
+    if (res.statusCode == 200 && await storage.read(key: "accessToken") != null) {
       await Future.wait([
         storage.write(
-            key: "accessToken", value: jsonDecode(res.body)["accessToken"]),
+            key: "accessToken", value: jsonDecode(res.body)["data"]["accessToken"]),
         storage.write(
-            key: "refreshToken", value: jsonDecode(res.body)["refreshToken"]),
+            key: "refreshToken", value: jsonDecode(res.body)["data"]["refreshToken"]),
       ]);
       return true;
     } else {
@@ -134,17 +132,15 @@ class API {
     final res = await api("$baseUrl/oauth/sign-up", HttpMethod.post,
         token: await storage.read(key: "socialToken"), body: jsonEncode(user));
     
-    print(await storage.read(key: "socialToken"));
     if (res.statusCode == 200) {
       await Future.wait([
         storage.write(
-            key: "accessToken", value: jsonDecode(res.body)["accessToken"]),
+            key: "accessToken", value: jsonDecode(res.body)["data"]["accessToken"]),
         storage.write(
-            key: "refreshToken", value: jsonDecode(res.body)["refreshToken"]),
+            key: "refreshToken", value: jsonDecode(res.body)["data"]["refreshToken"]),
       ]);
       return true;
     } else {
-      print(res.body);
       return false;
     }
   }
