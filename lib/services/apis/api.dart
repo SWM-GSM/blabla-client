@@ -116,17 +116,28 @@ class API {
     }
   }
 
+  Future<bool> reissue() async {
+    const storage = FlutterSecureStorage();
+    final res = await api("$baseUrl/oauth/reissue", HttpMethod.post,
+        body: jsonEncode({
+          "accessToken": await storage.read(key: "accessToken"),
+          "refreshToken": await storage.read(key: "refreshToken")
+        }));
+    if (res.statusCode == 200) {
+      saveToken(res);
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   Future<bool> login(String loginType) async {
     const storage = FlutterSecureStorage();
     final res = await api("$baseUrl/oauth/login/$loginType", HttpMethod.post,
         token: await storage.read(key: "socialToken"));
-    if (res.statusCode == 200 && await storage.read(key: "accessToken") != null) {
-      await Future.wait([
-        storage.write(
-            key: "accessToken", value: jsonDecode(res.body)["data"]["accessToken"]),
-        storage.write(
-            key: "refreshToken", value: jsonDecode(res.body)["data"]["refreshToken"]),
-      ]);
+    if (res.statusCode == 200 &&
+        await storage.read(key: "accessToken") != null) {
+      saveToken(res);
       return true;
     } else {
       return false;
@@ -137,14 +148,8 @@ class API {
     const storage = FlutterSecureStorage();
     final res = await api("$baseUrl/oauth/sign-up", HttpMethod.post,
         token: await storage.read(key: "socialToken"), body: jsonEncode(user));
-    
     if (res.statusCode == 200) {
-      await Future.wait([
-        storage.write(
-            key: "accessToken", value: jsonDecode(res.body)["data"]["accessToken"]),
-        storage.write(
-            key: "refreshToken", value: jsonDecode(res.body)["data"]["refreshToken"]),
-      ]);
+      saveToken(res);
       return true;
     } else {
       return false;
@@ -272,10 +277,23 @@ class API {
   Future<List<Schedule>> getSchedules(int crewId) async {
     final res = await api("$testUrl/crews/$crewId/schedules", HttpMethod.get);
     if (res.statusCode == 200) {
-      return (jsonDecode(utf8.decode(res.bodyBytes))["data"]
-              as List)
+      return (jsonDecode(utf8.decode(res.bodyBytes))["data"] as List)
           .map((e) => Schedule.fromJson(e))
           .toList();
+    } else {
+      throw Exception("http error :(");
+    }
+  }
+
+  Future<bool> createSchedule(
+      int crewId, String title, String meetingTime) async {
+    const storage = FlutterSecureStorage();
+    final res = await api("$testUrl/crews/$crewId/schedules", HttpMethod.post,
+        token: await storage.read(key: "socialToken"),
+        body: jsonEncode({"title": title, "meetingTime": meetingTime}));
+
+    if (res.statusCode == 200) {
+      return true;
     } else {
       throw Exception("http error :(");
     }
@@ -292,4 +310,22 @@ class API {
       throw Exception("http error :(");
     }
   }
+}
+
+Future<void> saveToken(res) async {
+  const storage = FlutterSecureStorage();
+  await Future.wait([
+    storage.write(
+        key: "accessToken", value: jsonDecode(res.body)["data"]["accessToken"]),
+    storage.write(
+        key: "refreshToken",
+        value: jsonDecode(res.body)["data"]["refreshToken"]),
+    storage.write(
+        key: "accessTokenExpiresIn",
+        value: jsonDecode(res.body)["data"]["accessTokenExpiresIn"].toString()),
+    storage.write(
+        key: "refreshTokenExpiresIn",
+        value:
+            jsonDecode(res.body)["data"]["refreshTokenExpiresIn"].toString()),
+  ]);
 }
