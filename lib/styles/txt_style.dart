@@ -38,6 +38,7 @@ class BlaTxt {
   static final TextStyle txt14SB = txtSBBase.copyWith(height: 20.0 / 14.0, fontSize: 14.0);
   static final TextStyle txt14SBH = txtSBBase.copyWith(height: 22.0 / 14.0, fontSize: 14.0);
   static final TextStyle txt16SB = txtSBBase.copyWith(height: 20.0 / 16.0, fontSize: 16.0);
+  static final TextStyle txt20SB = txtSBBase.copyWith(height: 24.0 / 20.0, fontSize: 20.0);
 
   /* Bold */
   static final TextStyle txt12BL = txtBBase.copyWith(height: 12.0 / 12.0, fontSize: 12.0);

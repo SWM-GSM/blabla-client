@@ -1,4 +1,5 @@
 import 'package:blabla/screens/crew_space/crews_view_model.dart';
+import 'package:blabla/screens/crew_space/widgets/crews_bottom_sheet_widget.dart';
 import 'package:blabla/screens/crew_space/widgets/crews_schedule_widget.dart';
 import 'package:blabla/styles/colors.dart';
 import 'package:blabla/styles/txt_style.dart';
@@ -25,6 +26,7 @@ class CrewsCalendarView extends StatelessWidget {
         centerTitle: true,
         leading: GestureDetector(
           onTap: () {
+            viewModel.setSelectedDate(DateTime.now());
             Navigator.pop(context);
           },
           child: Padding(
@@ -84,7 +86,8 @@ class CrewsCalendarView extends StatelessWidget {
                       color: BlaColor.black,
                       shape: BoxShape.circle,
                     ),
-                    selectedTextStyle: BlaTxt.txt16B.copyWith(color: BlaColor.white),
+                    selectedTextStyle:
+                        BlaTxt.txt16B.copyWith(color: BlaColor.white),
                     defaultTextStyle: BlaTxt.txt16R,
                     weekendTextStyle: BlaTxt.txt16R,
                   ),
@@ -156,7 +159,12 @@ class CrewsCalendarView extends StatelessWidget {
           color: BlaColor.white,
         ),
         child: GestureDetector(
-          onTap: () {},
+          onTap: () {
+            showModalBottomSheet(
+                isScrollControlled: true,
+                context: context,
+                builder: (context) => const CrewsBottomSheetWidget());
+          },
           child: Container(
             alignment: Alignment.center,
             height: 56,
