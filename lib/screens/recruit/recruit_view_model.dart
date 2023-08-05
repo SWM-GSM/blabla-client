@@ -1,5 +1,5 @@
 import 'dart:math';
-
+import 'package:blabla/models/crew.dart';
 import 'package:blabla/models/emoji_name_tag.dart';
 import 'package:blabla/models/level.dart';
 import 'package:blabla/services/apis/api.dart';
@@ -32,7 +32,7 @@ enum CrewCycle {
   twiceAWeek("주 2~3회", "TWICEAWEEK"),
   fourTimesAWeek("주 4~5회", "FOURTIMESAWEEK"),
   everyday("매일", "EVERYDAY");
-  
+
   const CrewCycle(this.name, this.tag);
   final String name;
   final String tag;
@@ -64,14 +64,17 @@ class RecruitViewModel with ChangeNotifier {
   int get korLv => _korLv;
   String get memProp => _memProp;
   String get detail => _detail;
-  
+
   /* 생성 시 임시로 사용됨 */
-  List<EmojiNameTag> _allCrewTags = [] ;
+  List<EmojiNameTag> _allCrewTags = [];
   List<EmojiNameTag> get allCrewTags => _allCrewTags;
   List<Level> _levels = [];
   List<Level> get levels => _levels;
   List<EmojiNameTag> _memProps = [];
   List<EmojiNameTag> get memProps => _memProps;
+
+  int? _crewId; // 생성된 크루 아이디
+  int? get crewId => _crewId;
 
   RecruitViewModel() {
     changeProfile();
@@ -106,6 +109,20 @@ class RecruitViewModel with ChangeNotifier {
       default:
         break;
     }
+    notifyListeners();
+  }
+
+  void init() {
+    changeProfile();
+    initName();
+    initDesc();
+    initCycle();
+    initCrewTags();
+    initApproval();
+    initNum();
+    initLv();
+    initMemProp();
+    initDetail();
     notifyListeners();
   }
 
@@ -163,12 +180,12 @@ class RecruitViewModel with ChangeNotifier {
     }
     notifyListeners();
   }
-  
+
   void initApproval() {
     _autoApproval = null;
     notifyListeners();
   }
-  
+
   void setApproval(bool value) {
     _autoApproval = value;
     notifyListeners();
@@ -228,5 +245,26 @@ class RecruitViewModel with ChangeNotifier {
   void setDetail(String input) {
     _detail = input;
     notifyListeners();
+  }
+
+  Future<bool> createCrew() async {
+    final crew = CrewToJson(
+        coverImage: _profileImg,
+        name: _name,
+        description: _desc,
+        meetingCycle: _cycle!.tag,
+        tags: _crewTags.map((e) => e.tag).toList(),
+        maxNum: _crewNum,
+        engLevel: _engLv,
+        korLevel: _korLv,
+        preferMember: _memProp,
+        detail: detail,
+        autoApproval: autoApproval!);
+    _crewId = await api.createCrew(crew);
+    if (_crewId != null) {
+      return true;
+    } else {
+      return false;
+    }
   }
 }

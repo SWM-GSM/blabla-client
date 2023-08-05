@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:blabla/screens/home/crew_view_model.dart';
 import 'package:blabla/screens/home/widget/level_tile_widget.dart';
 import 'package:blabla/screens/home/widget/member_tile_widget.dart';

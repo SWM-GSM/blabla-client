@@ -1,13 +1,20 @@
+import 'package:blabla/main.dart';
 import 'package:blabla/screens/home/crew_detail_view.dart';
+import 'package:blabla/screens/home/crew_view_model.dart';
+import 'package:blabla/screens/recruit/recruit_view_model.dart';
 import 'package:blabla/styles/colors.dart';
 import 'package:blabla/styles/txt_style.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class RecruitCompleteView extends StatelessWidget {
   const RecruitCompleteView({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final viewModel = Provider.of<RecruitViewModel>(context);
+    final crewViewModel =
+        Provider.of<CrewViewModel>(context); // 수정 - 리랙토링 시 삭제 할 수 있는 방향으로 진행
     return Scaffold(
       body: SafeArea(
         child: Column(
@@ -47,12 +54,16 @@ class RecruitCompleteView extends StatelessWidget {
               children: [
                 GestureDetector(
                   onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => CrewDetailView(
-                                  imgWidth: MediaQuery.of(context).size.width,
-                                )));
+                    crewViewModel
+                        .getCrewDetail(viewModel.crewId!)
+                        .then((value) {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => CrewDetailView(
+                                    imgWidth: MediaQuery.of(context).size.width,
+                                  )));
+                    });
                   },
                   child: Container(
                     margin:
@@ -69,8 +80,10 @@ class RecruitCompleteView extends StatelessWidget {
                 ),
                 GestureDetector(
                   onTap: () {
-                    Navigator.of(context)
-                        .popUntil(ModalRoute.withName("/CrewListView"));
+                    viewModel.init();
+                    Navigator.of(context).pushAndRemoveUntil(
+                        MaterialPageRoute(builder: (context) => const Main()),
+                        (route) => true);
                   },
                   child: Container(
                     margin:

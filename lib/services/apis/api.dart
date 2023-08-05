@@ -257,12 +257,22 @@ class API {
     }
   }
 
-  Future<CrewDetail> getCrewDetail() async {
+  Future<CrewDetail> getCrewDetail(int crewId) async {
     // 수정 - 테스트 API & crewId, 한글
     final res = await api("$korTestUrl/crews/1", HttpMethod.get);
     if (res.statusCode == 200) {
       return (CrewDetail.fromJson(
           jsonDecode(utf8.decode(res.bodyBytes))["data"]));
+    } else {
+      throw Exception("http error :(");
+    }
+  }
+
+  Future<int> createCrew(CrewToJson crew) async {
+    // 수정 - 테스트 API
+    final res = await api("$testUrl/crews", HttpMethod.post, body: jsonEncode(crew));
+    if (res.statusCode == 200) {
+      return jsonDecode(utf8.decode(res.bodyBytes))["data"]["crewId"];
     } else {
       throw Exception("http error :(");
     }
@@ -308,7 +318,6 @@ class API {
     final res = await api("$testUrl/crews/$crewId/schedules", HttpMethod.post,
         token: await storage.read(key: "socialToken"),
         body: jsonEncode({"title": title, "meetingTime": meetingTime}));
-
     if (res.statusCode == 200) {
       return true;
     } else {
