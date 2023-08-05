@@ -1,6 +1,5 @@
 import 'package:blabla/models/crew.dart';
 import 'package:blabla/providers/nav_provider.dart';
-import 'package:blabla/screens/home/crew_detail_view.dart';
 import 'package:blabla/screens/home/crew_list_view.dart';
 import 'package:blabla/screens/home/home_view_model.dart';
 import 'package:blabla/screens/home/widget/crew_tile_widget.dart';

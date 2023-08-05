@@ -199,9 +199,13 @@ class API {
   }
 
   /* 홈 API */
-  Future<UserSimple> getMyPrfile() async {
-    // 수정 - 테스트 API
-    final res = await api("$korTestUrl/profile/1", HttpMethod.get);
+  Future<UserSimple> getMyProfile() async {
+    const storage = FlutterSecureStorage();
+    // final res = await api("$korTestUrl/profile", HttpMethod.get);
+    final res = await api("$korBaseUrl/profile", HttpMethod.get,
+        token: "Bearer ${await storage.read(key: "accessToken")}",
+        needCheck: true);
+    // print(res.body);
     if (res.statusCode == 200) {
       return UserSimple.fromJson(
           jsonDecode(utf8.decode(res.bodyBytes))["data"]);
