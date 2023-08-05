@@ -34,7 +34,7 @@ class API {
   API();
 
   Future<http.Response> api(String url, HttpMethod method,
-      {String? token, body}) async {
+      {String? token, body, bool needCheck = false}) async {
     Map<String, String> headers;
 
     if (token != null) {
@@ -50,7 +50,24 @@ class API {
       };
     }
 
+    const storage = FlutterSecureStorage();
+    final accessTokenExpireIn = await storage.read(key: "accessTokenExpiresIn");
+
     try {
+      if (needCheck == true) {
+        if (DateTime.fromMillisecondsSinceEpoch(int.parse(accessTokenExpireIn!))
+            .isBefore(DateTime.now())) {
+          final res = await http.post(Uri.parse("$baseUrl/oauth/reissue"),
+              headers: headers,
+              body: jsonEncode({
+                "accessToken": await storage.read(key: "accessToken"),
+                "refreshToken": await storage.read(key: "refreshToken")
+              }));
+          if (res.statusCode == 200) {
+            saveToken(res);
+          }
+        }
+      }
       switch (method) {
         case HttpMethod.post:
           return await http.post(Uri.parse(url), headers: headers, body: body);
