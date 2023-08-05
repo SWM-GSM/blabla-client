@@ -49,6 +49,18 @@ class _CrewsBottomSheetWidgetState extends State<CrewsBottomSheetWidget> {
               ),
               GestureDetector(
                 onTap: () {
+                  if (title.isNotEmpty &&
+                      DateTime(date.year, date.month, date.day, time.hour,
+                              time.minute)
+                          .isAfter(DateTime.now())) {
+                    viewModel.createSchedule(
+                        title,
+                        datetimeToStr(
+                            DateTime(date.year, date.month, date.day, time.hour,
+                                time.minute, 0),
+                            StrDatetimeType.hypenDelimiter));
+                    Navigator.pop(context);
+                  }
                 },
                 child: SvgPicture.asset(
                   "assets/icons/ic_24_check.svg",

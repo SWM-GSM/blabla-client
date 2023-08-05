@@ -4,6 +4,7 @@ enum StrDatetimeType {
   strDelimiter,
   dotDelimiter,
   strDelOnlyDate,
+  hypenDelimiter,
 }
 
 datetimeToStr(DateTime datetime, StrDatetimeType type) {
@@ -16,5 +17,7 @@ datetimeToStr(DateTime datetime, StrDatetimeType type) {
       return formatDate(datetime, [yyyy, ".", mm, ".", dd, " ", HH, ":", nn]);
     case StrDatetimeType.strDelOnlyDate:
       return formatDate(datetime, [yyyy, "년 ", mm, "월 ", dd, "일 "]);
+    case StrDatetimeType.hypenDelimiter:
+      return formatDate(datetime, [yyyy, "-", mm, "-", dd, " ", HH, ":", nn, ":", ss]);
   }
 }

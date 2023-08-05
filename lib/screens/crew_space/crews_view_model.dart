@@ -100,4 +100,11 @@ class CrewsViewModel with ChangeNotifier {
     _selectedDate = input;
     notifyListeners();
   }
+
+  void createSchedule(String title, String meetingTime) async {
+    await Future.wait([
+      api.createSchedule(_crewId, title, meetingTime),
+      getSchedules(),
+    ]);
+  }
 }
