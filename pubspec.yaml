@@ -51,6 +51,12 @@ dependencies:
       url: https://github.com/gabrielguedest/flutter_styled_toast
       ref: master
   flutter_secure_storage: ^8.0.0
+  extended_image: ^8.0.2
+  shimmer: ^3.0.0
+  country_flags: ^2.1.0
+  date_format: ^2.0.7
+  table_calendar: ^3.0.9
+  flutter_native_splash: ^2.3.1
 
 dev_dependencies:
   flutter_test:

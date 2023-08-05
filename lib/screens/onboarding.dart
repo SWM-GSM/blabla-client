@@ -1,4 +1,4 @@
-import 'package:blabla/screens/home/home.dart';
+import 'package:blabla/main.dart';
 import 'package:blabla/screens/join/join_profile_view.dart';
 import 'package:blabla/services/login.dart';
 import 'package:blabla/styles/colors.dart';
@@ -39,7 +39,7 @@ class OnBoarding extends StatelessWidget {
                       await Login.google.service.login().then((alreadyJoined) {
                         if (alreadyJoined) {
                           Navigator.push(context,
-                              MaterialPageRoute(builder: (context) => Home()));
+                              MaterialPageRoute(builder: (context) => Main()));
                         } else {
                           Navigator.push(
                               context,
