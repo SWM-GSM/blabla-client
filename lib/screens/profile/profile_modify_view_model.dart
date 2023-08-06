@@ -47,7 +47,6 @@ class ProfileModifyViewModel with ChangeNotifier {
   List<Level> get levelList => _levelList;
 
   ProfileModifyViewModel() {
-    init("cat", "닉네임", '2000.09.14', "female", "KR", 5, 2);
     initCountryList();
     initLevelList();
   }

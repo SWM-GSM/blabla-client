@@ -1,4 +1,4 @@
-import 'dart:convert';
+import 'package:blabla/models/emoji_name_tag.dart';
 
 class User {
   final String socialLoginType;
@@ -52,42 +52,42 @@ class User {
       };
 }
 
-class UserSimple {
-    String profileImage;
-    String nickname;
-    int korLevel;
-    int engLevel;
-    int signedUpAfter;
-    String countryCode;
-    String description;
+class UserProfile {
+  String nickname;
+  String description;
+  String profileImage;
+  DateTime birthDate;
+  String gender;
+  String countryCode;
+  int korLevel;
+  int engLevel;
+  int signedUpAfter;
+  List<EmojiNameTag> keywords;
 
-    UserSimple({
-        required this.profileImage,
-        required this.nickname,
-        required this.korLevel,
-        required this.engLevel,
-        required this.signedUpAfter,
-        required this.countryCode,
-        required this.description,
-    });
+  UserProfile({
+    required this.nickname,
+    required this.description,
+    required this.profileImage,
+    required this.birthDate,
+    required this.gender,
+    required this.countryCode,
+    required this.korLevel,
+    required this.engLevel,
+    required this.signedUpAfter,
+    required this.keywords,
+  });
 
-    factory UserSimple.fromJson(Map<String, dynamic> json) => UserSimple(
-        profileImage: json["profileImage"],
+  factory UserProfile.fromJson(Map<String, dynamic> json) => UserProfile(
         nickname: json["nickname"],
+        description: json["description"],
+        profileImage: json["profileImage"],
+        birthDate: DateTime.parse(json["birthDate"]),
+        gender: json["gender"],
+        countryCode: json["countryCode"],
         korLevel: json["korLevel"],
         engLevel: json["engLevel"],
         signedUpAfter: json["signedUpAfter"],
-        countryCode: json["countryCode"],
-        description: json["description"],
-    );
-
-    Map<String, dynamic> toJson() => {
-        "profileImage": profileImage,
-        "nickname": nickname,
-        "korLevel": korLevel,
-        "engLevel": engLevel,
-        "signedUpAfter": signedUpAfter,
-        "countryCode": countryCode,
-        "description": description,
-    };
+        keywords: List<EmojiNameTag>.from(
+            json["keywords"].map((x) => EmojiNameTag.fromJson(x))),
+      );
 }

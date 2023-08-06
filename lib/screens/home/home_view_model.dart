@@ -8,13 +8,13 @@ class HomeViewModel with ChangeNotifier {
   final api = API();
 
   bool _isLoading = true;
-  UserSimple? _user;
+  UserProfile? _user;
   List<CrewSimple> _myCrewList = [];
   List<CrewSimple> _nowCrewList = [];
   Content? _todayContent;
 
   bool get isLoading => _isLoading;
-  UserSimple? get user => _user;
+  UserProfile? get user => _user;
   List<CrewSimple> get myCrewList => _myCrewList;
   List<CrewSimple> get nowCrewList => _nowCrewList;
   Content? get todayContent => _todayContent;

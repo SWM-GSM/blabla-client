@@ -199,7 +199,7 @@ class API {
   }
 
   /* 홈 API */
-  Future<UserSimple> getMyProfile() async {
+  Future<UserProfile> getMyProfile() async {
     const storage = FlutterSecureStorage();
     // final res = await api("$korTestUrl/profile", HttpMethod.get);
     final res = await api("$korBaseUrl/profile", HttpMethod.get,
@@ -207,7 +207,7 @@ class API {
         needCheck: true);
     // print(res.body);
     if (res.statusCode == 200) {
-      return UserSimple.fromJson(
+      return UserProfile.fromJson(
           jsonDecode(utf8.decode(res.bodyBytes))["data"]);
     } else {
       throw Exception("http error :(");
@@ -242,7 +242,8 @@ class API {
     // 수정 - 테스트 API
     final res = await api("$korTestUrl/contents/today", HttpMethod.get);
     if (res.statusCode == 200) {
-      return Content.fromJson(jsonDecode(utf8.decode(res.bodyBytes))["data"]);
+      return Content.fromJson(
+          jsonDecode(utf8.decode(res.bodyBytes))["data"]);
     } else {
       throw Exception("http error :(");
     }

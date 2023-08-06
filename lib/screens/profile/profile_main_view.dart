@@ -1,18 +1,26 @@
 import 'package:blabla/models/interest.dart';
+import 'package:blabla/screens/join/join_view_model.dart';
 import 'package:blabla/screens/profile/profile_modify_main_view.dart';
+import 'package:blabla/screens/profile/profile_modify_view_model.dart';
+import 'package:blabla/screens/profile/profile_view_model.dart';
 import 'package:blabla/styles/colors.dart';
 import 'package:blabla/styles/txt_style.dart';
+import 'package:blabla/utils/datetime_to_str.dart';
 import 'package:blabla/widgets/keyword_widget.dart';
 import 'package:blabla/widgets/profile_widget.dart';
+import 'package:blabla/widgets/skeleton_ui_widget.dart';
 import 'package:country_flags/country_flags.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
 
 class ProfileMainView extends StatelessWidget {
   const ProfileMainView({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final viewModel = Provider.of<ProfileViewModel>(context);
+    final modifyViewModel = Provider.of<ProfileModifyViewModel>(context);
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 64,
@@ -60,32 +68,61 @@ class ProfileMainView extends StatelessWidget {
                       const SizedBox(
                         height: 4,
                       ),
-                      Text(
-                        "버나드",
-                        style: BlaTxt.txt24BKH,
-                      ),
+                      viewModel.user == null
+                          ? SkeletonTxtWidget(
+                              style: BlaTxt.txt24BKH, width: 120)
+                          : Text(
+                              viewModel.user!.nickname,
+                              style: BlaTxt.txt24BKH,
+                            ),
                       const SizedBox(
                         height: 4,
                       ),
-                      Text(
-                        "2001.09.24 | 👩 여성",
-                        style: BlaTxt.txt12R.copyWith(color: BlaColor.grey700),
-                      ),
+                      viewModel.user == null
+                          ? SkeletonTxtWidget(style: BlaTxt.txt12R, width: 120)
+                          : Text(
+                              "${datetimeToStr(viewModel.user!.birthDate, StrDatetimeType.dotDelOnlyDate)} | ${Gender.getByStr(viewModel.user!.gender).emoji} ${Gender.getByStr(viewModel.user!.gender).kr}",
+                              style: BlaTxt.txt12R
+                                  .copyWith(color: BlaColor.grey700),
+                            ),
                     ],
                   ),
-                  const ProfileWidget(
-                    profileSize: 48,
-                    profile: "cat",
-                    bgSize: 80,
-                    bgColor: BlaColor.lightOrange,
-                  )
+                  viewModel.user == null
+                      ? SkeletonBoxWidget(
+                          child: Container(
+                            width: 80,
+                            height: 80,
+                            decoration: const BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: BlaColor.grey100,
+                            ),
+                          ),
+                        )
+                      : ProfileWidget(
+                          profileSize: 48,
+                          profile: viewModel.user!.profileImage,
+                          bgSize: 80,
+                          bgColor: BlaColor.lightOrange,
+                        )
                 ],
               ),
               GestureDetector(
                 onTap: () {
-                  Navigator.of(context, rootNavigator: true).push(
-                      MaterialPageRoute(
-                          builder: (context) => ProfileModifyMainView()));
+                  if (viewModel.user != null) {
+                    modifyViewModel.init(
+                        viewModel.user!.profileImage,
+                        viewModel.user!.nickname,
+                        datetimeToStr(viewModel.user!.birthDate,
+                            StrDatetimeType.dotDelOnlyDate),
+                        viewModel.user!.gender,
+                        viewModel.user!.countryCode,
+                        viewModel.user!.korLevel,
+                        viewModel.user!.engLevel);
+                    Navigator.of(context, rootNavigator: true).push(
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                const ProfileModifyMainView()));
+                  }
                 },
                 child: Container(
                   height: 48,
@@ -107,13 +144,34 @@ class ProfileMainView extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    infoCol("Lv. 1", "한국어 스킬"),
+                    infoCol(
+                        viewModel.user == null
+                            ? ""
+                            : "Lv. ${viewModel.user!.korLevel}",
+                        "한국어 스킬",
+                        isSkeleton: viewModel.user == null),
                     Container(width: 1, height: 20, color: BlaColor.grey200),
-                    infoCol("Lv. 3", "영어 스킬"),
+                    infoCol(
+                        viewModel.user == null
+                            ? ""
+                            : "Lv. ${viewModel.user!.engLevel}",
+                        "영어 스킬",
+                        isSkeleton: viewModel.user == null),
                     Container(width: 1, height: 20, color: BlaColor.grey200),
-                    infoCol("7일", "가입한지"),
+                    infoCol(
+                        viewModel.user == null
+                            ? ""
+                            : "${viewModel.user!.signedUpAfter}일",
+                        "가입한지",
+                        isSkeleton: viewModel.user == null),
                     Container(width: 1, height: 20, color: BlaColor.grey200),
-                    infoCol("KR", "국적", isCountry: true)
+                    infoCol(
+                        viewModel.user == null
+                            ? ""
+                            : viewModel.user!.countryCode.toUpperCase(),
+                        "국적",
+                        isSkeleton: viewModel.user == null,
+                        isCountry: true)
                   ],
                 ),
               ),
@@ -154,13 +212,37 @@ class ProfileMainView extends StatelessWidget {
                     const SizedBox(
                       height: 8,
                     ),
-                    Text(
-                      "함께 개발 이야기 나누고 게임도 같이해요! \nHello Nice yo meet you!",
-                      style: BlaTxt.txt14R.copyWith(
-                          color: BlaColor.grey800,
-                          overflow: TextOverflow.visible),
-                      softWrap: true,
-                    )
+                    viewModel.user == null
+                        ? Column(
+                            children: List.generate(
+                            3,
+                            (idx) => SkeletonTxtWidget(
+                                style: BlaTxt.txt14R,
+                                width: MediaQuery.of(context).size.width - 40),
+                          ))
+                        : viewModel.user!.description == ""
+                            ? Container(
+                                height: 56,
+                                alignment: Alignment.center,
+                                child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text("😋", style: BlaTxt.txt20BL),
+                                      const SizedBox(height: 8),
+                                      Text(
+                                        "아직 등록된 자기소개가 없어요!",
+                                        style: BlaTxt.txt14R
+                                            .copyWith(color: BlaColor.grey800),
+                                      )
+                                    ]),
+                              )
+                            : Text(
+                                viewModel.user!.description,
+                                style: BlaTxt.txt14R.copyWith(
+                                    color: BlaColor.grey800,
+                                    overflow: TextOverflow.visible),
+                                softWrap: true,
+                              )
                   ],
                 ),
               ),
@@ -201,16 +283,38 @@ class ProfileMainView extends StatelessWidget {
                     const SizedBox(
                       height: 8,
                     ),
-                    Wrap(
-                      children: List.generate(
-                          4,
-                          (idx) => KeywordWidget(
-                              keyword:
-                                  Keyword(emoji: "🎙️", name: "악기 연주", tag: ""),
-                              selected: false)),
-                      spacing: 8,
-                      runSpacing: 8,
-                    )
+                    viewModel.user == null
+                        ? Wrap(
+                            spacing: 8,
+                            runSpacing: 8,
+                            children: List.generate(
+                                6,
+                                (index) => SkeletonBoxWidget(
+                                        child: Container(
+                                      width:
+                                          (MediaQuery.of(context).size.width -
+                                                  57) /
+                                              3,
+                                      height: 36,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(18),
+                                        color: BlaColor.grey100,
+                                      ),
+                                    ))))
+                        : Wrap(
+                            spacing: 8,
+                            runSpacing: 8,
+                            children: List.generate(
+                                viewModel.user!.keywords.length,
+                                (idx) => KeywordWidget(
+                                    keyword: Keyword(
+                                        emoji:
+                                            viewModel.user!.keywords[idx].emoji,
+                                        name:
+                                            viewModel.user!.keywords[idx].name,
+                                        tag: viewModel.user!.keywords[idx].tag),
+                                    selected: false)),
+                          )
                   ],
                 ),
               ),
@@ -221,23 +325,29 @@ class ProfileMainView extends StatelessWidget {
     );
   }
 
-  Widget infoCol(String content, String category, {bool isCountry = false}) {
+  Widget infoCol(String content, String category,
+      {bool isCountry = false, bool isSkeleton = false}) {
     return SizedBox(
       width: 80,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          isCountry
-              ? CountryFlag.fromCountryCode(
-                  content,
-                  width: 24,
-                  height: 24,
-                )
-              : Text(
-                  content,
+          isSkeleton
+              ? SkeletonTxtWidget(
                   style: BlaTxt.txt20B,
-                ),
+                  width: 60,
+                )
+              : isCountry
+                  ? CountryFlag.fromCountryCode(
+                      content,
+                      width: 24,
+                      height: 24,
+                    )
+                  : Text(
+                      content,
+                      style: BlaTxt.txt20B,
+                    ),
           const SizedBox(
             height: 8,
           ),
