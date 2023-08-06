@@ -4,6 +4,7 @@ import 'package:blabla/styles/colors.dart';
 import 'package:blabla/styles/txt_style.dart';
 import 'package:blabla/widgets/create_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:provider/provider.dart';
 
 class RecruitDetailView extends StatefulWidget {
@@ -93,13 +94,18 @@ class _RecruitDetailViewState extends State<RecruitDetailView> {
         child: Row(children: [
           Expanded(
             child: GestureDetector(
-              onTap: () async {
-                // 수정 - API 연결
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => RecruitCompleteView()),
-                );
+              onTap: () {
+                viewModel.createCrew().then((value) {
+                  if (value) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => RecruitCompleteView()),
+                    );
+                  } else {
+                    showToast("크루 생성에 실패했습니다. 다시 시도해주세요.");
+                  }
+                });
               },
               child: Container(
                   height: 56,
@@ -118,15 +124,20 @@ class _RecruitDetailViewState extends State<RecruitDetailView> {
           Expanded(
             child: GestureDetector(
               onTap: () {
-                // 수정 - API 연결
                 if (detailCtr.text.isNotEmpty) {
                   viewModel.setDetail(detailCtr.text);
                   detailFocus.unfocus();
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => RecruitCompleteView()),
-                  );
+                  viewModel.createCrew().then((value) {
+                    if (value) {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const RecruitCompleteView()),
+                      );
+                    } else {
+                      showToast("크루 생성에 실패했습니다. 다시 시도해주세요.");
+                    }
+                  });
                 }
               },
               child: Container(

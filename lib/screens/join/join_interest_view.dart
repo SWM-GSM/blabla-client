@@ -44,6 +44,7 @@ class JoinInterestView extends StatelessWidget {
             ),
             Expanded(
               child: ListView.builder(
+                padding: const EdgeInsets.only(bottom: 78),
                 itemCount: viewModel.interests.length,
                 itemBuilder: (context, idx) =>
                     JoinInterestWidget(interest: viewModel.interests[idx]),
@@ -54,7 +55,7 @@ class JoinInterestView extends StatelessWidget {
       ),
       bottomSheet: Container(
         margin: EdgeInsets.fromLTRB(
-            20, 10, 20, 10 + MediaQuery.of(context).viewPadding.bottom),
+            20, 12, 20, 10 + MediaQuery.of(context).viewPadding.bottom),
         child: Row(children: [
           Expanded(
             child: GestureDetector(

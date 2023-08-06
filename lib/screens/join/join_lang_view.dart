@@ -86,7 +86,7 @@ class JoinLangView extends StatelessWidget {
         },
         child: Container(
           margin: EdgeInsets.fromLTRB(
-              20, 10, 20, 10 + MediaQuery.of(context).viewPadding.bottom),
+              20, 12, 20, 10 + MediaQuery.of(context).viewPadding.bottom),
           alignment: Alignment.center,
           height: 56,
           decoration: BoxDecoration(

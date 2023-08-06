@@ -1,3 +1,4 @@
+import 'package:blabla/main.dart';
 import 'package:blabla/screens/join/join_profile_view.dart';
 import 'package:blabla/services/login.dart';
 import 'package:blabla/styles/colors.dart';
@@ -31,12 +32,21 @@ class OnBoarding extends StatelessWidget {
               }),
               loginBtn("google", BlaColor.grey200, () async {
                 try {
-                  await Login.google.service.login(context).then((value) {
+                  await Login.google.service
+                      .socialLogin(context)
+                      .then((value) async {
                     if (value) {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => JoinProfileView()));
+                      await Login.google.service.login().then((alreadyJoined) {
+                        if (alreadyJoined) {
+                          Navigator.push(context,
+                              MaterialPageRoute(builder: (context) => Main()));
+                        } else {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => JoinProfileView()));
+                        }
+                      });
                     } else {
                       throw Error();
                     }

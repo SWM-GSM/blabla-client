@@ -34,7 +34,7 @@ class HomeViewModel with ChangeNotifier {
   }
 
   Future<void> getMyPrfile() async {
-    _user = await api.getMyPrfile();
+    _user = await api.getMyProfile();
     notifyListeners();
   }
 

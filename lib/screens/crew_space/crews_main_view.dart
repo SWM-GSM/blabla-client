@@ -1,11 +1,12 @@
+import 'package:blabla/screens/crew_space/crews_calendar_view.dart';
 import 'package:blabla/screens/crew_space/crews_reports_view.dart';
 import 'package:blabla/screens/crew_space/crews_view_model.dart';
 import 'package:blabla/screens/crew_space/crews_voiceroom_view.dart';
 import 'package:blabla/screens/crew_space/widgets/crews_report_widget.dart';
+import 'package:blabla/screens/crew_space/widgets/crews_schedule_widget.dart';
 import 'package:blabla/styles/colors.dart';
 import 'package:blabla/styles/txt_style.dart';
 import 'package:blabla/widgets/profile_widget.dart';
-import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
@@ -22,7 +23,7 @@ class CrewsMainView extends StatelessWidget {
           backgroundColor: BlaColor.white,
           elevation: 0,
           title: Text(
-            "일요일마다 언어교환 어쩌구",
+            viewModel.crewName,
             style: BlaTxt.txt18B,
           ),
           centerTitle: true,
@@ -60,72 +61,42 @@ class CrewsMainView extends StatelessWidget {
             child: SingleChildScrollView(
           child: Column(
             children: [
-              Container(
-                margin: const EdgeInsets.fromLTRB(20, 12, 20, 20),
-                padding: const EdgeInsets.all(20),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(12),
-                  color: BlaColor.grey100,
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+              Padding(
+                padding: const EdgeInsets.fromLTRB(20, 12, 20, 0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Row(
-                      children: [
-                        Text(
-                          "D-${viewModel.upcomingSchedule.dday}",
-                          style: BlaTxt.txt16B.copyWith(color: BlaColor.orange),
-                        ),
-                        const SizedBox(width: 8),
-                        Text(
-                          formatDate(
-                              viewModel.upcomingSchedule.meetingTime,
-                              [
-                                m,
-                                "월 ",
-                                d,
-                                "일 ",
-                                D,
-                                "요일 ",
-                                am,
-                                " ",
-                                hh,
-                                ":",
-                                nn
-                              ],
-                              locale:
-                                  const KoreanDateLocale()), // 수정 - 한글/영어 택하게 수정
-                          style:
-                              BlaTxt.txt16R.copyWith(color: BlaColor.grey700),
-                        ),
-                      ],
-                    ),
-                    Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 8),
-                        child: Text(
-                          viewModel.upcomingSchedule.title,
-                          style: BlaTxt.txt16B,
-                          maxLines: 1,
-                        )),
-                    SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: Wrap(
-                        direction: Axis.horizontal,
-                        spacing: 8,
-                        children: List.generate(
-                          viewModel.upcomingSchedule.profiles.length,
-                          (idx) => ProfileWidget(
-                            profileSize: 24,
-                            profile: viewModel.upcomingSchedule.profiles[idx],
-                            bgSize: 48,
-                            bgColor: Color(0xFFFFF6DE),
+                    Text("다가오는 일정", style: BlaTxt.txt20B),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => CrewsCalendarView()));
+                      },
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text(
+                            "더보기",
+                            style: BlaTxt.txt14ML
+                                .copyWith(color: BlaColor.grey600),
                           ),
-                        ),
+                          SvgPicture.asset("assets/icons/ic_16_arrow_right.svg",
+                              width: 16, height: 16)
+                        ],
                       ),
                     ),
                   ],
                 ),
               ),
+              viewModel.upcomingSchedule == null
+                  ? const CrewsScheduleWidget(
+                      type: ScheduleWidgetType.none, schedule: null)
+                  : CrewsScheduleWidget(
+                      type: ScheduleWidgetType.upcodming,
+                      schedule: viewModel.upcomingSchedule),
               Padding(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 20, vertical: 20),

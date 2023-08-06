@@ -23,16 +23,6 @@ get engBaseUrl => env["ENG_BASE_URL"];
 get testUrl => env["TEST_API"];
 get korTestUrl => env["KOR_TEST_API"];
 
-// class Res {
-//   final http.Response httpRes;
-//   final String success;
-//   final String code;
-//   final String msg;
-//   final dynamic data;
-
-//   Res({required this.httpRes, required this.success, required this.code, required this.msg, required this.data});
-// }
-
 enum HttpMethod {
   post,
   get,
@@ -44,18 +34,40 @@ class API {
   API();
 
   Future<http.Response> api(String url, HttpMethod method,
-      {String? token, Map<String, dynamic>? body}) async {
-    Map<String, String>? headers;
+      {String? token, body, bool needCheck = false}) async {
+    Map<String, String> headers;
+
     if (token != null) {
-      headers = {"Authorization": token};
+      headers = {
+        "Authorization": token,
+        "Content-Type": "application/json",
+        "Accept": "application/json",
+      };
     } else {
       headers = {
         "Content-Type": "application/json",
-        "Accept": "application/json"
+        "Accept": "application/json",
       };
     }
 
+    const storage = FlutterSecureStorage();
+    final accessTokenExpireIn = await storage.read(key: "accessTokenExpiresIn");
+
     try {
+      if (needCheck == true) {
+        if (DateTime.fromMillisecondsSinceEpoch(int.parse(accessTokenExpireIn!))
+            .isBefore(DateTime.now())) {
+          final res = await http.post(Uri.parse("$baseUrl/oauth/reissue"),
+              headers: headers,
+              body: jsonEncode({
+                "accessToken": await storage.read(key: "accessToken"),
+                "refreshToken": await storage.read(key: "refreshToken")
+              }));
+          if (res.statusCode == 200) {
+            saveToken(res);
+          }
+        }
+      }
       switch (method) {
         case HttpMethod.post:
           return await http.post(Uri.parse(url), headers: headers, body: body);
@@ -121,17 +133,28 @@ class API {
     }
   }
 
-  Future<bool> getAccessToken(token, String socialLoginType) async {
+  Future<bool> reissue() async {
     const storage = FlutterSecureStorage();
-    final res = await api(
-        "$baseUrl/oauth/login/$socialLoginType", HttpMethod.post,
-        token: token);
+    final res = await api("$baseUrl/oauth/reissue", HttpMethod.post,
+        body: jsonEncode({
+          "accessToken": await storage.read(key: "accessToken"),
+          "refreshToken": await storage.read(key: "refreshToken")
+        }));
     if (res.statusCode == 200) {
-      print(res.body);
-      await storage.write(
-          key: "accessToken", value: jsonDecode(res.body)["accessToken"]);
-      await storage.write(
-          key: "refreshToken", value: jsonDecode(res.body)["refreshToken"]);
+      saveToken(res);
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  Future<bool> login(String loginType) async {
+    const storage = FlutterSecureStorage();
+    final res = await api("$baseUrl/oauth/login/$loginType", HttpMethod.post,
+        token: await storage.read(key: "socialToken"));
+    if (res.statusCode == 200 &&
+        await storage.read(key: "accessToken") != null) {
+      saveToken(res);
       return true;
     } else {
       return false;
@@ -140,10 +163,10 @@ class API {
 
   Future<bool> join(User user) async {
     const storage = FlutterSecureStorage();
-    final token = await storage.read(key: "accessToken");
-    final res =
-        await api("$baseUrl/oauth/sign-up", HttpMethod.post, token: token!);
+    final res = await api("$baseUrl/oauth/sign-up", HttpMethod.post,
+        token: await storage.read(key: "socialToken"), body: jsonEncode(user));
     if (res.statusCode == 200) {
+      saveToken(res);
       return true;
     } else {
       return false;
@@ -176,9 +199,13 @@ class API {
   }
 
   /* 홈 API */
-  Future<UserSimple> getMyPrfile() async {
-    // 수정 - 테스트 API
-    final res = await api("$korTestUrl/profile/1", HttpMethod.get);
+  Future<UserSimple> getMyProfile() async {
+    const storage = FlutterSecureStorage();
+    // final res = await api("$korTestUrl/profile", HttpMethod.get);
+    final res = await api("$korBaseUrl/profile", HttpMethod.get,
+        token: "Bearer ${await storage.read(key: "accessToken")}",
+        needCheck: true);
+    // print(res.body);
     if (res.statusCode == 200) {
       return UserSimple.fromJson(
           jsonDecode(utf8.decode(res.bodyBytes))["data"]);
@@ -213,10 +240,9 @@ class API {
 
   Future<Content> getTodayContent() async {
     // 수정 - 테스트 API
-    final res = await api("$testUrl/content/today", HttpMethod.get);
+    final res = await api("$korTestUrl/contents/today", HttpMethod.get);
     if (res.statusCode == 200) {
-      return Content.fromJson(
-          jsonDecode(utf8.decode(res.bodyBytes))["data"]["content"]);
+      return Content.fromJson(jsonDecode(utf8.decode(res.bodyBytes))["data"]);
     } else {
       throw Exception("http error :(");
     }
@@ -235,12 +261,22 @@ class API {
     }
   }
 
-  Future<CrewDetail> getCrewDetail() async {
+  Future<CrewDetail> getCrewDetail(int crewId) async {
     // 수정 - 테스트 API & crewId, 한글
     final res = await api("$korTestUrl/crews/1", HttpMethod.get);
     if (res.statusCode == 200) {
       return (CrewDetail.fromJson(
           jsonDecode(utf8.decode(res.bodyBytes))["data"]));
+    } else {
+      throw Exception("http error :(");
+    }
+  }
+
+  Future<int> createCrew(CrewToJson crew) async {
+    // 수정 - 테스트 API
+    final res = await api("$testUrl/crews", HttpMethod.post, body: jsonEncode(crew));
+    if (res.statusCode == 200) {
+      return jsonDecode(utf8.decode(res.bodyBytes))["data"]["crewId"];
     } else {
       throw Exception("http error :(");
     }
@@ -268,13 +304,58 @@ class API {
       throw Exception("http error :(");
     }
   }
-  /* 크루 리포트 */
-  Future<ReportDetail> getDetailReport(int crewId, int reportId) async {
-    final res = await api("$testUrl/crews/$crewId/reports/$reportId", HttpMethod.get);
+
+  Future<List<Schedule>> getSchedules(int crewId) async {
+    final res = await api("$testUrl/crews/$crewId/schedules", HttpMethod.get);
     if (res.statusCode == 200) {
-      return ReportDetail.fromJson(jsonDecode(utf8.decode(res.bodyBytes))["data"]);
+      return (jsonDecode(utf8.decode(res.bodyBytes))["data"] as List)
+          .map((e) => Schedule.fromJson(e))
+          .toList();
     } else {
       throw Exception("http error :(");
     }
   }
+
+  Future<bool> createSchedule(
+      int crewId, String title, String meetingTime) async {
+    const storage = FlutterSecureStorage();
+    final res = await api("$testUrl/crews/$crewId/schedules", HttpMethod.post,
+        token: await storage.read(key: "socialToken"),
+        body: jsonEncode({"title": title, "meetingTime": meetingTime}));
+    if (res.statusCode == 200) {
+      return true;
+    } else {
+      throw Exception("http error :(");
+    }
+  }
+
+  /* 크루 리포트 */
+  Future<ReportDetail> getDetailReport(int crewId, int reportId) async {
+    final res =
+        await api("$testUrl/crews/$crewId/reports/$reportId", HttpMethod.get);
+    if (res.statusCode == 200) {
+      return ReportDetail.fromJson(
+          jsonDecode(utf8.decode(res.bodyBytes))["data"]);
+    } else {
+      throw Exception("http error :(");
+    }
+  }
+}
+
+Future<void> saveToken(res) async {
+  const storage = FlutterSecureStorage();
+  await Future.wait([
+    storage.write(
+        key: "accessToken", value: jsonDecode(res.body)["data"]["accessToken"]),
+    storage.write(
+        key: "refreshToken",
+        value: jsonDecode(res.body)["data"]["refreshToken"]),
+    storage.write(
+        key: "accessTokenExpiresIn",
+        value: jsonDecode(res.body)["data"]["accessTokenExpiresIn"].toString()),
+    storage.write(
+        key: "refreshTokenExpiresIn",
+        value:
+            jsonDecode(res.body)["data"]["refreshTokenExpiresIn"].toString()),
+  ]);
 }

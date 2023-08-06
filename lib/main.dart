@@ -7,6 +7,7 @@ import 'package:blabla/screens/home/crew_list_view.dart';
 import 'package:blabla/screens/home/crew_view_model.dart';
 import 'package:blabla/screens/home/home_view.dart';
 import 'package:blabla/screens/home/home_view_model.dart';
+import 'package:blabla/screens/join/join_nickname_view.dart';
 import 'package:blabla/screens/join/join_profile_view.dart';
 import 'package:blabla/screens/join/join_view_model.dart';
 import 'package:blabla/screens/onboarding.dart';
@@ -16,6 +17,7 @@ import 'package:blabla/screens/recruit/recruit_profile_view.dart';
 import 'package:blabla/screens/recruit/recruit_view_model.dart';
 import 'package:blabla/screens/report/report_main_view.dart';
 import 'package:blabla/screens/report/report_view_model.dart';
+import 'package:blabla/screens/splash.dart';
 import 'package:blabla/services/amplitude.dart';
 import 'package:blabla/styles/colors.dart';
 import 'package:blabla/styles/theme.dart';
@@ -23,14 +25,16 @@ import 'package:blabla/styles/txt_style.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+  WidgetsBinding widgetBinding = WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
   await dotenv.load();
+  FlutterNativeSplash.preserve(widgetsBinding: widgetBinding);
 
   AnalyticsConfig().init();
   runApp(
@@ -71,7 +75,7 @@ class MyApp extends StatelessWidget {
           supportedLocales: context.supportedLocales,
           title: 'BlaBla',
           theme: BlaTheme.blaTheme,
-          home: Main() //OnBoarding(),
+          home: const Splash(),
           ),
     );
   }

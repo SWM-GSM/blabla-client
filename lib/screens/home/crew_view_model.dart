@@ -30,7 +30,7 @@ class CrewViewModel with ChangeNotifier {
   }
 
   Future<void> getCrewDetail(int crewId) async {
-    _crew = await api.getCrewDetail();
+    _crew = await api.getCrewDetail(crewId);
     notifyListeners();
   }
 }
