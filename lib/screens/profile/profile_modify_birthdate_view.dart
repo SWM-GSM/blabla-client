@@ -23,7 +23,7 @@ class ProfileModifyBirthdateView extends StatelessWidget {
         subTitle: "생년월일을\n입력해주세요",
         leadingTap: () {
           viewModel.tempBirthdate ==
-                  datetimeToStr(birthdate, StrDatetimeType.dotDelimiterSimple)
+                  datetimeToStr(birthdate, StrDatetimeType.dotDelOnlyDate)
               ? Navigator.pop(context)
               : showCupertinoDialog(
                   context: context,
@@ -56,7 +56,7 @@ class ProfileModifyBirthdateView extends StatelessWidget {
         },
         actionTap: () {
           viewModel.setBirthdate(
-              datetimeToStr(birthdate, StrDatetimeType.dotDelimiterSimple));
+              datetimeToStr(birthdate, StrDatetimeType.dotDelOnlyDate));
           Navigator.pop(context);
         },
         widget: Column(
