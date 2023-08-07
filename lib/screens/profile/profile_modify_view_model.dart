@@ -215,4 +215,14 @@ class ProfileModifyViewModel with ChangeNotifier {
     _tempDescription = _description;
     notifyListeners();
   }
+
+  Future<bool> saveDescription() async {
+    if (await api.patchProfileDesc(_tempDescription)) {
+      initDescription(_tempDescription); 
+      notifyListeners();
+      return true;
+    } else {
+      return false;
+    }
+  }
 }

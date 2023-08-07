@@ -1,13 +1,16 @@
 import 'package:blabla/screens/profile/profile_modify_view_model.dart';
+import 'package:blabla/screens/profile/profile_view_model.dart';
 import 'package:blabla/styles/colors.dart';
 import 'package:blabla/styles/txt_style.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 
 class ProfileModifyDescView extends StatefulWidget {
-  const ProfileModifyDescView({super.key});
+  const ProfileModifyDescView({super.key, required this.initDesc});
+  final String initDesc;
 
   @override
   State<ProfileModifyDescView> createState() => _ProfileModifyDescViewState();
@@ -15,10 +18,25 @@ class ProfileModifyDescView extends StatefulWidget {
 
 class _ProfileModifyDescViewState extends State<ProfileModifyDescView> {
   final descFocus = FocusNode();
+  final descCtr = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    descCtr.text = widget.initDesc;
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    descCtr.dispose();
+    descFocus.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     final viewModel = Provider.of<ProfileModifyViewModel>(context);
+    final profileViewModel = Provider.of<ProfileViewModel>(context);
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 64,
@@ -31,7 +49,7 @@ class _ProfileModifyDescViewState extends State<ProfileModifyDescView> {
         centerTitle: true,
         leading: GestureDetector(
           onTap: () {
-            viewModel.description == viewModel.tempDescription
+            viewModel.description == descCtr.text
                 ? Navigator.pop(context)
                 : showCupertinoDialog(
                     context: context,
@@ -87,9 +105,7 @@ class _ProfileModifyDescViewState extends State<ProfileModifyDescView> {
                   runSpacing: 20,
                   children: [
                     TextField(
-                      onChanged: (value) {
-                        viewModel.setDescription(value);
-                      },
+                      controller: descCtr,
                       focusNode: descFocus,
                       scrollPadding: EdgeInsets.zero,
                       maxLines: null,
@@ -112,7 +128,16 @@ class _ProfileModifyDescViewState extends State<ProfileModifyDescView> {
         ],
       ),
       bottomSheet: GestureDetector(
-        onTap: () {},
+        onTap: () async {
+          viewModel.setDescription(descCtr.text);
+          descFocus.unfocus();
+          if (await viewModel.saveDescription()) {
+            profileViewModel.init();
+            showToast("입력하신 내용이 저장되었습니다.");
+          } else {
+            showToast("저장에 실패했습니다. 다시 시도해주세요.");
+          }
+        },
         child: Container(
           margin: EdgeInsets.fromLTRB(
               20,

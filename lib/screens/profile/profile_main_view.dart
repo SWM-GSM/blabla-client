@@ -191,11 +191,13 @@ class ProfileMainView extends StatelessWidget {
                         ),
                         GestureDetector(
                           onTap: () {
-                            modifyViewModel.initDescription(viewModel.user!.description);
+                            modifyViewModel
+                                .initDescription(viewModel.user!.description);
                             Navigator.of(context, rootNavigator: true).push(
                                 MaterialPageRoute(
-                                    builder: (context) =>
-                                        const ProfileModifyDescView()));
+                                    builder: (context) => ProfileModifyDescView(
+                                        initDesc:
+                                            viewModel.user!.description)));
                           },
                           child: Row(
                             crossAxisAlignment: CrossAxisAlignment.center,

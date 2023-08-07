@@ -15,6 +15,7 @@ class ProfileViewModel with ChangeNotifier {
 
   void init() async {
     _user = await api.getMyProfile();
+    notifyListeners();
   }
 
 }
