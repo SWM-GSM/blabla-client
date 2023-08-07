@@ -94,7 +94,7 @@ class UserProfile {
 
   Map<String, dynamic> toJson() => {
         "profileImage": profileImage,
-        "nicknme": nickname,
+        "nickname": nickname,
         "birthDate": datetimeToStr(birthDate, StrDatetimeType.hypenDelOnlyDate),
         "gender": gender,
         "countryCode": countryCode,
