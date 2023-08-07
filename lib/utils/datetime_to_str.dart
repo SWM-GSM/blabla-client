@@ -3,8 +3,10 @@ import 'package:date_format/date_format.dart';
 enum StrDatetimeType {
   strDelimiter,
   dotDelimiter,
-  strDelOnlyDate,
   hypenDelimiter,
+  dotDelOnlyDate,
+  strDelOnlyDate,
+  hypenDelOnlyDate,
 }
 
 datetimeToStr(DateTime datetime, StrDatetimeType type) {
@@ -15,9 +17,13 @@ datetimeToStr(DateTime datetime, StrDatetimeType type) {
           locale: const KoreanDateLocale()); // 수정 - 한글/영어 택하게 수정
     case StrDatetimeType.dotDelimiter:
       return formatDate(datetime, [yyyy, ".", mm, ".", dd, " ", HH, ":", nn]);
-    case StrDatetimeType.strDelOnlyDate:
-      return formatDate(datetime, [yyyy, "년 ", mm, "월 ", dd, "일 "]);
     case StrDatetimeType.hypenDelimiter:
       return formatDate(datetime, [yyyy, "-", mm, "-", dd, " ", HH, ":", nn, ":", ss]);
+    case StrDatetimeType.dotDelOnlyDate:
+      return formatDate(datetime, [yyyy, ".", mm, ".", dd]);
+    case StrDatetimeType.strDelOnlyDate:
+      return formatDate(datetime, [yyyy, "년 ", mm, "월 ", dd, "일 "]);
+    case StrDatetimeType.hypenDelOnlyDate:
+      return formatDate(datetime, [yyyy, "-", mm, "-", dd]);
   }
 }

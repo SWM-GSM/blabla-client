@@ -76,7 +76,7 @@ class API {
         case HttpMethod.delete:
           return await http.delete(Uri.parse(url), headers: headers);
         case HttpMethod.patch:
-          return await http.patch(Uri.parse(url), headers: headers);
+          return await http.patch(Uri.parse(url), headers: headers, body: body);
       }
     } catch (e) {
       return http.Response(e.toString(), 404);
@@ -199,7 +199,7 @@ class API {
   }
 
   /* 홈 API */
-  Future<UserSimple> getMyProfile() async {
+  Future<UserProfile> getMyProfile() async {
     const storage = FlutterSecureStorage();
     // final res = await api("$korTestUrl/profile", HttpMethod.get);
     final res = await api("$korBaseUrl/profile", HttpMethod.get,
@@ -207,7 +207,7 @@ class API {
         needCheck: true);
     // print(res.body);
     if (res.statusCode == 200) {
-      return UserSimple.fromJson(
+      return UserProfile.fromJson(
           jsonDecode(utf8.decode(res.bodyBytes))["data"]);
     } else {
       throw Exception("http error :(");
@@ -274,7 +274,8 @@ class API {
 
   Future<int> createCrew(CrewToJson crew) async {
     // 수정 - 테스트 API
-    final res = await api("$testUrl/crews", HttpMethod.post, body: jsonEncode(crew));
+    final res =
+        await api("$testUrl/crews", HttpMethod.post, body: jsonEncode(crew));
     if (res.statusCode == 200) {
       return jsonDecode(utf8.decode(res.bodyBytes))["data"]["crewId"];
     } else {
@@ -338,6 +339,43 @@ class API {
           jsonDecode(utf8.decode(res.bodyBytes))["data"]);
     } else {
       throw Exception("http error :(");
+    }
+  }
+
+  /* 마이페이지 */
+  Future<bool> patchProfile(UserProfile user) async {
+    const storage = FlutterSecureStorage();
+    final res = await api("$baseUrl/profile", HttpMethod.patch,
+        token: "Bearer ${await storage.read(key: "accessToken")}",
+        body: jsonEncode(user.toJson()));
+    if (res.statusCode == 200) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  Future<bool> patchProfileDesc(String description) async {
+    const storage = FlutterSecureStorage();
+    final res = await api("$baseUrl/profile/description", HttpMethod.patch,
+        token: "Bearer ${await storage.read(key: "accessToken")}",
+        body: jsonEncode({"description": description}));
+    if (res.statusCode == 200) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  Future<bool> patchProfileInterest(List<String> interests) async {
+    const storage = FlutterSecureStorage();
+    final res = await api("$baseUrl/profile/keywords", HttpMethod.patch,
+        token: "Bearer ${await storage.read(key: "accessToken")}",
+        body: jsonEncode({"keywords": interests}));
+    if (res.statusCode == 200) {
+      return true;
+    } else {
+      return false;
     }
   }
 }

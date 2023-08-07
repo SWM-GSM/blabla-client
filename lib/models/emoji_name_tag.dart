@@ -1,4 +1,6 @@
-class EmojiNameTag {
+import 'package:equatable/equatable.dart';
+
+class EmojiNameTag extends Equatable {
   final String name;
   final String emoji;
   final String tag;
@@ -16,4 +18,7 @@ class EmojiNameTag {
       tag: json["tag"],
     );
   }
+  
+  @override
+  List<Object?> get props => [name, emoji, tag];
 }
