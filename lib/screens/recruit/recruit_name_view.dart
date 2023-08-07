@@ -99,7 +99,7 @@ class _RecruitNameViewState extends State<RecruitNameView> {
                   height: 20,
                   colorFilter: ColorFilter.mode(
                       isNameLenValid ? BlaColor.orange : BlaColor.grey600,
-                      BlendMode.color),
+                      BlendMode.srcIn),
                 ),
               ],
             )
