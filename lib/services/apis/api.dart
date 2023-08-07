@@ -354,6 +354,18 @@ class API {
       return false;
     }
   }
+
+  Future<bool> patchProfileInterest(List<String> interests) async {
+    const storage = FlutterSecureStorage();
+    final res = await api("$baseUrl/profile/keywords", HttpMethod.patch,
+        token: "Bearer ${await storage.read(key: "accessToken")}",
+        body: jsonEncode({"keywords": interests}));
+    if (res.statusCode == 200) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 }
 
 Future<void> saveToken(res) async {

@@ -1,6 +1,7 @@
 import 'package:blabla/models/emoji_name_tag.dart';
 import 'package:blabla/screens/join/join_view_model.dart';
 import 'package:blabla/screens/profile/profile_modify_desc_view.dart';
+import 'package:blabla/screens/profile/profile_modify_interest_view.dart';
 import 'package:blabla/screens/profile/profile_modify_main_view.dart';
 import 'package:blabla/screens/profile/profile_modify_view_model.dart';
 import 'package:blabla/screens/profile/profile_view_model.dart';
@@ -268,7 +269,12 @@ class ProfileMainView extends StatelessWidget {
                         ),
                         GestureDetector(
                           onTap: () {
-                            print("관심사 수정하기");
+                            modifyViewModel
+                                .initInterestList(viewModel.user!.keywords);
+                            Navigator.of(context, rootNavigator: true).push(
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        const ProfileModifyInterestView()));
                           },
                           child: Row(
                             crossAxisAlignment: CrossAxisAlignment.center,
@@ -308,20 +314,37 @@ class ProfileMainView extends StatelessWidget {
                                         color: BlaColor.grey100,
                                       ),
                                     ))))
-                        : Wrap(
-                            spacing: 8,
-                            runSpacing: 8,
-                            children: List.generate(
-                                viewModel.user!.keywords.length,
-                                (idx) => KeywordWidget(
-                                    keyword: EmojiNameTag(
-                                        emoji:
-                                            viewModel.user!.keywords[idx].emoji,
-                                        name:
-                                            viewModel.user!.keywords[idx].name,
-                                        tag: viewModel.user!.keywords[idx].tag),
-                                    selected: false)),
-                          )
+                        : viewModel.user!.keywords.isEmpty
+                            ? Container(
+                                height: 56,
+                                alignment: Alignment.center,
+                                child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text("💝", style: BlaTxt.txt20BL),
+                                      const SizedBox(height: 8),
+                                      Text(
+                                        "관심사를 등록해 나를 표현해보세요!",
+                                        style: BlaTxt.txt14R
+                                            .copyWith(color: BlaColor.grey800),
+                                      )
+                                    ]),
+                              )
+                            : Wrap(
+                                spacing: 8,
+                                runSpacing: 8,
+                                children: List.generate(
+                                    viewModel.user!.keywords.length,
+                                    (idx) => KeywordWidget(
+                                        keyword: EmojiNameTag(
+                                            emoji: viewModel
+                                                .user!.keywords[idx].emoji,
+                                            name: viewModel
+                                                .user!.keywords[idx].name,
+                                            tag: viewModel
+                                                .user!.keywords[idx].tag),
+                                        selected: false)),
+                              )
                   ],
                 ),
               ),

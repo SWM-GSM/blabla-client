@@ -1,9 +1,12 @@
 import 'dart:math';
 import 'package:blabla/models/country.dart';
+import 'package:blabla/models/emoji_name_tag.dart';
+import 'package:blabla/models/interest.dart';
 import 'package:blabla/models/level.dart';
 import 'package:blabla/screens/join/join_view_model.dart';
 import 'package:blabla/services/apis/api.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 
 class ProfileModifyViewModel with ChangeNotifier {
   final api = API();
@@ -43,15 +46,23 @@ class ProfileModifyViewModel with ChangeNotifier {
   late String _tempDescription;
   String get description => _description;
   String get tempDescription => _tempDescription;
-  
+
+  /* 관심사 수정 */
+  late List<EmojiNameTag> _interests;
+  late List<EmojiNameTag> _tempInterests;
+  List<EmojiNameTag> get interests => _interests;
+  List<EmojiNameTag> get tempInterests => _tempInterests;
+
   /* static 데이터 받아오기 */
   List<Country> _countryList = [];
   List<Country> _searchCountryList = [];
   List<Level> _levelList = [];
+  List<Interest> _interestList = [];
 
   List<Country> get countryList => _countryList;
   List<Country> get searchCountryList => _searchCountryList;
   List<Level> get levelList => _levelList;
+  List<Interest> get interestList => _interestList;
 
   ProfileModifyViewModel() {
     initCountryList();
@@ -59,13 +70,14 @@ class ProfileModifyViewModel with ChangeNotifier {
   }
 
   void init(
-      String profileImage,
-      String nickname,
-      String birthdate,
-      String gender,
-      String countryCode,
-      int korLangLevel,
-      int engLangLevel,) {
+    String profileImage,
+    String nickname,
+    String birthdate,
+    String gender,
+    String countryCode,
+    int korLangLevel,
+    int engLangLevel,
+  ) {
     _profileImage = profileImage;
     _nickname = nickname;
     _birthdate = birthdate;
@@ -88,6 +100,13 @@ class ProfileModifyViewModel with ChangeNotifier {
     _tempDescription = description;
   }
 
+  void initInterestList(List<EmojiNameTag> interests) async {
+    _interests = [...interests];
+    _tempInterests = [...interests];
+    _interestList = await api.getInterests();
+    notifyListeners();
+  }
+
   void revert() {
     revertProfileImage();
     revertNickname();
@@ -99,8 +118,7 @@ class ProfileModifyViewModel with ChangeNotifier {
   }
 
   bool isProfileChanged() {
-    return (
-        _profileImage != _tempProfileImage ||
+    return (_profileImage != _tempProfileImage ||
         _nickname != _tempNickname ||
         _birthdate != _tempBirthdate ||
         _gender != _tempGender ||
@@ -218,7 +236,36 @@ class ProfileModifyViewModel with ChangeNotifier {
 
   Future<bool> saveDescription() async {
     if (await api.patchProfileDesc(_tempDescription)) {
-      initDescription(_tempDescription); 
+      initDescription(_tempDescription);
+      notifyListeners();
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  void setInterest(EmojiNameTag interest) {
+    if (_tempInterests.contains(interest)) {
+      _tempInterests.remove(interest);
+    } else {
+      if (_tempInterests.length == 10) {
+        showToast("키워드는 10개까지만 선택할 수 있습니다.");
+      } else {
+        _tempInterests.add(interest);
+      }
+    }
+    notifyListeners();
+  }
+
+  void revertInterests() {
+    _tempInterests = _interests;
+    notifyListeners();
+  }
+
+  Future<bool> saveInterests() async {
+    if (await api
+        .patchProfileInterest(_tempInterests.map((e) => e.tag).toList())) {
+      initInterestList(_tempInterests);
       notifyListeners();
       return true;
     } else {
