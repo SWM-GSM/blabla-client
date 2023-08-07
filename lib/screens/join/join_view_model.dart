@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:blabla/models/country.dart';
+import 'package:blabla/models/emoji_name_tag.dart';
 import 'package:blabla/models/interest.dart';
 import 'package:blabla/models/level.dart';
 import 'package:blabla/models/user.dart';
@@ -202,7 +203,7 @@ class JoinViewModel with ChangeNotifier {
     notifyListeners();
   }
 
-  void setKeywords(Keyword input) {
+  void setKeywords(EmojiNameTag input) {
     if (_keywords.contains(input.tag)) {
       _keywords.remove(input.tag);
     } else {

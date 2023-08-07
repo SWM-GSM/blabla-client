@@ -1,4 +1,4 @@
-import 'package:blabla/models/interest.dart';
+import 'package:blabla/models/emoji_name_tag.dart';
 import 'package:blabla/styles/colors.dart';
 import 'package:blabla/styles/txt_style.dart';
 import 'package:flutter/material.dart';
@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 class KeywordWidget extends StatelessWidget {
   const KeywordWidget(
       {super.key, required this.keyword, required this.selected});
-  final Keyword keyword;
+  final EmojiNameTag keyword;
   final bool selected;
 
   @override
