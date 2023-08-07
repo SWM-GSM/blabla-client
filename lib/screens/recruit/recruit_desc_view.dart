@@ -103,7 +103,7 @@ class _RecruitDescViewState extends State<RecruitDescView> {
                                 isDescLenValid
                                     ? BlaColor.orange
                                     : BlaColor.grey600,
-                                BlendMode.color),
+                                BlendMode.srcIn),
                           ),
                         ],
                       )

@@ -177,7 +177,7 @@ class _ProfileModifyNicknameViewState extends State<ProfileModifyNicknameView> {
                   height: 20,
                   colorFilter: ColorFilter.mode(
                       isNickDupValid ? BlaColor.orange : BlaColor.grey600,
-                      BlendMode.color),
+                      BlendMode.srcIn),
                 ),
                 const SizedBox(width: 16),
                 Text(
@@ -195,7 +195,7 @@ class _ProfileModifyNicknameViewState extends State<ProfileModifyNicknameView> {
                   height: 20,
                   colorFilter: ColorFilter.mode(
                       isNickLenValid ? BlaColor.orange : BlaColor.grey600,
-                      BlendMode.color),
+                      BlendMode.srcIn),
                 ),
               ],
             )
