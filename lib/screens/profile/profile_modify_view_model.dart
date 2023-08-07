@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 class ProfileModifyViewModel with ChangeNotifier {
   final api = API();
 
+  /* 프로필 수정 */
   late String _profileImage;
   late String _nickname;
   late String _birthdate;
@@ -37,6 +38,12 @@ class ProfileModifyViewModel with ChangeNotifier {
   int get tempKorLangLevel => _tempKorLangLevel;
   int get tempEngLangLevel => _tempEngLangLevel;
 
+  /* 자기소개 수정 */
+  late String _description;
+  late String _tempDescription;
+  String get description => _description;
+  String get tempDescription => _tempDescription;
+  
   /* static 데이터 받아오기 */
   List<Country> _countryList = [];
   List<Country> _searchCountryList = [];
@@ -74,6 +81,11 @@ class ProfileModifyViewModel with ChangeNotifier {
     _tempCountryCode = countryCode;
     _tempKorLangLevel = korLangLevel;
     _tempEngLangLevel = engLangLevel;
+  }
+
+  void initDescription(String description) {
+    _description = description;
+    _tempDescription = description;
   }
 
   void revert() {
@@ -191,6 +203,16 @@ class ProfileModifyViewModel with ChangeNotifier {
 
   void initLevelList() async {
     _levelList = await api.getLevels();
+    notifyListeners();
+  }
+
+  void setDescription(String input) {
+    _tempDescription = input;
+    notifyListeners();
+  }
+
+  void revertDescription() {
+    _tempDescription = _description;
     notifyListeners();
   }
 }

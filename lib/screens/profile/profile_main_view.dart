@@ -1,5 +1,6 @@
 import 'package:blabla/models/interest.dart';
 import 'package:blabla/screens/join/join_view_model.dart';
+import 'package:blabla/screens/profile/profile_modify_desc_view.dart';
 import 'package:blabla/screens/profile/profile_modify_main_view.dart';
 import 'package:blabla/screens/profile/profile_modify_view_model.dart';
 import 'package:blabla/screens/profile/profile_view_model.dart';
@@ -190,7 +191,11 @@ class ProfileMainView extends StatelessWidget {
                         ),
                         GestureDetector(
                           onTap: () {
-                            print("자기소개 수정하기");
+                            modifyViewModel.initDescription(viewModel.user!.description);
+                            Navigator.of(context, rootNavigator: true).push(
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        const ProfileModifyDescView()));
                           },
                           child: Row(
                             crossAxisAlignment: CrossAxisAlignment.center,
