@@ -3,6 +3,7 @@ import 'package:blabla/models/country.dart';
 import 'package:blabla/models/emoji_name_tag.dart';
 import 'package:blabla/models/interest.dart';
 import 'package:blabla/models/level.dart';
+import 'package:blabla/models/user.dart';
 import 'package:blabla/screens/join/join_view_model.dart';
 import 'package:blabla/services/apis/api.dart';
 import 'package:flutter/material.dart';
@@ -67,6 +68,8 @@ class ProfileModifyViewModel with ChangeNotifier {
   ProfileModifyViewModel() {
     initCountryList();
     initLevelList();
+    initDescription("");
+    initInterestList([]);
   }
 
   void init(
@@ -222,6 +225,25 @@ class ProfileModifyViewModel with ChangeNotifier {
   void initLevelList() async {
     _levelList = await api.getLevels();
     notifyListeners();
+  }
+
+  Future<bool> saveProfile() async {
+    if (await api.patchProfile(UserProfile(
+        nickname: _tempNickname,
+        profileImage: _tempProfileImage,
+        birthDate: DateTime.parse(_tempBirthdate.replaceAll(".", "-")),
+        gender: _tempGender,
+        countryCode: _tempCountryCode,
+        korLevel: _tempKorLangLevel,
+        engLevel: _tempEngLangLevel,
+        description: _tempDescription, // 더미
+        signedUpAfter: 0, // 더미
+        keywords: [] // 더미
+        ))) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   void setDescription(String input) {

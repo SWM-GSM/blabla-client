@@ -5,11 +5,13 @@ import 'package:blabla/screens/profile/profile_modify_gender_view.dart';
 import 'package:blabla/screens/profile/profile_modify_level_view.dart';
 import 'package:blabla/screens/profile/profile_modify_nickname_view.dart';
 import 'package:blabla/screens/profile/profile_modify_view_model.dart';
+import 'package:blabla/screens/profile/profile_view_model.dart';
 import 'package:blabla/styles/colors.dart';
 import 'package:blabla/styles/txt_style.dart';
 import 'package:blabla/widgets/profile_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import 'package:country_code/country_code.dart';
@@ -20,6 +22,7 @@ class ProfileModifyMainView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final viewModel = Provider.of<ProfileModifyViewModel>(context);
+    final profileViewModel = Provider.of<ProfileViewModel>(context);
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 64,
@@ -121,7 +124,7 @@ class ProfileModifyMainView extends StatelessWidget {
                         context,
                         MaterialPageRoute(
                             builder: (context) =>
-                                ProfileModifyBirthdateView()));
+                                const ProfileModifyBirthdateView()));
                   }),
                   infoRow("성별",
                       "${Gender.getByStr(viewModel.tempGender).emoji} ${Gender.getByStr(viewModel.tempGender).kr}",
@@ -168,7 +171,16 @@ class ProfileModifyMainView extends StatelessWidget {
         ),
       ),
       bottomSheet: GestureDetector(
-        onTap: () {},
+        onTap: () {
+          viewModel.saveProfile().then((value) {
+            if (value) {
+              profileViewModel.init();
+              Navigator.pop(context);
+            } else {
+              showToast("저장에 실패했습니다. 다시 시도해주세요.");
+            }
+          });
+        },
         child: Container(
           margin: EdgeInsets.fromLTRB(
               20, 0, 20, 10 + MediaQuery.of(context).viewPadding.bottom),

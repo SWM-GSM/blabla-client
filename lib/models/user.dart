@@ -1,4 +1,5 @@
 import 'package:blabla/models/emoji_name_tag.dart';
+import 'package:blabla/utils/datetime_to_str.dart';
 
 class User {
   final String socialLoginType;
@@ -90,4 +91,14 @@ class UserProfile {
         keywords: List<EmojiNameTag>.from(
             json["keywords"].map((x) => EmojiNameTag.fromJson(x))),
       );
+
+  Map<String, dynamic> toJson() => {
+        "profileImage": profileImage,
+        "nicknme": nickname,
+        "birthDate": datetimeToStr(birthDate, StrDatetimeType.hypenDelOnlyDate),
+        "gender": gender,
+        "countryCode": countryCode,
+        "korLevel": korLevel,
+        "engLevel": engLevel,
+      };
 }

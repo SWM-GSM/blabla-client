@@ -343,6 +343,18 @@ class API {
   }
 
   /* 마이페이지 */
+  Future<bool> patchProfile(UserProfile user) async {
+    const storage = FlutterSecureStorage();
+    final res = await api("$baseUrl/profile", HttpMethod.patch,
+        token: "Bearer ${await storage.read(key: "accessToken")}",
+        body: jsonEncode(user.toJson()));
+    if (res.statusCode == 200) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   Future<bool> patchProfileDesc(String description) async {
     const storage = FlutterSecureStorage();
     final res = await api("$baseUrl/profile/description", HttpMethod.patch,
