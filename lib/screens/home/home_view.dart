@@ -50,7 +50,7 @@ class HomeView extends StatelessWidget {
                               color: BlaColor.lightOrange,
                             ),
                             child: Image.asset(
-                                "assets/imgs/img_120_profile_cat.png",
+                                "assets/imgs/img_120_profile_${viewModel.user!.profileImage}.png",
                                 width: 48,
                                 height: 48),
                           ),

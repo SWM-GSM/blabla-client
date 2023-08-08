@@ -40,104 +40,102 @@ class ReportMainView extends StatelessWidget {
       ),
       body: SafeArea(
         child: SingleChildScrollView(
-          child: Expanded(
-            child: Column(
-              children: [
-                const SizedBox(
-                  height: 12,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: List.generate(
-                    HistoryFilter.values.length,
-                    (idx) => GestureDetector(
-                      onTap: () {
-                        viewModel.setHistoryFilter(HistoryFilter.values[idx]);
-                      },
-                      child: Container(
-                        margin: const EdgeInsets.symmetric(horizontal: 6),
-                        width: 84,
-                        height: 34,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(14),
-                          color: viewModel.filter == HistoryFilter.values[idx]
-                              ? BlaColor.lightOrange
-                              : BlaColor.grey100,
-                        ),
-                        child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              SvgPicture.asset(
-                                  "assets/icons/ic_16_${HistoryFilter.values[idx].icon}.svg",
-                                  width: 16,
-                                  height: 16,
-                                  colorFilter: ColorFilter.mode(
-                                      viewModel.filter ==
-                                              HistoryFilter.values[idx]
-                                          ? BlaColor.orange
-                                          : BlaColor.grey600,
-                                      BlendMode.srcIn)),
-                              const SizedBox(
-                                width: 8,
-                              ),
-                              Text(
-                                HistoryFilter.values[idx].name,
-                                style: viewModel.filter ==
-                                        HistoryFilter.values[idx]
-                                    ? BlaTxt.txt12B
-                                        .copyWith(color: BlaColor.orange)
-                                    : BlaTxt.txt12M
-                                        .copyWith(color: BlaColor.grey600),
-                              )
-                            ]),
+          child: Column(
+            children: [
+              const SizedBox(
+                height: 12,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: List.generate(
+                  HistoryFilter.values.length,
+                  (idx) => GestureDetector(
+                    onTap: () {
+                      viewModel.setHistoryFilter(HistoryFilter.values[idx]);
+                    },
+                    child: Container(
+                      margin: const EdgeInsets.symmetric(horizontal: 6),
+                      width: 84,
+                      height: 34,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(14),
+                        color: viewModel.filter == HistoryFilter.values[idx]
+                            ? BlaColor.lightOrange
+                            : BlaColor.grey100,
                       ),
+                      child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            SvgPicture.asset(
+                                "assets/icons/ic_16_${HistoryFilter.values[idx].icon}.svg",
+                                width: 16,
+                                height: 16,
+                                colorFilter: ColorFilter.mode(
+                                    viewModel.filter ==
+                                            HistoryFilter.values[idx]
+                                        ? BlaColor.orange
+                                        : BlaColor.grey600,
+                                    BlendMode.srcIn)),
+                            const SizedBox(
+                              width: 8,
+                            ),
+                            Text(
+                              HistoryFilter.values[idx].name,
+                              style: viewModel.filter ==
+                                      HistoryFilter.values[idx]
+                                  ? BlaTxt.txt12B
+                                      .copyWith(color: BlaColor.orange)
+                                  : BlaTxt.txt12M
+                                      .copyWith(color: BlaColor.grey600),
+                            )
+                          ]),
                     ),
                   ),
                 ),
-                const SizedBox(
-                  height: 10,
-                ),
-                Column(
-                  children: List.generate(
-                    3,
-                    (calendarIdx) => Padding(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 4, horizontal: 20),
-                      child: Column(
-                          children: List.generate(
-                              3,
-                              (idx) => Row(
-                                    children: [
-                                      if (idx == 0)
-                                        SizedBox(
-                                          width: 30,
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            children: [
-                                              Text(
-                                                "6월",
-                                                style: BlaTxt.txt12R.copyWith(
-                                                    color: BlaColor.grey700),
-                                              ),
-                                              Text(
-                                                "30",
-                                                style: BlaTxt.txt20B,
-                                              )
-                                            ],
-                                          ),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              Column(
+                children: List.generate(
+                  3,
+                  (calendarIdx) => Padding(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 4, horizontal: 20),
+                    child: Column(
+                        children: List.generate(
+                            3,
+                            (idx) => Row(
+                                  children: [
+                                    if (idx == 0)
+                                      SizedBox(
+                                        width: 30,
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: [
+                                            Text(
+                                              "6월",
+                                              style: BlaTxt.txt12R.copyWith(
+                                                  color: BlaColor.grey700),
+                                            ),
+                                            Text(
+                                              "30",
+                                              style: BlaTxt.txt20B,
+                                            )
+                                          ],
                                         ),
-                                      SizedBox(width: idx == 0 ? 16 : 46),
-                                      Expanded(child: ReportHistoryTile()),
-                                    ],
-                                  ))),
-                    ),
+                                      ),
+                                    SizedBox(width: idx == 0 ? 16 : 46),
+                                    Expanded(child: ReportHistoryTile()),
+                                  ],
+                                ))),
                   ),
                 ),
-                const SizedBox(height: 10),
-              ],
-            ),
+              ),
+              const SizedBox(height: 10),
+            ],
           ),
         ),
       ),
