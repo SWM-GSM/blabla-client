@@ -152,11 +152,15 @@ class API {
     const storage = FlutterSecureStorage();
     final res = await api("$baseUrl/oauth/login/$loginType", HttpMethod.post,
         token: await storage.read(key: "socialToken"));
-    if (res.statusCode == 200 &&
-        await storage.read(key: "accessToken") != null) {
-      saveToken(res);
-      return true;
+    if (res.statusCode == 200) {
+      if (jsonDecode(res.body)["success"]) {
+        saveToken(res);
+        return true;
+      } else {
+        return false;
+      }
     } else {
+      Exception("http error :(");
       return false;
     }
   }
