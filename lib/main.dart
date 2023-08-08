@@ -5,6 +5,7 @@ import 'package:blabla/screens/home/crew_view_model.dart';
 import 'package:blabla/screens/home/home_view.dart';
 import 'package:blabla/screens/home/home_view_model.dart';
 import 'package:blabla/screens/join/join_view_model.dart';
+import 'package:blabla/screens/my_space/mys_main_view.dart';
 import 'package:blabla/screens/profile/profile_main_view.dart';
 import 'package:blabla/screens/profile/profile_modify_view_model.dart';
 import 'package:blabla/screens/profile/profile_view_model.dart';
@@ -87,7 +88,7 @@ class Main extends StatelessWidget {
     final pageList = [
       HomeView(),
       CrewsJoinedView(),
-      MySpace(),
+      MysMainView(),
       ReportMainView(),
       ProfileMainView(),
     ];
@@ -131,14 +132,5 @@ class Main extends StatelessWidget {
             .toList(),
       ),
     );
-  }
-}
-
-class MySpace extends StatelessWidget {
-  const MySpace({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Placeholder();
   }
 }
