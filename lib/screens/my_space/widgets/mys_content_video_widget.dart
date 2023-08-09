@@ -45,23 +45,21 @@ class _MysContentVideoWidgetState extends State<MysContentVideoWidget> {
     return Stack(
       alignment: Alignment.center,
       children: [
-        IgnorePointer(
-          child: YoutubePlayer(
-            controller: _videoCtr,
-            showVideoProgressIndicator: false,
-            onReady: () {
-              _videoCtr.addListener(() {
-                if (_videoCtr.value.position.inMilliseconds >=
-                    widget.endAt * 1000 - 500) {
-                  _videoCtr.pause();
-                  setState(() {
-                    replayBtnOn = true;
-                  });
-                }
-              });
-            },
-            bottomActions: const [],
-          ),
+        YoutubePlayer(
+          controller: _videoCtr,
+          showVideoProgressIndicator: false,
+          onReady: () {
+            _videoCtr.addListener(() {
+              if (_videoCtr.value.position.inMilliseconds >=
+                  widget.endAt * 1000 - 500) {
+                _videoCtr.pause();
+                setState(() {
+                  replayBtnOn = true;
+                });
+              }
+            });
+          },
+          bottomActions: const [],
         ),
         if (replayBtnOn)
           GestureDetector(
