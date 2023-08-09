@@ -136,7 +136,7 @@ class HomeView extends StatelessWidget {
                         ? SkeletonTxtWidget(
                             width: double.infinity, style: BlaTxt.txt12R)
                         : Text(
-                            viewModel.todayContent!.title,
+                            viewModel.todayContent!.contentName,
                             style:
                                 BlaTxt.txt12R.copyWith(color: BlaColor.grey700),
                           ),
