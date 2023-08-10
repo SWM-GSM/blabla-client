@@ -38,7 +38,8 @@ class _SplashState extends State<Splash> {
         page = SplashPage.onboarding;
       });
     } else {
-      if (DateTime.fromMillisecondsSinceEpoch(int.parse(refreshExpireDate) * 1000) // refreshToken이 만료시간까지 4시간보다 넉넉하게 남아있지 않을 경우 재로그인 필요
+      if (DateTime.fromMillisecondsSinceEpoch(int.parse(
+              refreshExpireDate)) // refreshToken이 만료시간까지 4시간보다 넉넉하게 남아있지 않을 경우 재로그인 필요
           .isBefore(DateTime.now().add(const Duration(hours: 4)))) {
         setState(() {
           page = SplashPage.onboarding;
@@ -47,9 +48,10 @@ class _SplashState extends State<Splash> {
         setState(() {
           page = SplashPage.home;
         });
-        if (DateTime.fromMillisecondsSinceEpoch( // accessToken이 만료시 재발급
-            int.parse(accessExpireDate) * 1000).isBefore(DateTime.now())) {
-          if (!await API().reissue()) { // 재발급 실패시
+        if (DateTime.fromMillisecondsSinceEpoch(// accessToken이 만료시 재발급
+            int.parse(accessExpireDate)).isBefore(DateTime.now())) {
+          if (!await API().reissue()) {
+            // 재발급 실패시
             setState(() {
               page = SplashPage.onboarding;
             });

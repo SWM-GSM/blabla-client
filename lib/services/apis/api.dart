@@ -64,7 +64,10 @@ class API {
                 "refreshToken": await storage.read(key: "refreshToken")
               }));
           if (res.statusCode == 200) {
-            saveToken(res);
+            await saveToken(res);
+          } else {
+            print(res.body);
+            print("재발급 실패");
           }
         }
       }
@@ -141,7 +144,7 @@ class API {
           "refreshToken": await storage.read(key: "refreshToken")
         }));
     if (res.statusCode == 200) {
-      saveToken(res);
+      await saveToken(res);
       return true;
     } else {
       return false;
@@ -154,7 +157,7 @@ class API {
         token: await storage.read(key: "socialToken"));
     if (res.statusCode == 200) {
       if (jsonDecode(res.body)["success"]) {
-        saveToken(res);
+        await saveToken(res);
         return true;
       } else {
         return false;
@@ -170,7 +173,7 @@ class API {
     final res = await api("$baseUrl/oauth/sign-up", HttpMethod.post,
         token: await storage.read(key: "socialToken"), body: jsonEncode(user));
     if (res.statusCode == 200) {
-      saveToken(res);
+      await saveToken(res);
       return true;
     } else {
       return false;
@@ -209,7 +212,7 @@ class API {
     final res = await api("$korBaseUrl/profile", HttpMethod.get,
         token: "Bearer ${await storage.read(key: "accessToken")}",
         needCheck: true);
-    // print(res.body);
+    //print(jsonDecode(utf8.decode(res.bodyBytes)));
     if (res.statusCode == 200) {
       return UserProfile.fromJson(
           jsonDecode(utf8.decode(res.bodyBytes))["data"]);
