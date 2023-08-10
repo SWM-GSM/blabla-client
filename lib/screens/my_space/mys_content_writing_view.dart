@@ -1,4 +1,5 @@
 import 'package:avatar_glow/avatar_glow.dart';
+import 'package:blabla/screens/my_space/mys_content_feedback_view.dart';
 import 'package:blabla/screens/my_space/mys_view_model.dart';
 import 'package:blabla/styles/colors.dart';
 import 'package:blabla/styles/txt_style.dart';
@@ -15,7 +16,6 @@ enum WritingStatus {
   isWriting,
   afterWriting,
   beforeFeedback,
-  afterFeedback,
 }
 
 class MysContentWritingView extends StatefulWidget {
@@ -244,20 +244,22 @@ class _MysContentWritingViewState extends State<MysContentWritingView> {
             ),
             leadingWidth: 64,
           ),
-          body: Padding(
-            padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const ChatBubbleWidget(
-                  type: ChatBubbleType.receiver,
-                  txt: "다음으로 올 문장을 영작해주세요!",
-                  isFirst: true,
-                ),
-                const ChatBubbleWidget(
-                    type: ChatBubbleType.receiver, txt: "만나서 반가워!"),
-                ChatBubbleWidget(type: ChatBubbleType.sender, txt: _txt)
-              ],
+          body: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const ChatBubbleWidget(
+                    type: ChatBubbleType.receiver,
+                    txt: "다음으로 올 문장을 영작해주세요!",
+                    isFirst: true,
+                  ),
+                  const ChatBubbleWidget(
+                      type: ChatBubbleType.receiver, txt: "만나서 반가워!"),
+                  ChatBubbleWidget(type: ChatBubbleType.sender, txt: _txt)
+                ],
+              ),
             ),
           ),
           bottomSheet: Padding(
@@ -336,20 +338,22 @@ class _MysContentWritingViewState extends State<MysContentWritingView> {
               ),
               leadingWidth: 64,
             ),
-            body: Padding(
-              padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const ChatBubbleWidget(
-                    type: ChatBubbleType.receiver,
-                    txt: "다음으로 올 문장을 영작해주세요!",
-                    isFirst: true,
-                  ),
-                  const ChatBubbleWidget(
-                      type: ChatBubbleType.receiver, txt: "만나서 반가워!"),
-                  ChatBubbleWidget(type: ChatBubbleType.sender, txt: _txt)
-                ],
+            body: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const ChatBubbleWidget(
+                      type: ChatBubbleType.receiver,
+                      txt: "다음으로 올 문장을 영작해주세요!",
+                      isFirst: true,
+                    ),
+                    const ChatBubbleWidget(
+                        type: ChatBubbleType.receiver, txt: "만나서 반가워!"),
+                    ChatBubbleWidget(type: ChatBubbleType.sender, txt: _txt)
+                  ],
+                ),
               ),
             ),
             bottomSheet: Padding(
@@ -450,6 +454,7 @@ class _MysContentWritingViewState extends State<MysContentWritingView> {
                     onTap: () {
                       setState(() {
                         _status = WritingStatus.beforeFeedback;
+                        _getFeedBack(context);
                       });
                     },
                     child: Container(
@@ -494,23 +499,25 @@ class _MysContentWritingViewState extends State<MysContentWritingView> {
             ),
             leadingWidth: 64,
           ),
-          body: Padding(
-            padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const ChatBubbleWidget(
-                  type: ChatBubbleType.receiver,
-                  txt: "다음으로 올 문장을 영작해주세요!",
-                  isFirst: true,
-                ),
-                const ChatBubbleWidget(
-                    type: ChatBubbleType.receiver, txt: "만나서 반가워!"),
-                ChatBubbleWidget(type: ChatBubbleType.sender, txt: _txt),
-                Column(
-                  children: feedBackBubbles,
-                )
-              ],
+          body: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const ChatBubbleWidget(
+                    type: ChatBubbleType.receiver,
+                    txt: "다음으로 올 문장을 영작해주세요!",
+                    isFirst: true,
+                  ),
+                  const ChatBubbleWidget(
+                      type: ChatBubbleType.receiver, txt: "만나서 반가워!"),
+                  ChatBubbleWidget(type: ChatBubbleType.sender, txt: _txt),
+                  Column(
+                    children: feedBackBubbles,
+                  )
+                ],
+              ),
             ),
           ),
           bottomSheet: _isFeedbackEnded
@@ -541,8 +548,8 @@ class _MysContentWritingViewState extends State<MysContentWritingView> {
                 )
               : null,
         );
-      default:
-        return Container();
+      // default:
+      //   return Container();
     }
   }
 }

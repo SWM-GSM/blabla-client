@@ -22,6 +22,7 @@ class ChatBubbleWidget extends StatelessWidget {
               constraints: BoxConstraints(
                 maxWidth: MediaQuery.of(context).size.width * 0.66,
               ),
+              margin: const EdgeInsets.only(top: 8),
               padding: const EdgeInsets.all(12),
               decoration: const BoxDecoration(
                 color: BlaColor.orange,
@@ -33,7 +34,8 @@ class ChatBubbleWidget extends StatelessWidget {
               ),
               child: Text(
                 txt,
-                style: BlaTxt.txt14M.copyWith(color: BlaColor.white),
+                style: BlaTxt.txt14M.copyWith(
+                    color: BlaColor.white, overflow: TextOverflow.visible),
                 textAlign: TextAlign.end,
                 maxLines: null,
               ),
@@ -46,7 +48,8 @@ class ChatBubbleWidget extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             isFirst
-                ? Image.asset("assets/imgs/img_140_logo.png", width: 40, height: 40)
+                ? Image.asset("assets/imgs/img_140_logo.png",
+                    width: 40, height: 40)
                 : const SizedBox(width: 40),
             const SizedBox(width: 12),
             Column(
@@ -68,7 +71,9 @@ class ChatBubbleWidget extends StatelessWidget {
                         bottomRight: Radius.circular(16)),
                   ),
                   child: Text(txt,
-                      style: BlaTxt.txt14M.copyWith(color: BlaColor.grey900)),
+                      style: BlaTxt.txt14M.copyWith(
+                          color: BlaColor.grey900,
+                          overflow: TextOverflow.visible)),
                 ),
               ],
             ),
