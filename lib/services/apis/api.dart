@@ -51,26 +51,29 @@ class API {
     }
 
     const storage = FlutterSecureStorage();
-    final accessTokenExpireIn = await storage.read(key: "accessTokenExpiresIn");
 
     try {
-      if (needCheck == true) {
-        if (DateTime.fromMillisecondsSinceEpoch(int.parse(accessTokenExpireIn!))
-            .isBefore(DateTime.now())) {
-          final res = await http.post(Uri.parse("$baseUrl/oauth/reissue"),
-              headers: headers,
-              body: jsonEncode({
-                "accessToken": await storage.read(key: "accessToken"),
-                "refreshToken": await storage.read(key: "refreshToken")
-              }));
-          if (res.statusCode == 200) {
-            await saveToken(res);
-          } else {
-            print(res.body);
-            print("재발급 실패");
-          }
+      if (DateTime.fromMillisecondsSinceEpoch(
+                  int.parse((await storage.read(key: "accessTokenExpiresIn"))!))
+              .isBefore(DateTime.now()) &&
+          needCheck == true) {
+        print("accessToken: ${await storage.read(key: "accessToken")}");
+        print("refreshToken: ${await storage.read(key: "refreshToken")}");
+        final res = await http.post(Uri.parse("$baseUrl/oauth/reissue"),
+            headers: headers,
+            body: jsonEncode({
+              "accessToken": await storage.read(key: "accessToken"),
+              "refreshToken": await storage.read(key: "refreshToken")
+            }));
+        if (res.statusCode == 200) {
+          await saveToken(res);
+        } else {
+          print(jsonDecode(utf8.decode(res.bodyBytes)));
+          print("재발급 실패");
         }
       }
+      await Future.delayed(const Duration(seconds: 1));
+
       switch (method) {
         case HttpMethod.post:
           return await http.post(Uri.parse(url), headers: headers, body: body);
