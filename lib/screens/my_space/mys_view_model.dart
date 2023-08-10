@@ -1,5 +1,4 @@
 import 'package:blabla/models/content_feedback.dart';
-import 'package:blabla/screens/my_space/widgets/mys_content_record_widget.dart';
 import 'package:blabla/services/apis/api.dart';
 import 'package:flutter/material.dart';
 
@@ -12,7 +11,7 @@ class MysViewModel with ChangeNotifier {
   ContentFeedback? get feedback => _feedback;
 
   /* 스피킹 */
-  List<String> _recordPathes = List.generate(3, (idx) => "");
+  final List<String> _recordPathes = List.generate(3, (idx) => "");
   List<String> get recordPathes => _recordPathes;
 
 
