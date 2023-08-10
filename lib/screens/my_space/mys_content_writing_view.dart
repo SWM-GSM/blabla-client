@@ -532,7 +532,11 @@ class _MysContentWritingViewState extends State<MysContentWritingView> {
                   ),
                   child: GestureDetector(
                     onTap: () {
-                      print("피드백 페이지 이동");
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  const MysContentFeedbackView()));
                     },
                     child: Container(
                       alignment: Alignment.center,

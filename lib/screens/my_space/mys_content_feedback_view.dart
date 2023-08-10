@@ -97,7 +97,14 @@ class MysContentFeedbackView extends StatelessWidget {
           color: BlaColor.white,
         ),
         child: GestureDetector(
-          onTap: () {},
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const MysContentSpeakingView(),
+              ),
+            );
+          },
           child: Container(
             alignment: Alignment.center,
             height: 56,

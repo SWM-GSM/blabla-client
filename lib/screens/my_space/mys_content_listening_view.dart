@@ -1,3 +1,4 @@
+import 'package:blabla/screens/my_space/mys_content_writing_view.dart';
 import 'package:blabla/screens/my_space/widgets/mys_content_video_widget.dart';
 import 'package:blabla/styles/colors.dart';
 import 'package:blabla/styles/txt_style.dart';
@@ -67,16 +68,27 @@ class MysContentListeningView extends StatelessWidget {
           border: Border(
             top: BorderSide(color: BlaColor.grey100, width: 1),
           ),
+          color: BlaColor.white,
         ),
-        child: Container(
-          alignment: Alignment.center,
-          height: 56,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(12),
-            color: BlaColor.orange,
+        child: GestureDetector(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const MysContentWritingView(),
+              ),
+            );
+          },
+          child: Container(
+            alignment: Alignment.center,
+            height: 56,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(12),
+              color: BlaColor.orange,
+            ),
+            child: Text("다음",
+                style: BlaTxt.txt16B.copyWith(color: BlaColor.white)),
           ),
-          child:
-              Text("다음", style: BlaTxt.txt16B.copyWith(color: BlaColor.white)),
         ),
       ),
     );
