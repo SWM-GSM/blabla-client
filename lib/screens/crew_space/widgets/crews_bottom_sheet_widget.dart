@@ -59,6 +59,7 @@ class _CrewsBottomSheetWidgetState extends State<CrewsBottomSheetWidget> {
                             DateTime(date.year, date.month, date.day, time.hour,
                                 time.minute, 0),
                             StrDatetimeType.hypenDelimiter));
+                    viewModel.getSchedules();
                     Navigator.pop(context);
                   }
                 },
