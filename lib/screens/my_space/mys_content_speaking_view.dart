@@ -7,6 +7,7 @@ import 'package:blabla/styles/colors.dart';
 import 'package:blabla/styles/txt_style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sound/flutter_sound.dart';
+import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 
@@ -193,12 +194,17 @@ class _MysContentSpeakingViewState extends State<MysContentSpeakingView> {
               ),
               child: GestureDetector(
                 onTap: () {
-                  // 수정 - 저장 로직 추가
-                  navProvider.changeIdx(2);
-                  Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(builder: (context) => const Main()),
-                      (route) => true);
+                  viewModel.uploadRecords().then((value) {
+                    if (value) {
+                      navProvider.changeIdx(2);
+                      Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(builder: (context) => const Main()),
+                          (route) => true);
+                    } else {
+                      showToast("업로드 실패. 다시 시도해주세요");
+                    }
+                  });
                 },
                 child: Container(
                   alignment: Alignment.center,

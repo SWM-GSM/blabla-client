@@ -32,4 +32,9 @@ class MysViewModel with ChangeNotifier {
     _recordPathes[idx] = path;
     notifyListeners();
   }
+
+  Future<bool> uploadRecords() async {
+    final result = await api.uploadRecords(_contentId, _recordPathes);
+    return result;
+  }
 }

@@ -401,6 +401,27 @@ class API {
       throw Exception("http error :(");
     }
   }
+
+  Future<bool> uploadRecords(int contentId, List<String> pathes) async {
+    const storage = FlutterSecureStorage();
+    final dio = Dio();
+    final formData = FormData.fromMap({
+      "files": List.generate(
+          pathes.length, (idx) => MultipartFile.fromFileSync(pathes[idx]))
+    });
+
+    final res = await dio.post("$testUrl/contents/$contentId/practice",
+        data: formData,
+        options: Options(headers: {
+          "Authorization": await storage.read(key: "accessToken"),
+        }));
+    print(res.data);
+    if (res.statusCode == 200){
+      return true;
+    } else {
+      return false;
+    }
+  }
 }
 
 Future<void> saveToken(res) async {
