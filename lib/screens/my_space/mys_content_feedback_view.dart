@@ -1,13 +1,16 @@
 import 'package:blabla/screens/my_space/mys_content_speaking_view.dart';
+import 'package:blabla/screens/my_space/mys_view_model.dart';
 import 'package:blabla/styles/colors.dart';
 import 'package:blabla/styles/txt_style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
 
 class MysContentFeedbackView extends StatelessWidget {
   const MysContentFeedbackView({super.key});
   @override
   Widget build(BuildContext context) {
+    final viewModel = Provider.of<MysViewModel>(context);
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 64,
@@ -55,7 +58,7 @@ class MysContentFeedbackView extends StatelessWidget {
                           "문장 유사도",
                           style: BlaTxt.txt20B,
                         ),
-                        starScore(2),
+                        starScore(viewModel.feedback!.starRating),
                       ],
                     ),
                     const SizedBox(
@@ -64,14 +67,14 @@ class MysContentFeedbackView extends StatelessWidget {
                     Text("내가 영작한 문장",
                         style: BlaTxt.txt12R.copyWith(color: BlaColor.grey700)),
                     const SizedBox(height: 4),
-                    Text("I’ll be there soon",
+                    Text(viewModel.feedback!.userAnswer,
                         style: BlaTxt.txt16B
                             .copyWith(overflow: TextOverflow.visible)),
                     const SizedBox(height: 16),
                     Text("정답 문장",
                         style: BlaTxt.txt12R.copyWith(color: BlaColor.grey700)),
                     const SizedBox(height: 4),
-                    Text("I’ll be there soon",
+                    Text(viewModel.feedback!.answer,
                         style: BlaTxt.txt16B
                             .copyWith(overflow: TextOverflow.visible)),
                   ],
@@ -79,7 +82,7 @@ class MysContentFeedbackView extends StatelessWidget {
               ),
               const SizedBox(height: 20),
               Text(
-                "이 번역은 원래 문자의 의미를 전달하면서도, 목표를 향해 점점 가까워지고 있다는 느낌을 잘 담아내고 있습니다. “You’re getting close”는 누군가가 목표를 달성하기 위해 진전하고 있음을 나타내는 표현이며, “You will succeed soon”은 목표에 성공적으로 도달할 것이라는 확신을 전하는 표현입니다. 따라서, 이 번역은 원래 문장의 의도를 정확하게 전달하고 있습니다. 이 번역은 원래 문자의 의미를 전달하면서도, 목표를 향해 점점 가까워지고 있다는 느낌을 잘 담아내고 있습니다. “You’re getting close”는 누군가가 목표를 달성하기 위해 진전하고 있음을 나타내는 표현이며, “You will succeed soon”은 목표에 성공적으로 도달할 것이라는 확신을 전하는 표현입니다. 따라서, 이 번역은 원래 문장의 의도를 정확하게 전달하고 있습니다.이 번역은 원래 문자의 의미를 전달하면서도, 목표를 향해 점점 가까워지고 있다는 느낌을 잘 담아내고 있습니다. “You’re getting close”는 누군가가 목표를 달성하기 위해 진전하고 있음을 나타내는 표현이며, “You will succeed soon”은 목표에 성공적으로 도달할 것이라는 확신을 전하는 표현입니다. 따라서, 이 번역은 원래 문장의 의도를 정확하게 전달하고 있습니다.이 번역은 원래 문자의 의미를 전달하면서도, 목표를 향해 점점 가까워지고 있다는 느낌을 잘 담아내고 있습니다. “You’re getting close”는 누군가가 목표를 달성하기 위해 진전하고 있음을 나타내는 표현이며, “You will succeed soon”은 목표에 성공적으로 도달할 것이라는 확신을 전하는 표현입니다. 따라서, 이 번역은 원래 문장의 의도를 정확하게 전달하고 있습니다.이 번역은 원래 문자의 의미를 전달하면서도, 목표를 향해 점점 가까워지고 있다는 느낌을 잘 담아내고 있습니다. “You’re getting close”는 누군가가 목표를 달성하기 위해 진전하고 있음을 나타내는 표현이며, “You will succeed soon”은 목표에 성공적으로 도달할 것이라는 확신을 전하는 표현입니다. 따라서, 이 번역은 원래 문장의 의도를 정확하게 전달하고 있습니다.이 번역은 원래 문자의 의미를 전달하면서도, 목표를 향해 점점 가까워지고 있다는 느낌을 잘 담아내고 있습니다. “You’re getting close”는 누군가가 목표를 달성하기 위해 진전하고 있음을 나타내는 표현이며, “You will succeed soon”은 목표에 성공적으로 도달할 것이라는 확신을 전하는 표현입니다. 따라서, 이 번역은 원래 문장의 의도를 정확하게 전달하고 있습니다.이 번역은 원래 문자의 의미를 전달하면서도, 목표를 향해 점점 가까워지고 있다는 느낌을 잘 담아내고 있습니다. “You’re getting close”는 누군가가 목표를 달성하기 위해 진전하고 있음을 나타내는 표현이며, “You will succeed soon”은 목표에 성공적으로 도달할 것이라는 확신을 전하는 표현입니다. 따라서, 이 번역은 원래 문장의 의도를 정확하게 전달하고 있습니다.이 번역은 원래 문자의 의미를 전달하면서도, 목표를 향해 점점 가까워지고 있다는 느낌을 잘 담아내고 있습니다. “You’re getting close”는 누군가가 목표를 달성하기 위해 진전하고 있음을 나타내는 표현이며, “You will succeed soon”은 목표에 성공적으로 도달할 것이라는 확신을 전하는 표현입니다. 따라서, 이 번역은 원래 문장의 의도를 정확하게 전달하고 있습니다.이 번역은 원래 문자의 의미를 전달하면서도, 목표를 향해 점점 가까워지고 있다는 느낌을 잘 담아내고 있습니다. “You’re getting close”는 누군가가 목표를 달성하기 위해 진전하고 있음을 나타내는 표현이며, “You will succeed soon”은 목표에 성공적으로 도달할 것이라는 확신을 전하는 표현입니다. 따라서, 이 번역은 원래 문장의 의도를 정확하게 전달하고 있습니다.이 번역은 원래 문자의 의미를 전달하면서도, 목표를 향해 점점 가까워지고 있다는 느낌을 잘 담아내고 있습니다. “You’re getting close”는 누군가가 목표를 달성하기 위해 진전하고 있음을 나타내는 표현이며, “You will succeed soon”은 목표에 성공적으로 도달할 것이라는 확신을 전하는 표현입니다. 따라서, 이 번역은 원래 문장의 의도를 정확하게 전달하고 있습니다.",
+                viewModel.feedback!.longFeedback,
                 style: BlaTxt.txt14R.copyWith(
                     color: BlaColor.grey800, overflow: TextOverflow.visible),
               ),

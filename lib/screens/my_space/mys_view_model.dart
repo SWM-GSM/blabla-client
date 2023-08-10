@@ -9,6 +9,8 @@ class MysViewModel with ChangeNotifier {
   int _contentId = 0;
   ContentFeedback? _feedback;
 
+  ContentFeedback? get feedback => _feedback;
+
   /* 스피킹 */
   List<String> _recordPathes = List.generate(3, (idx) => "");
   List<String> get recordPathes => _recordPathes;
