@@ -385,6 +385,22 @@ class API {
       return false;
     }
   }
+
+  Future<ContentFeedback> getContentFeedback(
+      int contentId, String userAnswer) async {
+    const storage = FlutterSecureStorage();
+    final res = await api(
+        "$testUrl/contents/$contentId/feedback", HttpMethod.post,
+        token: "Bearer ${await storage.read(key: "accessToken")}",
+        body: jsonEncode({"userAnswer": userAnswer}));
+    if (res.statusCode == 200) {
+      return ContentFeedback.fromJson(
+          jsonDecode(utf8.decode(res.bodyBytes))["data"]);
+    } else {
+      print(jsonDecode(utf8.decode(res.bodyBytes)));
+      throw Exception("http error :(");
+    }
+  }
 }
 
 Future<void> saveToken(res) async {

@@ -21,6 +21,10 @@ class MysViewModel with ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> getFeedback(String userAnswer) async {
+    _feedback = await api.getContentFeedback(_contentId, userAnswer);
+    notifyListeners();
+  }
 
   void setRecordPath(int idx, String path) {
     _recordPathes[idx] = path;
