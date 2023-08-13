@@ -13,6 +13,7 @@ class MysCategoryWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final viewModel = Provider.of<MysViewModel>(context);
     return Padding(
         padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
         child: Column(
@@ -70,12 +71,17 @@ class MysCategoryWidget extends StatelessWidget {
                     category.contents.length,
                     (idx) => GestureDetector(
                         onTap: () {
-                          Navigator.of(context, rootNavigator: true).push(
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      MysContentListeningView()));
+                          viewModel.setContentId(category.contents[idx].id);
+                          Navigator.of(context, rootNavigator: true)
+                              .push(MaterialPageRoute(
+                                  builder: (context) => MysContentListeningView(
+                                        contentId: category.contents[idx].id,
+                                        category: category.contentName,
+                                        topic: category.contents[idx].topic,
+                                      )));
                         },
-                        child: MysContentTileWidget(content: category.contents[idx])))),
+                        child: MysContentTileWidget(
+                            content: category.contents[idx])))),
           ],
         ));
   }

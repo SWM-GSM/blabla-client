@@ -1,27 +1,59 @@
 import 'package:blabla/screens/my_space/mys_content_writing_view.dart';
+import 'package:blabla/screens/my_space/mys_view_model.dart';
 import 'package:blabla/screens/my_space/widgets/mys_content_video_widget.dart';
 import 'package:blabla/styles/colors.dart';
 import 'package:blabla/styles/txt_style.dart';
+import 'package:blabla/widgets/skeleton_ui_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:provider/provider.dart';
 
-class MysContentListeningView extends StatelessWidget {
-  const MysContentListeningView({super.key});
+class MysContentListeningView extends StatefulWidget {
+  const MysContentListeningView(
+      {super.key,
+      required this.contentId,
+      required this.category,
+      required this.topic});
+  final int contentId;
+  final String category;
+  final String topic;
+
+  @override
+  State<MysContentListeningView> createState() =>
+      _MysContentListeningViewState();
+}
+
+class _MysContentListeningViewState extends State<MysContentListeningView> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Provider.of<MysViewModel>(context, listen: false)
+          .setContentId(widget.contentId);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
+    final viewModel = Provider.of<MysViewModel>(context);
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 64,
-        title: Text(
-          "시간 약속 정하기",
-          style: BlaTxt.txt18B,
-        ),
+        title: viewModel.content == null
+            ? Text(
+                "${widget.category} - ${widget.topic}",
+                style: BlaTxt.txt18B,
+              )
+            : Text(
+                "${viewModel.content!.contentName} - ${viewModel.content!.topic}",
+                style: BlaTxt.txt18B,
+              ),
         backgroundColor: BlaColor.white,
         elevation: 0,
         centerTitle: true,
         leading: GestureDetector(
           onTap: () {
+            viewModel.setContentId(0);
             Navigator.pop(context);
           },
           child: Padding(
@@ -52,12 +84,20 @@ class MysContentListeningView extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 40),
             child: ClipRRect(
-                borderRadius: BorderRadius.circular(16),
-                child: MysContentVideoWidget(
-                  contentUrl: "https://youtu.be/u-vHrjoO6n4",
-                  startAt: 263,
-                  endAt: 288,
-                )),
+              borderRadius: BorderRadius.circular(16),
+              child: viewModel.content == null
+                  ? SkeletonBoxWidget(
+                      child: Container(
+                          width: MediaQuery.of(context).size.width - 40,
+                          height: 200,
+                          color: BlaColor.black),
+                    )
+                  : MysContentVideoWidget(
+                      contentUrl: viewModel.content!.contentUrl,
+                      startAt: viewModel.content!.startedAtSec,
+                      endAt: viewModel.content!.stoppedAtSec,
+                    ),
+            ),
           ),
         ],
       ),

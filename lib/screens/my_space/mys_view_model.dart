@@ -1,3 +1,4 @@
+import 'package:blabla/models/content.dart';
 import 'package:blabla/models/content_category.dart';
 import 'package:blabla/models/content_feedback.dart';
 import 'package:blabla/services/apis/api.dart';
@@ -11,8 +12,10 @@ class MysViewModel with ChangeNotifier {
 
   /* 컨텐츠 진입 후 */
   int _contentId = 0;
+  ContentDetail? _content;
   ContentFeedback? _feedback;
 
+  ContentDetail? get content => _content;
   ContentFeedback? get feedback => _feedback;
 
   /* 스피킹 */
@@ -29,9 +32,13 @@ class MysViewModel with ChangeNotifier {
     notifyListeners();
   }
 
-
-  void setContentId(int id) {
+  void setContentId(int id) async {
     _contentId = id;
+    if (id == 0) {
+      _content = null;
+    } else {
+      _content = await api.getContent(id);
+    }
     notifyListeners();
   }
 
