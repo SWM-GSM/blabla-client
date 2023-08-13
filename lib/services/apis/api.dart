@@ -409,6 +409,22 @@ class API {
     }
   }
 
+  Future<ContentDetail> getContent(int contentId) async {
+    const storage = FlutterSecureStorage();
+    final res = await api(
+      "$baseUrl/contents/$contentId",
+      HttpMethod.get,
+      token: "Bearer ${await storage.read(key: "accessToken")}",
+    );
+    if (res.statusCode == 200) {
+      return ContentDetail.fromJson(
+          jsonDecode(utf8.decode(res.bodyBytes))["data"]);
+    } else {
+      print(jsonDecode(utf8.decode(res.bodyBytes)));
+      throw Exception("http error :(");
+    }
+  }
+
   Future<ContentFeedback> getContentFeedback(
       int contentId, String userAnswer) async {
     const storage = FlutterSecureStorage();

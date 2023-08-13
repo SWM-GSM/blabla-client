@@ -134,13 +134,14 @@ class _MysContentWritingViewState extends State<MysContentWritingView> {
 
   @override
   Widget build(BuildContext context) {
+    final viewModel = Provider.of<MysViewModel>(context);
     switch (_status) {
       case WritingStatus.beforeWriting:
         return Scaffold(
           appBar: AppBar(
             toolbarHeight: 64,
             title: Text(
-              "아이스베어 - 시간 약속 정하기",
+              "${viewModel.content!.contentName} - ${viewModel.content!.topic}",
               style: BlaTxt.txt18B,
             ),
             backgroundColor: BlaColor.white,
@@ -161,17 +162,17 @@ class _MysContentWritingViewState extends State<MysContentWritingView> {
             ),
             leadingWidth: 64,
           ),
-          body: const Padding(
-            padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
+          body: Padding(
+            padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                ChatBubbleWidget(
+                const ChatBubbleWidget(
                   type: ChatBubbleType.receiver,
                   txt: "다음으로 올 문장을 영작해주세요!",
                   isFirst: true,
                 ),
-                ChatBubbleWidget(type: ChatBubbleType.receiver, txt: "만나서 반가워!")
+                ChatBubbleWidget(type: ChatBubbleType.receiver, txt: viewModel.content!.sentence)
               ],
             ),
           ),
@@ -223,7 +224,7 @@ class _MysContentWritingViewState extends State<MysContentWritingView> {
           appBar: AppBar(
             toolbarHeight: 64,
             title: Text(
-              "아이스베어 - 시간 약속 정하기",
+              "${viewModel.content!.contentName} - ${viewModel.content!.topic}",
               style: BlaTxt.txt18B,
             ),
             backgroundColor: BlaColor.white,
@@ -255,8 +256,8 @@ class _MysContentWritingViewState extends State<MysContentWritingView> {
                     txt: "다음으로 올 문장을 영작해주세요!",
                     isFirst: true,
                   ),
-                  const ChatBubbleWidget(
-                      type: ChatBubbleType.receiver, txt: "만나서 반가워!"),
+                  ChatBubbleWidget(
+                      type: ChatBubbleType.receiver, txt: viewModel.content!.sentence),
                   ChatBubbleWidget(type: ChatBubbleType.sender, txt: _txt)
                 ],
               ),
@@ -317,7 +318,7 @@ class _MysContentWritingViewState extends State<MysContentWritingView> {
             appBar: AppBar(
               toolbarHeight: 64,
               title: Text(
-                "아이스베어 - 시간 약속 정하기",
+                "${viewModel.content!.contentName} - ${viewModel.content!.topic}",
                 style: BlaTxt.txt18B,
               ),
               backgroundColor: BlaColor.white,
@@ -349,8 +350,8 @@ class _MysContentWritingViewState extends State<MysContentWritingView> {
                       txt: "다음으로 올 문장을 영작해주세요!",
                       isFirst: true,
                     ),
-                    const ChatBubbleWidget(
-                        type: ChatBubbleType.receiver, txt: "만나서 반가워!"),
+                    ChatBubbleWidget(
+                        type: ChatBubbleType.receiver, txt: viewModel.content!.sentence),
                     ChatBubbleWidget(type: ChatBubbleType.sender, txt: _txt)
                   ],
                 ),
@@ -478,7 +479,7 @@ class _MysContentWritingViewState extends State<MysContentWritingView> {
           appBar: AppBar(
             toolbarHeight: 64,
             title: Text(
-              "아이스베어 - 시간 약속 정하기",
+              "${viewModel.content!.contentName} - ${viewModel.content!.topic}",
               style: BlaTxt.txt18B,
             ),
             backgroundColor: BlaColor.white,
@@ -510,8 +511,8 @@ class _MysContentWritingViewState extends State<MysContentWritingView> {
                     txt: "다음으로 올 문장을 영작해주세요!",
                     isFirst: true,
                   ),
-                  const ChatBubbleWidget(
-                      type: ChatBubbleType.receiver, txt: "만나서 반가워!"),
+                  ChatBubbleWidget(
+                      type: ChatBubbleType.receiver, txt: viewModel.content!.sentence),
                   ChatBubbleWidget(type: ChatBubbleType.sender, txt: _txt),
                   Column(
                     children: feedBackBubbles,
