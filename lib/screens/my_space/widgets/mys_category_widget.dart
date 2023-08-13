@@ -51,7 +51,7 @@ class MysCategoryWidget extends StatelessWidget {
                   child: Container(
                     height: 4,
                     width:
-                        (MediaQuery.of(context).size.width - 40) * (80 / 100),
+                        (MediaQuery.of(context).size.width - 40) * (category.progress / 100),
                     margin: const EdgeInsets.only(top: 12, bottom: 20),
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(2),

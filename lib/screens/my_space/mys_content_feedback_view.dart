@@ -15,7 +15,7 @@ class MysContentFeedbackView extends StatelessWidget {
       appBar: AppBar(
         toolbarHeight: 64,
         title: Text(
-          "아이스베어 - 시간 약속 정하기",
+          "${viewModel.content!.contentName} - ${viewModel.content!.topic}",
           style: BlaTxt.txt18B,
         ),
         backgroundColor: BlaColor.white,
