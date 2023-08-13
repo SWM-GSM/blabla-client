@@ -85,7 +85,7 @@ class _MysContentSpeakingViewState extends State<MysContentSpeakingView> {
       appBar: AppBar(
         toolbarHeight: 64,
         title: Text(
-          "아이스베어 - 시간 약속 정하기",
+          "${viewModel.content!.contentName} - ${viewModel.content!.topic}",
           style: BlaTxt.txt18B,
         ),
         backgroundColor: BlaColor.white,
@@ -126,18 +126,18 @@ class _MysContentSpeakingViewState extends State<MysContentSpeakingView> {
               child: ClipRRect(
                   borderRadius: BorderRadius.circular(16),
                   child: MysContentVideoWidget(
-                    contentUrl: "https://youtu.be/u-vHrjoO6n4",
-                    startAt: 263, //62,
-                    endAt: 288,
+                    contentUrl: viewModel.content!.contentUrl,
+                    startAt: viewModel.content!.startedAtSec,
+                    endAt: viewModel.content!.endAtSec,
                   )),
             ),
             Text(
-              "I’ll be there soon",
+              viewModel.content!.answer,
               style: BlaTxt.txt24B,
             ),
             const SizedBox(height: 8),
             Text(
-              "나 곧 도착할 것 같아!",
+              viewModel.content!.sentence,
               style: BlaTxt.txt14R.copyWith(color: BlaColor.grey700),
             ),
             const SizedBox(height: 40),
