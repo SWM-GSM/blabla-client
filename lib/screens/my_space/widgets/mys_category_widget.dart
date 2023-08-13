@@ -1,11 +1,15 @@
+import 'package:blabla/models/content_category.dart';
 import 'package:blabla/screens/my_space/mys_content_listening_view.dart';
+import 'package:blabla/screens/my_space/mys_view_model.dart';
 import 'package:blabla/screens/my_space/widgets/mys_content_tile_widget.dart';
 import 'package:blabla/styles/colors.dart';
 import 'package:blabla/styles/txt_style.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class MysCategoryWidget extends StatelessWidget {
-  const MysCategoryWidget({super.key});
+  const MysCategoryWidget({super.key, required this.category});
+  final ContentCategory category;
 
   @override
   Widget build(BuildContext context) {
@@ -17,12 +21,12 @@ class MysCategoryWidget extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text("드라마, 도깨비로 한글 배우기", style: BlaTxt.txt18B),
+                Text(category.contentName, style: BlaTxt.txt18B),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     Text(
-                      "80",
+                      category.progress.toString(),
                       style: BlaTxt.txt18B.copyWith(color: BlaColor.orange),
                     ),
                     Text("%",
@@ -63,7 +67,7 @@ class MysCategoryWidget extends StatelessWidget {
                 crossAxisCount: 2,
                 childAspectRatio: 170 / 172,
                 children: List.generate(
-                    3,
+                    category.contents.length,
                     (idx) => GestureDetector(
                         onTap: () {
                           Navigator.of(context, rootNavigator: true).push(
@@ -71,7 +75,7 @@ class MysCategoryWidget extends StatelessWidget {
                                   builder: (context) =>
                                       MysContentListeningView()));
                         },
-                        child: MysContentTileWidget()))),
+                        child: MysContentTileWidget(content: category.contents[idx])))),
           ],
         ));
   }

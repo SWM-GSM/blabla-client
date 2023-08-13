@@ -390,6 +390,25 @@ class API {
     }
   }
 
+  /* 마이스페이스 */
+  Future<List<ContentCategory>> getContentList() async {
+    // 수정 - 언어 설정
+    const storage = FlutterSecureStorage();
+    final res = await api(
+      "$korBaseUrl/contents",
+      HttpMethod.get,
+      token: "Bearer ${await storage.read(key: "accessToken")}",
+    );
+    if (res.statusCode == 200) {
+      return (jsonDecode(utf8.decode(res.bodyBytes))["data"]["category"] as List)
+          .map((e) => ContentCategory.fromJson(e))
+          .toList();
+    } else {
+      print(jsonDecode(utf8.decode(res.bodyBytes)));
+      throw Exception("http error :(");
+    }
+  }
+
   Future<ContentFeedback> getContentFeedback(
       int contentId, String userAnswer) async {
     const storage = FlutterSecureStorage();

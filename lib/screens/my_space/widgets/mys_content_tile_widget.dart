@@ -1,3 +1,4 @@
+import 'package:blabla/models/content.dart';
 import 'package:blabla/styles/colors.dart';
 import 'package:blabla/styles/txt_style.dart';
 import 'package:extended_image/extended_image.dart';
@@ -5,44 +6,50 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 class MysContentTileWidget extends StatelessWidget {
-  const MysContentTileWidget({super.key});
+  const MysContentTileWidget({super.key, required this.content});
+  final Content content;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(12),
-        color: BlaColor.grey100,
-      ),
-      child: Stack(
-        children: [
-          Column(
+    return Stack(
+      children: [
+        Container(
+            width: (MediaQuery.of(context).size.width - 50) / 2,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(12),
+              color: BlaColor.grey100,
+            )),
+        SizedBox(
+          width: MediaQuery.of(context).size.width - 50 / 2,
+          height: (MediaQuery.of(context).size.width - 50) / 2 / 170 * 108,
+          child: ExtendedImage.network(
+            content.thumbnailUrl,
+            fit: BoxFit.fitWidth,
+            shape: BoxShape.rectangle,
+            borderRadius: const BorderRadius.vertical(
+              top: Radius.circular(12),
+            ),
+          ),
+        ),
+        Positioned(
+          bottom: 0,
+          child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Expanded(
-                child: ExtendedImage.network(
-                  "https://img.youtube.com/vi/GsEjIrO1jnM/mqdefault.jpg",
-                  fit: BoxFit.cover,
-                  shape: BoxShape.rectangle,
-                  borderRadius: const BorderRadius.vertical(
-                    top: Radius.circular(12),
-                  ),
-                ),
-              ),
               Padding(
                 padding: const EdgeInsets.all(12),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "에니메이션 - 아이스 베어",
+                      "${content.genre} - ${content.contentName}",
                       style: BlaTxt.txt12R.copyWith(color: BlaColor.grey700),
                     ),
                     const SizedBox(
                       height: 4,
                     ),
                     Text(
-                      "시간 약속 정하기",
+                      content.topic,
                       style: BlaTxt.txt14SB,
                     ),
                   ],
@@ -50,6 +57,8 @@ class MysContentTileWidget extends StatelessWidget {
               )
             ],
           ),
+        ),
+        if (content.isCompleted)
           Positioned(
               top: 10,
               left: 10,
@@ -65,8 +74,7 @@ class MysContentTileWidget extends StatelessWidget {
                   height: 16,
                 ),
               ))
-        ],
-      ),
+      ],
     );
   }
 }

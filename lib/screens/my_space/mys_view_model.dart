@@ -1,3 +1,4 @@
+import 'package:blabla/models/content_category.dart';
 import 'package:blabla/models/content_feedback.dart';
 import 'package:blabla/services/apis/api.dart';
 import 'package:flutter/material.dart';
@@ -5,6 +6,10 @@ import 'package:flutter/material.dart';
 class MysViewModel with ChangeNotifier {
   final api = API();
 
+  List<ContentCategory> _categoryList = [];
+  List<ContentCategory> get categoryList => _categoryList;
+
+  /* 컨텐츠 진입 후 */
   int _contentId = 0;
   ContentFeedback? _feedback;
 
@@ -15,7 +20,15 @@ class MysViewModel with ChangeNotifier {
   List<String> get recordPathes => _recordPathes;
 
 
-  MysViewModel() {}
+  MysViewModel() {
+    getCategoryList();
+  }
+
+  void getCategoryList() async{
+    _categoryList = await api.getContentList();
+    notifyListeners();
+  }
+
 
   void setContentId(int id) {
     _contentId = id;

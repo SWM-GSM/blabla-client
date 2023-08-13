@@ -27,4 +27,13 @@ class Content {
         thumbnailUrl: json["thumbnailUrl"],
         isCompleted: json["isCompleted"],
       );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "contentName": contentName,
+        "genre": genre,
+        "topic": topic,
+        "thumbnailUrl": thumbnailUrl,
+        "isCompleted": isCompleted,
+    };
 }
