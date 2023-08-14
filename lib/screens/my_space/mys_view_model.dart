@@ -4,9 +4,19 @@ import 'package:blabla/models/content_feedback.dart';
 import 'package:blabla/services/apis/api.dart';
 import 'package:flutter/material.dart';
 
+enum ContentLangType {
+  kor("한국어"),
+  eng("영어");
+
+  const ContentLangType(this.korName);
+  final String korName;
+}
+
 class MysViewModel with ChangeNotifier {
   final api = API();
 
+  ContentLangType _contentLangType = ContentLangType.kor;
+  ContentLangType get contentLangType => _contentLangType;
   List<ContentCategory> _categoryList = [];
   List<ContentCategory> get categoryList => _categoryList;
 
@@ -22,13 +32,27 @@ class MysViewModel with ChangeNotifier {
   final List<String> _recordPathes = List.generate(3, (idx) => "");
   List<String> get recordPathes => _recordPathes;
 
-
   MysViewModel() {
     getCategoryList();
   }
 
-  void getCategoryList() async{
-    _categoryList = await api.getContentList();
+  void changeContentLangType(bool isLeft) {
+    if (isLeft) {
+      if (_contentLangType.index != 0) {
+        _contentLangType = ContentLangType.values[_contentLangType.index - 1];
+      }
+    } else {
+      if (_contentLangType.index < (ContentLangType.values.length - 1)) {
+        _contentLangType = ContentLangType.values[_contentLangType.index + 1];
+      }
+    }
+    _categoryList = [];
+    getCategoryList();
+    notifyListeners();
+  }
+
+  Future<void> getCategoryList() async {
+    _categoryList = await api.getContentList(contentLangType);
     notifyListeners();
   }
 
