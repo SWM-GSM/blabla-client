@@ -81,7 +81,8 @@ class API {
         case HttpMethod.get:
           return await http.get(Uri.parse(url), headers: headers);
         case HttpMethod.delete:
-          return await http.delete(Uri.parse(url), headers: headers);
+          return await http.delete(Uri.parse(url),
+              headers: headers, body: body);
         case HttpMethod.patch:
           return await http.patch(Uri.parse(url), headers: headers, body: body);
       }
