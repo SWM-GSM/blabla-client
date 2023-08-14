@@ -13,7 +13,8 @@ import 'package:speech_to_text/speech_to_text.dart' as stt;
 
 enum WritingStatus {
   beforeWriting,
-  isWriting,
+  isWritingByText,
+  isWritingByVoice,
   afterWriting,
   beforeFeedback,
 }
@@ -27,6 +28,8 @@ class MysContentWritingView extends StatefulWidget {
 
 class _MysContentWritingViewState extends State<MysContentWritingView> {
   stt.SpeechToText _speech = stt.SpeechToText();
+  final TextEditingController _txtCtr = TextEditingController();
+  final FocusNode _txtFocusNode = FocusNode();
   WritingStatus _status = WritingStatus.beforeWriting;
   bool _isListening = false;
   String _txt = "";
@@ -38,6 +41,21 @@ class _MysContentWritingViewState extends State<MysContentWritingView> {
   void initState() {
     super.initState();
     _speech = stt.SpeechToText();
+    _txtCtr.addListener(_isWriting);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _txtCtr.dispose();
+    _txtFocusNode.dispose();
+  }
+
+  void _isWriting() async {
+    _txtFocusNode.requestFocus();
+    setState(() {
+      _txt = _txtCtr.text;
+    });
   }
 
   void _startListening() async {
@@ -47,7 +65,7 @@ class _MysContentWritingViewState extends State<MysContentWritingView> {
     if (speechAvailable) {
       setState(() {
         _isListening = true;
-        _status = WritingStatus.isWriting;
+        _status = WritingStatus.isWritingByVoice;
       });
       _speech.listen(
           onResult: (result) => setState(() {
@@ -173,7 +191,9 @@ class _MysContentWritingViewState extends State<MysContentWritingView> {
                   txt: "다음으로 올 문장을 영작해주세요!",
                   isFirst: true,
                 ),
-                ChatBubbleWidget(type: ChatBubbleType.receiver, txt: viewModel.content!.sentence)
+                ChatBubbleWidget(
+                    type: ChatBubbleType.receiver,
+                    txt: viewModel.content!.sentence)
               ],
             ),
           ),
@@ -200,7 +220,12 @@ class _MysContentWritingViewState extends State<MysContentWritingView> {
                 ),
                 const SizedBox(width: 20),
                 GestureDetector(
-                  onTap: () {},
+                  onTap: () {
+                    setState(() {
+                      _status = WritingStatus.isWritingByText;
+                    });
+                    _txtFocusNode.requestFocus();
+                  },
                   child: Container(
                     padding: const EdgeInsets.all(10),
                     decoration: const BoxDecoration(
@@ -220,7 +245,7 @@ class _MysContentWritingViewState extends State<MysContentWritingView> {
             ),
           ),
         );
-      case WritingStatus.isWriting:
+      case WritingStatus.isWritingByVoice:
         return Scaffold(
           appBar: AppBar(
             toolbarHeight: 64,
@@ -258,8 +283,13 @@ class _MysContentWritingViewState extends State<MysContentWritingView> {
                     isFirst: true,
                   ),
                   ChatBubbleWidget(
-                      type: ChatBubbleType.receiver, txt: viewModel.content!.sentence),
-                  ChatBubbleWidget(type: ChatBubbleType.sender, txt: _txt)
+                      type: ChatBubbleType.receiver,
+                      txt: viewModel.content!.sentence),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 4),
+                    child: ChatBubbleWidget(
+                        type: ChatBubbleType.sender, txt: _txt),
+                  )
                 ],
               ),
             ),
@@ -314,6 +344,74 @@ class _MysContentWritingViewState extends State<MysContentWritingView> {
             ),
           ),
         );
+      case WritingStatus.isWritingByText:
+        return Scaffold(
+          appBar: AppBar(
+            toolbarHeight: 64,
+            title: Text(
+              "${viewModel.content!.contentName} - ${viewModel.content!.topic}",
+              style: BlaTxt.txt18B,
+            ),
+            backgroundColor: BlaColor.white,
+            elevation: 0,
+            centerTitle: true,
+            leading: GestureDetector(
+              onTap: () {
+                Navigator.pop(context);
+              },
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: SvgPicture.asset(
+                  "assets/icons/ic_32_arrow_left.svg",
+                  width: 24,
+                  height: 24,
+                ),
+              ),
+            ),
+            leadingWidth: 64,
+          ),
+          body: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const ChatBubbleWidget(
+                    type: ChatBubbleType.receiver,
+                    txt: "다음으로 올 문장을 영작해주세요!",
+                    isFirst: true,
+                  ),
+                  ChatBubbleWidget(
+                      type: ChatBubbleType.receiver,
+                      txt: viewModel.content!.sentence),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 4),
+                    child: ChatBubbleWidget(
+                        type: ChatBubbleType.sender, txt: _txt),
+                  ),
+                  TextFormField(
+                    onFieldSubmitted: (value) {
+                      setState(() {
+                        _status = WritingStatus.afterWriting;
+                        _txtFocusNode.unfocus();
+                      });
+                    },
+                    controller: _txtCtr,
+                    focusNode: _txtFocusNode,
+                    textInputAction: TextInputAction.done,
+                    style: const TextStyle(fontSize: 0),
+                    showCursor: false,
+                    decoration: const InputDecoration(
+                      contentPadding: EdgeInsets.zero,
+                      isDense: true,
+                      border: InputBorder.none,
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ),
+        );
       case WritingStatus.afterWriting:
         return Scaffold(
             appBar: AppBar(
@@ -352,8 +450,13 @@ class _MysContentWritingViewState extends State<MysContentWritingView> {
                       isFirst: true,
                     ),
                     ChatBubbleWidget(
-                        type: ChatBubbleType.receiver, txt: viewModel.content!.sentence),
-                    ChatBubbleWidget(type: ChatBubbleType.sender, txt: _txt)
+                        type: ChatBubbleType.receiver,
+                        txt: viewModel.content!.sentence),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 4),
+                      child: ChatBubbleWidget(
+                          type: ChatBubbleType.sender, txt: _txt),
+                    )
                   ],
                 ),
               ),
@@ -364,41 +467,6 @@ class _MysContentWritingViewState extends State<MysContentWritingView> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  // PageTransitionSwitcher(
-                  //   transitionBuilder: (child, animation, secondary) => FadeThroughTransition(
-                  //     animation: animation,
-                  //     secondaryAnimation: secondary,
-                  //     child: Column(
-                  //       crossAxisAlignment: CrossAxisAlignment.center,
-                  //       children: [
-                  //         Container(
-                  //           alignment: Alignment.center,
-                  //           padding: const EdgeInsets.all(16),
-                  //           decoration: BoxDecoration(
-                  //             shape: BoxShape.circle,
-                  //             color: BlaColor.orange,
-                  //             border:
-                  //                 Border.all(color: BlaColor.lightOrange, width: 8),
-                  //           ),
-                  //           child: SvgPicture.asset(
-                  //             "assets/icons/ic_24_check.svg",
-                  //             width: 24,
-                  //             height: 24,
-                  //             colorFilter: const ColorFilter.mode(
-                  //                 BlaColor.white, BlendMode.srcIn),
-                  //           ),
-                  //         ),
-                  //         const SizedBox(
-                  //           height: 12,
-                  //         ),
-                  //         Text(
-                  //           "영작 완료",
-                  //           style: BlaTxt.txt20SB,
-                  //         ),
-                  //       ],
-                  //     ),
-                  //   ),
-                  // ),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
@@ -434,6 +502,7 @@ class _MysContentWritingViewState extends State<MysContentWritingView> {
                       setState(() {
                         _status = WritingStatus.beforeWriting;
                         _txt = "";
+                        _txtCtr.text = "";
                       });
                     },
                     child: Container(
@@ -513,8 +582,13 @@ class _MysContentWritingViewState extends State<MysContentWritingView> {
                     isFirst: true,
                   ),
                   ChatBubbleWidget(
-                      type: ChatBubbleType.receiver, txt: viewModel.content!.sentence),
-                  ChatBubbleWidget(type: ChatBubbleType.sender, txt: _txt),
+                      type: ChatBubbleType.receiver,
+                      txt: viewModel.content!.sentence),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 4),
+                    child: ChatBubbleWidget(
+                        type: ChatBubbleType.sender, txt: _txt),
+                  ),
                   Column(
                     children: feedBackBubbles,
                   )
