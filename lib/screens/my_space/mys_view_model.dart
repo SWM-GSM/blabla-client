@@ -40,18 +40,20 @@ class MysViewModel with ChangeNotifier {
     if (isLeft) {
       if (_contentLangType.index != 0) {
         _contentLangType = ContentLangType.values[_contentLangType.index - 1];
+        _categoryList = [];
+        getCategoryList();
       }
     } else {
       if (_contentLangType.index < (ContentLangType.values.length - 1)) {
         _contentLangType = ContentLangType.values[_contentLangType.index + 1];
+        _categoryList = [];
+        getCategoryList();
       }
     }
-    _categoryList = [];
-    getCategoryList();
     notifyListeners();
   }
 
-  Future<void> getCategoryList() async {
+  void getCategoryList() async {
     _categoryList = await api.getContentList(contentLangType);
     notifyListeners();
   }

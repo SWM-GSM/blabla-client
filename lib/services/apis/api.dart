@@ -451,11 +451,12 @@ class API {
 
     final res = await dio.post("$testUrl/contents/$contentId/practice",
         data: formData,
-        options: Options(headers: {
-          "Authorization": await storage.read(key: "accessToken"),
+        options: Options(
+          headers: {
+          "Authorization": "Bearer ${await storage.read(key: "accessToken")}",
         }));
     print(res.data);
-    if (res.statusCode == 200){
+    if (res.statusCode == 200) {
       return true;
     } else {
       return false;

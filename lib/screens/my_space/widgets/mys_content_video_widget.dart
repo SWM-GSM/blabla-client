@@ -41,6 +41,12 @@ class _MysContentVideoWidgetState extends State<MysContentVideoWidget> {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+    _videoCtr.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Stack(
       alignment: Alignment.center,

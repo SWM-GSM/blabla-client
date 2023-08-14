@@ -121,6 +121,7 @@ class _MysContentWritingViewState extends State<MysContentWritingView> {
         feedBackBubbles.add(const ChatBubbleWidget(
             type: ChatBubbleType.receiver, txt: "Nice Try! 🥰"));
       });
+      viewModel.getCategoryList();
     });
     await Future.delayed(Duration(seconds: _feedbackDelaySecond)).then((value) {
       setState(() {

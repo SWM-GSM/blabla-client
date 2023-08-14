@@ -6,6 +6,7 @@ import 'package:blabla/styles/colors.dart';
 import 'package:blabla/styles/txt_style.dart';
 import 'package:blabla/widgets/skeleton_ui_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:provider/provider.dart';
 
 class MysCategoryWidget extends StatelessWidget {
@@ -102,18 +103,22 @@ class MysCategoryWidget extends StatelessWidget {
                         category!.contents.length,
                         (idx) => GestureDetector(
                             onTap: () {
-                              viewModel
-                                  .setContentId(category!.contents[idx].id);
-                              Navigator.of(context, rootNavigator: true).push(
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          MysContentListeningView(
-                                            contentId:
-                                                category!.contents[idx].id,
-                                            category: category!.contentName,
-                                            topic:
-                                                category!.contents[idx].topic,
-                                          )));
+                              if (category!.contents[idx].isCompleted) {
+                                showToast("이미 학습한 컨텐츠입니다.");
+                              } else {
+                                viewModel
+                                    .setContentId(category!.contents[idx].id);
+                                Navigator.of(context, rootNavigator: true).push(
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            MysContentListeningView(
+                                              contentId:
+                                                  category!.contents[idx].id,
+                                              category: category!.contentName,
+                                              topic:
+                                                  category!.contents[idx].topic,
+                                            )));
+                              }
                             },
                             child: MysContentTileWidget(
                                 content: category!.contents[idx])))),

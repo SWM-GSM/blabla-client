@@ -5,6 +5,7 @@ import 'package:blabla/styles/colors.dart';
 import 'package:blabla/styles/txt_style.dart';
 import 'package:blabla/widgets/skeleton_ui_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 
@@ -112,12 +113,16 @@ class _MysContentListeningViewState extends State<MysContentListeningView> {
         ),
         child: GestureDetector(
           onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const MysContentWritingView(),
-              ),
-            );
+            if (viewModel.content != null) {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const MysContentWritingView(),
+                ),
+              );
+            } else {
+              showToast("컨텐츠 로딩중입니다.");
+            }
           },
           child: Container(
             alignment: Alignment.center,
