@@ -54,10 +54,10 @@ class API {
     const storage = FlutterSecureStorage();
 
     try {
-      if (DateTime.fromMillisecondsSinceEpoch(
+      if (needCheck &&
+          DateTime.fromMillisecondsSinceEpoch(
                   int.parse((await storage.read(key: "accessTokenExpiresIn"))!))
-              .isBefore(DateTime.now()) &&
-          needCheck == true) {
+              .isBefore(DateTime.now())) {
         print("accessToken: ${await storage.read(key: "accessToken")}");
         print("refreshToken: ${await storage.read(key: "refreshToken")}");
         final res = await http.post(Uri.parse("$baseUrl/oauth/reissue"),
