@@ -168,8 +168,8 @@ class API {
         return false;
       }
     } else {
-      Exception("http error :(");
-      return false;
+      print(res.body);
+      throw Error();
     }
   }
 
