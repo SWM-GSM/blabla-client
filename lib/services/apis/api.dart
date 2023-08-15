@@ -400,6 +400,35 @@ class API {
     }
   }
 
+  Future<bool> joinSchedule(int crewId, int scheduleId) async {
+    const storage = FlutterSecureStorage();
+    final res = await api(
+        "$baseUrl/crews/$crewId/schedules/join", HttpMethod.post,
+        token: "Bearer ${await storage.read(key: "accessToken")}",
+        needCheck: true,
+        body: jsonEncode({"id": scheduleId}));
+    print(jsonDecode(utf8.decode(res.bodyBytes)));
+    if (res.statusCode == 200) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  Future<bool> cancelSchedule(int crewId, int scheduleId) async {
+    const storage = FlutterSecureStorage();
+    final res = await api("$baseUrl/crews/$crewId/schedules", HttpMethod.delete,
+        token: "Bearer ${await storage.read(key: "accessToken")}",
+        needCheck: true,
+        body: jsonEncode({"id": scheduleId}));
+    print(jsonDecode(utf8.decode(res.bodyBytes)));
+    if (res.statusCode == 200) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   /* 크루 리포트 */
   Future<ReportDetail> getDetailReport(int crewId, int reportId) async {
     const storage = FlutterSecureStorage();
