@@ -182,6 +182,7 @@ class CrewsMainView extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 20),
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -223,12 +224,35 @@ class CrewsMainView extends StatelessWidget {
                         child: Wrap(
                             direction: Axis.horizontal,
                             spacing: 16,
-                            children: List.generate(
-                                viewModel.reportList.length,
-                                (idx) => CrewsReportWidget(
-                                    reportType: ReportType.small,
-                                    reportStatus: true,
-                                    report: viewModel.reportList[idx])))),
+                            children: viewModel.reportList.isEmpty
+                                ? [
+                                    Container(
+                                      width: MediaQuery.of(context).size.width -
+                                          40,
+                                      height: 100,
+                                      alignment: Alignment.center,
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Text("📝", style: BlaTxt.txt20BL),
+                                          const SizedBox(height: 8),
+                                          Text(
+                                            "보이스룸에서 소통하고\n첫 번째 리포트를 만들어보세요!",
+                                            style: BlaTxt.txt14R.copyWith(
+                                                color: BlaColor.grey800),
+                                            textAlign: TextAlign.center,
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  ]
+                                : List.generate(
+                                    viewModel.reportList.length,
+                                    (idx) => CrewsReportWidget(
+                                        reportType: ReportType.small,
+                                        reportStatus: true,
+                                        report: viewModel.reportList[idx])))),
                   ],
                 ),
               )

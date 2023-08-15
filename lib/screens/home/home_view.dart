@@ -136,7 +136,7 @@ class HomeView extends StatelessWidget {
                         ? SkeletonTxtWidget(
                             width: double.infinity, style: BlaTxt.txt12R)
                         : Text(
-                            viewModel.todayContent!.title,
+                            viewModel.todayContent!.contentName,
                             style:
                                 BlaTxt.txt12R.copyWith(color: BlaColor.grey700),
                           ),
@@ -169,6 +169,7 @@ class HomeView extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 20),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
             padding: const EdgeInsets.only(left: 20, right: 20, bottom: 12),
@@ -195,10 +196,11 @@ class HomeView extends StatelessWidget {
             ),
           ),
           SingleChildScrollView(
-            padding: const EdgeInsets.only(right: 20),
+            padding: EdgeInsets.only(right: list.isEmpty ? 0 : 20),
             scrollDirection: Axis.horizontal,
             child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: viewModel.isLoading
                     ? List.generate(
                         5,
@@ -207,14 +209,34 @@ class HomeView extends StatelessWidget {
                           tileType: CrewTileType.home,
                         ),
                       )
-                    : list
-                        .map(
-                          (e) => CrewTileWidget(
-                            crew: e,
-                            tileType: CrewTileType.home,
-                          ),
-                        )
-                        .toList()),
+                    : list.isEmpty
+                        ? [
+                            Container(
+                              width: MediaQuery.of(context).size.width,
+                              height: 80,
+                              alignment: Alignment.center,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text("😋", style: BlaTxt.txt20BL),
+                                  const SizedBox(height: 8),
+                                  Text(
+                                    "크루를 생성하거나 크루에 참여해보세요!",
+                                    style: BlaTxt.txt14R
+                                        .copyWith(color: BlaColor.grey800),
+                                  )
+                                ],
+                              ),
+                            ),
+                          ]
+                        : list
+                            .map(
+                              (e) => CrewTileWidget(
+                                crew: e,
+                                tileType: CrewTileType.home,
+                              ),
+                            )
+                            .toList()),
           ),
         ],
       ),

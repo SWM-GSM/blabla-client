@@ -30,6 +30,7 @@ class Schedule {
   DateTime meetingTime;
   List<MemberSimple> members;
   int dday;
+  String status;
 
   Schedule({
     required this.id,
@@ -37,6 +38,7 @@ class Schedule {
     required this.meetingTime,
     required this.members,
     required this.dday,
+    required this.status,
   });
 
   factory Schedule.fromJson(Map<String, dynamic> json) => Schedule(
@@ -46,5 +48,6 @@ class Schedule {
         members: List<MemberSimple>.from(
             json["members"].map((x) => MemberSimple.fromJson(x))),
         dday: json["dday"],
+        status: json["status"],
       );
 }

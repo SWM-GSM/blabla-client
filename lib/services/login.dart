@@ -32,6 +32,7 @@ class GoogleLoginService extends LoginService {
               key: "platform", value: Login.google.name.toUpperCase()),
           storage.write(key: "socialToken", value: value.accessToken),
         ]);
+        print("[socialLogin] socialToken: ${await storage.read(key: "socialToken")}");
         viewModel.initUser(
             Login.google.name, account.email, account.displayName!);
       });

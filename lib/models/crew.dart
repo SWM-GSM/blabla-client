@@ -158,4 +158,18 @@ class CrewToJson {
         detail: json["detail"],
         autoApproval: json["autoApproval"],
       );
+
+  Map<String, dynamic> toJson() => {
+        "coverImage": coverImage,
+        "name": name,
+        "description": description,
+        "meetingCycle": meetingCycle,
+        "tags": List<dynamic>.from(tags.map((x) => x)),
+        "maxNum": maxNum,
+        "engLevel": engLevel,
+        "korLevel": korLevel,
+        "preferMember": preferMember,
+        "detail": detail,
+        "autoApproval": autoApproval,
+      };
 }
