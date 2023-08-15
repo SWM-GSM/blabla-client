@@ -1,8 +1,10 @@
+import 'package:blabla/screens/crew_space/crews_view_model.dart';
 import 'package:blabla/styles/colors.dart';
 import 'package:blabla/styles/txt_style.dart';
 import 'package:blabla/utils/datetime_to_str.dart';
 import 'package:blabla/widgets/profile_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 enum ScheduleWidgetType {
   none,
@@ -18,6 +20,7 @@ class CrewsScheduleWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final viewModel = Provider.of<CrewsViewModel>(context);
     switch (type) {
       case ScheduleWidgetType.none:
         return Container(
@@ -111,7 +114,7 @@ class CrewsScheduleWidget extends StatelessWidget {
               Row(
                 children: [
                   Text(
-                    "D-${schedule!.dday}",
+                    "D-${schedule.dday}",
                     style: BlaTxt.txt16B.copyWith(color: BlaColor.orange),
                   ),
                   const SizedBox(width: 8),
@@ -148,19 +151,42 @@ class CrewsScheduleWidget extends StatelessWidget {
               const SizedBox(
                 height: 16,
               ),
-              GestureDetector(
-                  child: Container(
-                height: 48,
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(12),
-                  color: BlaColor.lightOrange,
-                ),
-                child: Text(
-                  "참여하기",
-                  style: BlaTxt.txt14B.copyWith(color: BlaColor.orange),
-                ),
-              ))
+              if (schedule.status == "ENDED")
+                Container()
+              else if (schedule.status == "JOINED")
+                GestureDetector(
+                    onTap: () {
+                      viewModel.cancelSchedule(schedule.id);
+                    },
+                    child: Container(
+                      height: 48,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(12),
+                        color: BlaColor.grey300,
+                      ),
+                      child: Text(
+                        "참여 취소하기",
+                        style: BlaTxt.txt14B.copyWith(color: BlaColor.grey600),
+                      ),
+                    ))
+              else
+                GestureDetector(
+                    onTap: () {
+                      viewModel.joinSchedule(schedule.id);
+                    },
+                    child: Container(
+                      height: 48,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(12),
+                        color: BlaColor.lightOrange,
+                      ),
+                      child: Text(
+                        "참여하기",
+                        style: BlaTxt.txt14B.copyWith(color: BlaColor.orange),
+                      ),
+                    )),
             ],
           ),
         );

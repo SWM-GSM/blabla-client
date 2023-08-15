@@ -3,6 +3,7 @@ import 'package:blabla/models/report.dart';
 import 'package:blabla/models/schedule.dart';
 import 'package:blabla/services/apis/api.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 
 class CrewsViewModel with ChangeNotifier {
   final api = API();
@@ -102,9 +103,30 @@ class CrewsViewModel with ChangeNotifier {
   }
 
   void createSchedule(String title, String meetingTime) async {
-    await Future.wait([
-      api.createSchedule(_crewId, title, meetingTime),
-      getSchedules(),
-    ]);
+    if (await api.createSchedule(_crewId, title, meetingTime)) {
+      await Future.wait([
+        getSchedules(),
+        getUpcomingSchedule(),
+      ]);
+    }
+    notifyListeners();
+  }
+
+  void joinSchedule(int scheduleId) async {
+    if (await api.joinSchedule(_crewId, scheduleId)) {
+      await getSchedules();
+      notifyListeners();
+    } else {
+      showToast("일정 가입에 실패했습니다. 다시 시도 해주세요.");
+    }
+  }
+
+  void cancelSchedule(int scheduleId) async {
+    if (await api.cancelSchedule(_crewId, scheduleId)) {
+      await getSchedules();
+      notifyListeners();
+    } else {
+      showToast("일정 가입에 실패했습니다. 다시 시도 해주세요.");
+    }
   }
 }
