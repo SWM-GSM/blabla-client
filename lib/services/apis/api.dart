@@ -71,6 +71,11 @@ class API {
             }));
         if (res.statusCode == 200) {
           await saveToken(res);
+          headers = {
+            "Authorization": "Bearer ${await storage.read(key: "accessToken")}",
+            "Content-Type": "application/json",
+            "Accept": "application/json",
+          };
         } else {
           print(jsonDecode(utf8.decode(res.bodyBytes)));
           print("재발급 실패");
@@ -115,6 +120,7 @@ class API {
           .map((e) => Country.fromJson(e))
           .toList();
     } else {
+      print(res.body);
       throw Exception("http error :(");
     }
   }
@@ -127,6 +133,7 @@ class API {
           .map((e) => Level.fromJson(e))
           .toList();
     } else {
+      print(res.body);
       throw Exception("http error :()");
     }
   }
@@ -164,6 +171,7 @@ class API {
     final res = await api("$baseUrl/oauth/login/$loginType", HttpMethod.post,
         token: await storage.read(key: "socialToken"));
     if (res.statusCode == 200) {
+      print("로그인: ${jsonDecode(utf8.decode(res.bodyBytes))}");
       if (jsonDecode(res.body)["success"]) {
         await saveToken(res);
         return true;
@@ -172,7 +180,7 @@ class API {
       }
     } else {
       print(res.body);
-      throw Error();
+      throw jsonDecode(res.body)["code"];
     }
   }
 
@@ -184,6 +192,7 @@ class API {
       await saveToken(res);
       return true;
     } else {
+      print(res.body);
       return false;
     }
   }
@@ -264,7 +273,12 @@ class API {
 
   Future<Content> getTodayContent() async {
     // 수정 - 테스트 API
-    final res = await api("$korTestUrl/contents/today", HttpMethod.get);
+    const storage = FlutterSecureStorage();
+    // final res = await api("$testUrl/contents/today", HttpMethod.get,
+    final res = await api("$korTestUrl/contents/today", HttpMethod.get,
+        token: "Bearer ${await storage.read(key: "accessToken")}",
+        needCheck: true);
+    // print(jsonDecode(utf8.decode(res.bodyBytes)));
     if (res.statusCode == 200) {
       return Content.fromJson(jsonDecode(utf8.decode(res.bodyBytes))["data"]);
     } else {
@@ -326,6 +340,7 @@ class API {
     // 수정 - sort 추가
     final res = await api("$baseUrl/crews/$crewId/reports", HttpMethod.get,
         token: "Bearer ${await storage.read(key: "accessToken")}",
+        needCheck: true);
     if (res.statusCode == 200) {
       return (jsonDecode(utf8.decode(res.bodyBytes))["data"]["reports"] as List)
           .map((e) => Report.fromJson(e))

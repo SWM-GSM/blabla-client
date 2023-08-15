@@ -34,6 +34,7 @@ class _SplashState extends State<Splash> {
         refreshToken == null ||
         accessExpireDate == null ||
         refreshExpireDate == null) {
+      print("$accessToken, $refreshToken, $accessExpireDate, $refreshExpireDate");
       setState(() {
         page = SplashPage.onboarding;
       });
