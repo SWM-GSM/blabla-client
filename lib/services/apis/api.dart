@@ -543,10 +543,9 @@ class API {
           pathes.length, (idx) => MultipartFile.fromFileSync(pathes[idx]))
     });
 
-    final res = await dio.post("$testUrl/contents/$contentId/practice",
+    final res = await dio.post("$baseUrl/contents/$contentId/practice",
         data: formData,
-        options: Options(
-          headers: {
+        options: Options(headers: {
           "Authorization": "Bearer ${await storage.read(key: "accessToken")}",
         }));
     print(res.data);
