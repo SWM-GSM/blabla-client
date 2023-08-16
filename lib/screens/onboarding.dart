@@ -36,7 +36,7 @@ class OnBoarding extends StatelessWidget {
                       .socialLogin(context)
                       .then((value) async {
                     if (value) {
-                      await Login.google.service.login().then((alreadyJoined) {
+                      await Login.google.service.login().then((alreadyJoined) { // 이미 가입된 유저
                         if (alreadyJoined) {
                           Navigator.push(context,
                               MaterialPageRoute(builder: (context) => Main()));
@@ -48,7 +48,7 @@ class OnBoarding extends StatelessWidget {
                         }
                       });
                     } else {
-                      throw Error();
+                      showToast("로그인 실패. 다시 시도해주세요");
                     }
                   });
                 } catch (e) {
