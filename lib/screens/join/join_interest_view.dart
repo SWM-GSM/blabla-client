@@ -1,3 +1,4 @@
+import 'package:blabla/main.dart';
 import 'package:blabla/screens/home/home_view.dart';
 import 'package:blabla/screens/join/join_view_model.dart';
 import 'package:blabla/widgets/create_widget.dart';
@@ -60,12 +61,12 @@ class JoinInterestView extends StatelessWidget {
           Expanded(
             child: GestureDetector(
               onTap: () async {
+                viewModel.initKeywords();
                 await viewModel.join().then((value) {
                   if (value) {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => HomeView()),
-                    );
+                    Navigator.of(context).pushAndRemoveUntil(
+                        MaterialPageRoute(builder: (context) => const Main()),
+                        (route) => false);
                   } else {
                     showToast("회원가입에 실패했습니다. 다시 시도해주세요.");
                   }
