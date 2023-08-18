@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:blabla/models/agora.dart';
 import 'package:blabla/models/content.dart';
 import 'package:blabla/models/content_category.dart';
 import 'package:blabla/models/content_feedback.dart';
@@ -162,6 +163,7 @@ class API {
       await saveToken(res);
       return true;
     } else {
+      print(res.body);
       return false;
     }
   }
@@ -349,6 +351,13 @@ class API {
           needCheck: true);
     }
     if (res.statusCode == 200) {
+      return jsonDecode(utf8.decode(res.bodyBytes))["success"];
+    } else {
+      print(jsonDecode(utf8.decode(res.bodyBytes)));
+      throw Exception("http error :(");
+    }
+  }
+
   /* 크루 스페이스 */
   Future<List<Report>> getReports(int crewId) async {
     const storage = FlutterSecureStorage();
@@ -361,6 +370,54 @@ class API {
           .map((e) => Report.fromJson(e))
           .toList();
     } else {
+      print(res.body);
+      throw Exception("http error :(");
+    }
+  }
+
+  Future<Agora> getAgoraToken(int crewId, bool isActivated) async {
+    const storage = FlutterSecureStorage();
+    final res = await api("$baseUrl/crews/$crewId/voice-room", HttpMethod.post,
+        token: "Bearer ${await storage.read(key: "accessToken")}",
+        body: jsonEncode({"isActivated": isActivated}),
+        needCheck: true);
+    if (res.statusCode == 200) {
+      return Agora.fromJson(jsonDecode(utf8.decode(res.bodyBytes))["data"]);
+    } else {
+      print(res.body);
+      throw Exception("http error :(");
+    }
+  }
+
+  Future<bool> uploadVoiceFile(int reportId, String path) async {
+    const storage = FlutterSecureStorage();
+    final dio = Dio();
+    final formData =
+        FormData.fromMap({"file": MultipartFile.fromFileSync(path)});
+
+    final res = await dio.post("$baseUrl/crews/reports/$reportId/voice-file",
+        data: formData,
+        options: Options(headers: {
+          "Authorization": "Bearer ${await storage.read(key: "accessToken")}",
+        }));
+    print(res.data);
+    if (res.statusCode == 200) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  Future<bool> requestCreateReport(int reportId) async {
+    const storage = FlutterSecureStorage();
+    final res = await api(
+        "$baseUrl/crews/reports/$reportId/request", HttpMethod.post,
+        token: "Bearer ${await storage.read(key: "accessToken")}",
+        needCheck: true);
+    if (res.statusCode == 200) {
+      return true;
+    } else {
+      print(res.body);
       throw Exception("http error :(");
     }
   }
