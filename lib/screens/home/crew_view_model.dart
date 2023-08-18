@@ -31,13 +31,27 @@ class CrewViewModel with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> getCrewDetail(int crewId) async {
-    _crewId = crewId;
-    _crew = await api.getCrewDetail(crewId);
+  Future<void> initCrew() async {
+    _crewId = 0;
+    _crew = await null;
+    notifyListeners();
+  }
+
+  void setCrewId(int id) async {
+    _crewId = id;
+    notifyListeners();
+  }
+
+  Future<void> getCrewDetail({int id = 0}) async {
+    if (id != 0) {
+      _crew = await api.getCrewDetail(id);
+    } else {
+      _crew = await api.getCrewDetail(_crewId);
+    }
     notifyListeners();
   }
 
   Future<bool> joinCrew(bool autoApproval, {String msg = ""}) async {
-    return await api.joinCrew(crewId, autoApproval, msg: msg);
+    return await api.joinCrew(_crewId, autoApproval, msg: msg);
   }
 }
