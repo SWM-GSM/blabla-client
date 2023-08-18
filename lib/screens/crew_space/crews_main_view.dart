@@ -265,10 +265,16 @@ class CrewsMainView extends StatelessWidget {
                                   ]
                                 : List.generate(
                                     viewModel.reportList.length,
-                                    (idx) => CrewsReportWidget(
-                                        reportType: ReportType.small,
-                                        reportStatus: true,
-                                        report: viewModel.reportList[idx])))),
+                                    (idx) => viewModel.reportList[idx] == null
+                                        ? CrewsReportWidget(
+                                            reportType: ReportType.small,
+                                            reportStatus: false,
+                                            report: null)
+                                        : CrewsReportWidget(
+                                            reportType: ReportType.small,
+                                            reportStatus: true,
+                                            report:
+                                                viewModel.reportList[idx])))),
                   ],
                 ),
               )

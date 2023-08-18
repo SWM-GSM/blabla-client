@@ -359,7 +359,7 @@ class API {
   }
 
   /* 크루 스페이스 */
-  Future<List<Report>> getReports(int crewId) async {
+  Future<List<Report?>> getReports(int crewId) async {
     const storage = FlutterSecureStorage();
     // 수정 - sort 추가
     final res = await api("$baseUrl/crews/$crewId/reports", HttpMethod.get,
@@ -367,7 +367,7 @@ class API {
         needCheck: true);
     if (res.statusCode == 200) {
       return (jsonDecode(utf8.decode(res.bodyBytes))["data"]["reports"] as List)
-          .map((e) => Report.fromJson(e))
+          .map((e) => e == null ? null : Report.fromJson(e))
           .toList();
     } else {
       print(res.body);
