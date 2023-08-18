@@ -15,7 +15,7 @@ class CrewsViewModel with ChangeNotifier {
   /* 개별 크루 스페이스 */
   late int _crewId;
   late String _crewName;
-  List<Report?> _reportList = [];
+  List<Report> _reportList = [];
   late ReportDetail _report;
   late ScheduleSimple? _upcomingSchedule;
   List<Schedule> _schedules = [];
@@ -24,7 +24,7 @@ class CrewsViewModel with ChangeNotifier {
 
   int get crewId => _crewId;
   String get crewName => _crewName;
-  List<Report?> get reportList => _reportList;
+  List<Report> get reportList => _reportList;
   ReportDetail get report => _report;
   ScheduleSimple? get upcomingSchedule => _upcomingSchedule;
   Map<DateTime, List<Schedule>> get schedulesForCalendar =>

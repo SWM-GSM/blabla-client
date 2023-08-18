@@ -235,46 +235,44 @@ class CrewsMainView extends StatelessWidget {
                     ),
                     const SizedBox(height: 20),
                     SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        child: Wrap(
-                            direction: Axis.horizontal,
-                            spacing: 16,
-                            children: viewModel.reportList.isEmpty
-                                ? [
-                                    Container(
-                                      width: MediaQuery.of(context).size.width -
-                                          40,
-                                      height: 100,
-                                      alignment: Alignment.center,
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Text("📝", style: BlaTxt.txt20BL),
-                                          const SizedBox(height: 8),
-                                          Text(
-                                            "보이스룸에서 소통하고\n첫 번째 리포트를 만들어보세요!",
-                                            style: BlaTxt.txt14R.copyWith(
-                                                color: BlaColor.grey800),
-                                            textAlign: TextAlign.center,
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                  ]
-                                : List.generate(
-                                    viewModel.reportList.length,
-                                    (idx) => viewModel.reportList[idx] == null
-                                        ? CrewsReportWidget(
-                                            reportType: ReportType.small,
-                                            reportStatus: false,
-                                            report: null)
-                                        : CrewsReportWidget(
-                                            reportType: ReportType.small,
-                                            reportStatus: true,
-                                            report:
-                                                viewModel.reportList[idx])))),
+                      scrollDirection: Axis.horizontal,
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: Wrap(
+                        direction: Axis.horizontal,
+                        spacing: 16,
+                        children: viewModel.reportList.isEmpty
+                            ? [
+                                Container(
+                                  width: MediaQuery.of(context).size.width - 40,
+                                  height: 100,
+                                  alignment: Alignment.center,
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text("📝", style: BlaTxt.txt20BL),
+                                      const SizedBox(height: 8),
+                                      Text(
+                                        "보이스룸에서 소통하고\n첫 번째 리포트를 만들어보세요!",
+                                        style: BlaTxt.txt14R
+                                            .copyWith(color: BlaColor.grey800),
+                                        textAlign: TextAlign.center,
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ]
+                            : List.generate(
+                                viewModel.reportList.length,
+                                (idx) => CrewsReportWidget(
+                                  reportType: ReportType.small,
+                                  reportStatus:
+                                      !(viewModel.reportList[idx].createdAt ==
+                                          DateTime(2000, 1, 1)),
+                                  report: viewModel.reportList[idx],
+                                ),
+                              ),
+                      ),
+                    ),
                   ],
                 ),
               )

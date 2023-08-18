@@ -17,7 +17,7 @@ class CrewsReportWidget extends StatelessWidget {
       required this.reportStatus,
       required this.report});
   final ReportType reportType;
-  final bool reportStatus; // 임시 생성 중
+  final bool reportStatus;
   final Report? report;
 
   @override
@@ -29,7 +29,7 @@ class CrewsReportWidget extends StatelessWidget {
           viewModel.setReport(report!.id).then((value) => Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) => CrewsReportDetailView())));
+                  builder: (context) => const CrewsReportDetailView())));
         }
       },
       child: switch (reportType) {
@@ -59,7 +59,7 @@ class CrewsReportWidget extends StatelessWidget {
                                   profileSize: 16,
                                   profile: report!.members[idx].profileImage,
                                   bgSize: 32,
-                                  bgColor: Color(0xFFFFF6DE),
+                                  bgColor: BlaColor.lightOrange, // 수정 - 프로필 전용 색상으로 교체 Color(0xFFFFF6DE),
                                 );
                               } else if (idx == 3) {
                                 return Container(
@@ -77,7 +77,7 @@ class CrewsReportWidget extends StatelessWidget {
                                           .copyWith(color: BlaColor.grey700),
                                     ));
                               } else {
-                                return SizedBox();
+                                return const SizedBox();
                               }
                             }),
                           ),
@@ -117,7 +117,7 @@ class CrewsReportWidget extends StatelessWidget {
                       alignment: WrapAlignment.center,
                       crossAxisAlignment: WrapCrossAlignment.center,
                       children: [
-                        CircularProgressIndicator(
+                        const CircularProgressIndicator(
                           strokeWidth: 8,
                           color: BlaColor.orange,
                         ),

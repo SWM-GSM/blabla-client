@@ -48,8 +48,8 @@ class CrewsReportsView extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Container(
-                      padding:
-                          const EdgeInsets.symmetric(vertical: 6, horizontal: 12),
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 6, horizontal: 12),
                       decoration: BoxDecoration(
                         border: Border.all(color: BlaColor.grey200, width: 1),
                         borderRadius: BorderRadius.circular(16),
@@ -82,7 +82,8 @@ class CrewsReportsView extends StatelessWidget {
                         ),
                         Text(
                           "최신순",
-                          style: BlaTxt.txt14M.copyWith(color: BlaColor.grey700),
+                          style:
+                              BlaTxt.txt14M.copyWith(color: BlaColor.grey700),
                         ),
                       ],
                     )
@@ -92,8 +93,13 @@ class CrewsReportsView extends StatelessWidget {
               Expanded(
                 child: SingleChildScrollView(
                   child: Column(
-                    children: viewModel.reportList.map((e) => CrewsReportWidget(reportType: ReportType.big, reportStatus: true, report: e)).toList()
-                  ),
+                      children: viewModel.reportList
+                          .map((e) => CrewsReportWidget(
+                              reportType: ReportType.big,
+                              reportStatus:
+                                  !(e.createdAt == DateTime(2000, 1, 1)),
+                              report: e))
+                          .toList()),
                 ),
               ),
             ],
