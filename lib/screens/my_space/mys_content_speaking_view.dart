@@ -200,7 +200,7 @@ class _MysContentSpeakingViewState extends State<MysContentSpeakingView> {
                       Navigator.pushAndRemoveUntil(
                           context,
                           MaterialPageRoute(builder: (context) => const Main()),
-                          (route) => true);
+                          (route) => false);
                     } else {
                       showToast("업로드 실패. 다시 시도해주세요");
                     }

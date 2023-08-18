@@ -89,9 +89,10 @@ class RecruitCompleteView extends StatelessWidget {
                     viewModel.init();
                     homeViewModel.init();
                     crewsViewModel.init();
-                    Navigator.of(context).pushAndRemoveUntil(
+                    Navigator.pushAndRemoveUntil(
+                        context,
                         MaterialPageRoute(builder: (context) => const Main()),
-                        (route) => true);
+                        (route) => false);
                   },
                   child: Container(
                     margin:

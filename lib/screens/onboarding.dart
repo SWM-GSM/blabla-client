@@ -38,8 +38,11 @@ class OnBoarding extends StatelessWidget {
                     if (value) {
                       await Login.google.service.login().then((alreadyJoined) {
                         if (alreadyJoined) {
-                          Navigator.push(context,
-                              MaterialPageRoute(builder: (context) => Main()));
+                          Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const Main()),
+                              (route) => false);
                         } else {
                           Navigator.push(
                               context,
