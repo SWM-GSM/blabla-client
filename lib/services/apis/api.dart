@@ -334,6 +334,21 @@ class API {
     }
   }
 
+  Future<bool> joinCrew(int crewId, bool autoApproval,
+      {String msg = ""}) async {
+    const storage = FlutterSecureStorage();
+    late final http.Response res;
+    if (autoApproval) {
+      res = await api("$baseUrl/crews/$crewId/join", HttpMethod.post,
+          token: "Bearer ${await storage.read(key: "accessToken")}",
+          needCheck: true);
+    } else {
+      res = await api("$baseUrl/crews/$crewId/join", HttpMethod.post,
+          body: jsonEncode({"message": msg}),
+          token: "Bearer ${await storage.read(key: "accessToken")}",
+          needCheck: true);
+    }
+    if (res.statusCode == 200) {
   /* 크루 스페이스 */
   Future<List<Report>> getReports(int crewId) async {
     const storage = FlutterSecureStorage();

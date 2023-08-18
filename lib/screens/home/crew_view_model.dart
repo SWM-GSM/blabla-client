@@ -7,10 +7,12 @@ class CrewViewModel with ChangeNotifier {
 
   bool _isLoading = true;
   List<Crew> _crewList = [];
+  int _crewId = 0;
   CrewDetail? _crew;
 
   bool get isLoading => _isLoading;
   List<Crew> get crewList => _crewList;
+  int get crewId => _crewId;
   CrewDetail? get crew => _crew;
 
   CrewViewModel() {
@@ -30,7 +32,12 @@ class CrewViewModel with ChangeNotifier {
   }
 
   Future<void> getCrewDetail(int crewId) async {
+    _crewId = crewId;
     _crew = await api.getCrewDetail(crewId);
     notifyListeners();
+  }
+
+  Future<bool> joinCrew(bool autoApproval, {String msg = ""}) async {
+    return await api.joinCrew(crewId, autoApproval, msg: msg);
   }
 }
