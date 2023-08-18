@@ -3,6 +3,7 @@ import 'package:blabla/screens/crew_space/crews_view_model.dart';
 import 'package:blabla/screens/crew_space/widgets/voiceroom_profile_widget.dart';
 import 'package:blabla/styles/colors.dart';
 import 'package:blabla/styles/txt_style.dart';
+import 'package:blabla/utils/change_into_two_digit.dart';
 import 'package:blabla/utils/dotenv.dart';
 import 'package:country_flags/country_flags.dart';
 import 'package:flutter/material.dart';
@@ -32,6 +33,7 @@ class _CrewsVoiceroomViewState extends State<CrewsVoiceroomView> {
 
   Future<void> initRecorder() async {
     await recorder.openRecorder();
+    recorder.setSubscriptionDuration(const Duration(milliseconds: 500));
   }
 
   Future<void> startRecord() async {
@@ -256,7 +258,18 @@ class _CrewsVoiceroomViewState extends State<CrewsVoiceroomView> {
           const SizedBox(
             height: 4,
           ),
-          Text("01:23:22", style: BlaTxt.txt16B),
+          StreamBuilder<RecordingDisposition>(
+            stream: recorder.onProgress,
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                return Text(
+                    "${changeIntoTwoDigit(snapshot.data!.duration.inHours.remainder(60))}:${changeIntoTwoDigit(snapshot.data!.duration.inMinutes.remainder(60))}:${changeIntoTwoDigit(snapshot.data!.duration.inSeconds.remainder(60))}",
+                    style: BlaTxt.txt16B);
+              } else {
+                return Text("00:00:00", style: BlaTxt.txt16B);
+              }
+            },
+          ),
           Padding(
             padding: const EdgeInsets.only(top: 20),
             child: Wrap(
