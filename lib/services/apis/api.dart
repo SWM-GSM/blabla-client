@@ -6,6 +6,7 @@ import 'package:blabla/models/content_feedback.dart';
 import 'package:blabla/models/country.dart';
 import 'package:blabla/models/crew.dart';
 import 'package:blabla/models/emoji_name_tag.dart';
+import 'package:blabla/models/history.dart';
 import 'package:blabla/models/interest.dart';
 import 'package:blabla/models/level.dart';
 import 'package:blabla/models/report.dart';
@@ -359,7 +360,7 @@ class API {
   }
 
   /* 크루 스페이스 */
-  Future<List<Report?>> getReports(int crewId) async {
+  Future<List<Report>> getReports(int crewId) async {
     const storage = FlutterSecureStorage();
     // 수정 - sort 추가
     final res = await api("$baseUrl/crews/$crewId/reports", HttpMethod.get,
@@ -367,7 +368,7 @@ class API {
         needCheck: true);
     if (res.statusCode == 200) {
       return (jsonDecode(utf8.decode(res.bodyBytes))["data"]["reports"] as List)
-          .map((e) => e == null ? null : Report.fromJson(e))
+          .map((e) => Report.fromJson(e))
           .toList();
     } else {
       print(res.body);
@@ -638,6 +639,25 @@ class API {
       return true;
     } else {
       return false;
+    }
+  }
+
+  /* 히스토리 */
+  Future<List<History>> getHistory() async {
+    const storage = FlutterSecureStorage();
+    final res = await api(
+      "$baseUrl/reports/history",
+      HttpMethod.get,
+      token: "Bearer ${await storage.read(key: "accessToken")}",
+    );
+    if (res.statusCode == 200) {
+      return (jsonDecode(utf8.decode(res.bodyBytes))["data"]["histories"]
+              as List)
+          .map((e) => History.fromJson(e))
+          .toList();
+    } else {
+      print(jsonDecode(utf8.decode(res.bodyBytes)));
+      throw Exception("http error :(");
     }
   }
 }
