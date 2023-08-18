@@ -6,9 +6,12 @@ import 'package:blabla/screens/crew_space/widgets/crews_report_widget.dart';
 import 'package:blabla/screens/crew_space/widgets/crews_schedule_widget.dart';
 import 'package:blabla/styles/colors.dart';
 import 'package:blabla/styles/txt_style.dart';
+import 'package:blabla/utils/dotenv.dart';
 import 'package:blabla/widgets/profile_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 
 class CrewsMainView extends StatelessWidget {
@@ -157,11 +160,25 @@ class CrewsMainView extends StatelessWidget {
                     ),
                   ),
                   GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => CrewsVoiceroomView()));
+                    onTap: () async {
+                      final token = await viewModel
+                          .getAgoraToken(viewModel.voiceRoomUsers.isNotEmpty);
+                      print(token);
+                      final permission = await Permission.microphone.request();
+                      print(permission);
+                      if (permission == PermissionStatus.granted) {
+                        if (context.mounted) {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => CrewsVoiceroomView(
+                                      token: token,
+                                      channelId: viewModel.channelId)));
+                        }
+                      } else if (permission ==
+                          PermissionStatus.permanentlyDenied) {
+                        openAppSettings();
+                      }
                     },
                     child: Container(
                       width: double.infinity,

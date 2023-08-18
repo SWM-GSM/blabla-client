@@ -1,3 +1,4 @@
+import 'package:blabla/models/agora.dart';
 import 'package:blabla/models/crew.dart';
 import 'package:blabla/models/report.dart';
 import 'package:blabla/models/schedule.dart';
@@ -21,6 +22,7 @@ class CrewsViewModel with ChangeNotifier {
   Map<DateTime, List<Schedule>> _schedulesForCalendar = {};
   DateTime _selectedDate = DateTime.now();
 
+  int get crewId => _crewId;
   String get crewName => _crewName;
   List<Report> get reportList => _reportList;
   ReportDetail get report => _report;
@@ -30,6 +32,14 @@ class CrewsViewModel with ChangeNotifier {
   DateTime get selectedDate => _selectedDate;
   List<Schedule>? get selectedDateSchedules => schedulesForCalendar[
       DateTime(selectedDate.year, selectedDate.month, selectedDate.day)];
+
+  /* 보이스룸 */
+  late String _channelId;
+  String get channelId => _channelId;
+  List<int> _voiceRoomUsers = [];
+  List<int> get voiceRoomUsers => _voiceRoomUsers;
+  int _createReportId = 0;
+  int get createReportId => _createReportId;
 
   CrewsViewModel() {
     init();
@@ -47,6 +57,7 @@ class CrewsViewModel with ChangeNotifier {
   Future<void> initCrew(int crewId, String crewName) async {
     setCrewId(crewId);
     setCrewName(crewName);
+    setChannelId();
     await Future.wait([
       getReports(),
       getUpcomingSchedule(),
@@ -128,5 +139,43 @@ class CrewsViewModel with ChangeNotifier {
     } else {
       showToast("일정 가입에 실패했습니다. 다시 시도 해주세요.");
     }
+  }
+
+  void setChannelId() {
+    _channelId = "crew-$_crewId";
+    notifyListeners();
+  }
+
+  Future<String> getAgoraToken(bool isActivated) async {
+    final Agora agora = await api.getAgoraToken(crewId, isActivated);
+    _createReportId = agora.reportId;
+    return agora.token;
+  }
+
+  void addUser(int userId) {
+    _voiceRoomUsers.add(userId);
+    notifyListeners();
+  }
+
+  void removeUser(int userId) {
+    _voiceRoomUsers.remove(userId);
+    notifyListeners();
+  }
+
+  void clearUser() {
+    _voiceRoomUsers.clear();
+    notifyListeners();
+  }
+
+  List<int> tempGetUsers() {
+    return _voiceRoomUsers;
+  }
+
+  Future<bool> uploadVoiceFile(String path) async {
+    return api.uploadVoiceFile(_createReportId, path);
+  }
+
+  void requestCreateReport() async { // 수정
+    await api.requestCreateReport(_createReportId);
   }
 }
