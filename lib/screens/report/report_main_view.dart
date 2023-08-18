@@ -22,21 +22,21 @@ class ReportMainView extends StatelessWidget {
           style: BlaTxt.txt18B,
         ),
         centerTitle: true,
-        actions: [
-          GestureDetector(
-            onTap: () {
-              print("인포 버튼 클릭");
-            },
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: SvgPicture.asset(
-                "assets/icons/ic_24_info.svg",
-                width: 24,
-                height: 24,
-              ),
-            ),
-          ),
-        ],
+        // actions: [
+        //   GestureDetector(
+        //     onTap: () {
+        //       print("인포 버튼 클릭");
+        //     },
+        //     child: Padding(
+        //       padding: const EdgeInsets.symmetric(horizontal: 20),
+        //       child: SvgPicture.asset(
+        //         "assets/icons/ic_24_info.svg",
+        //         width: 24,
+        //         height: 24,
+        //       ),
+        //     ),
+        //   ),
+        // ],
       ),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -82,12 +82,12 @@ class ReportMainView extends StatelessWidget {
                             ),
                             Text(
                               HistoryFilter.values[idx].name,
-                              style: viewModel.filter ==
-                                      HistoryFilter.values[idx]
-                                  ? BlaTxt.txt12B
-                                      .copyWith(color: BlaColor.orange)
-                                  : BlaTxt.txt12M
-                                      .copyWith(color: BlaColor.grey600),
+                              style:
+                                  viewModel.filter == HistoryFilter.values[idx]
+                                      ? BlaTxt.txt12B
+                                          .copyWith(color: BlaColor.orange)
+                                      : BlaTxt.txt12M
+                                          .copyWith(color: BlaColor.grey600),
                             )
                           ]),
                     ),
@@ -99,13 +99,13 @@ class ReportMainView extends StatelessWidget {
               ),
               Column(
                 children: List.generate(
-                  3,
+                  viewModel.histories.length,
                   (calendarIdx) => Padding(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 4, horizontal: 20),
+                    padding:
+                        const EdgeInsets.symmetric(vertical: 4, horizontal: 20),
                     child: Column(
                         children: List.generate(
-                            3,
+                            viewModel.histories[calendarIdx].reports.length,
                             (idx) => Row(
                                   children: [
                                     if (idx == 0)
@@ -116,19 +116,23 @@ class ReportMainView extends StatelessWidget {
                                               CrossAxisAlignment.center,
                                           children: [
                                             Text(
-                                              "6월",
+                                              "${viewModel.histories[calendarIdx].datetime.month}월",
                                               style: BlaTxt.txt12R.copyWith(
                                                   color: BlaColor.grey700),
                                             ),
                                             Text(
-                                              "30",
+                                              "${viewModel.histories[calendarIdx].datetime.day}",
                                               style: BlaTxt.txt20B,
                                             )
                                           ],
                                         ),
                                       ),
                                     SizedBox(width: idx == 0 ? 16 : 46),
-                                    Expanded(child: ReportHistoryTile()),
+                                    Expanded(
+                                        child: ReportHistoryTile(
+                                      report: viewModel
+                                          .histories[calendarIdx].reports[idx],
+                                    )),
                                   ],
                                 ))),
                   ),
