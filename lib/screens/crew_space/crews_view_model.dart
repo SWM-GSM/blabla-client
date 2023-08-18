@@ -9,8 +9,8 @@ import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 class CrewsViewModel with ChangeNotifier {
   final api = API();
 
-  List<CrewSimple> _myCrewList = [];
-  List<CrewSimple> get myCrewList => _myCrewList;
+  List<CrewSimple>? _myCrewList;
+  List<CrewSimple>? get myCrewList => _myCrewList;
 
   /* 개별 크루 스페이스 */
   late int _crewId;
