@@ -221,21 +221,30 @@ class CrewsReportWidget extends StatelessWidget {
                       )
                     ],
                   )
-                : Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      const CircularProgressIndicator(
-                        strokeWidth: 8,
-                        color: BlaColor.orange,
+                : Row(
+                  children: [
+                    Expanded(
+                      child: Container(
+                        padding: const EdgeInsets.only(right: 20),
+                        child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              const CircularProgressIndicator(
+                                strokeWidth: 8,
+                                color: BlaColor.orange,
+                              ),
+                              const SizedBox(height: 16),
+                              Text(
+                                "리포트 생성중...",
+                                style: BlaTxt.txt12SB.copyWith(color: BlaColor.grey700),
+                              ),
+                            ],
+                          ),
                       ),
-                      const SizedBox(height: 16),
-                      Text(
-                        "리포트 생성중...",
-                        style: BlaTxt.txt12SB.copyWith(color: BlaColor.grey700),
-                      ),
-                    ],
-                  ))
+                    ),
+                  ],
+                ))
       },
     );
   }

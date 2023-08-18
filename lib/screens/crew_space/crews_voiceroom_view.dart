@@ -285,14 +285,14 @@ class _CrewsVoiceroomViewState extends State<CrewsVoiceroomView> {
                     final path = await stopRecord() ?? "";
                     print("저장 경로 $path");
                     if (path != "" && await viewModel.uploadVoiceFile(path)) {
+                      leave();
+                      await viewModel.getReports();
                       if (context.mounted) {
                         Navigator.pop(context);
                       } else {
                         showToast("파일 업로드에 실패했습니다");
                       }
                     }
-                    leave();
-                    await viewModel.getReports();
                   },
                 ),
               ],

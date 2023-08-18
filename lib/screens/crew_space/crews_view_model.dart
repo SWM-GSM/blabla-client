@@ -78,7 +78,7 @@ class CrewsViewModel with ChangeNotifier {
   }
 
   Future<void> getReports() async {
-    _reportList = await api.getReports(_crewId);
+    _reportList = [...await api.getReports(_crewId)];
     notifyListeners();
   }
 
