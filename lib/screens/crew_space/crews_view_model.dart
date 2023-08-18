@@ -34,6 +34,7 @@ class CrewsViewModel with ChangeNotifier {
       DateTime(selectedDate.year, selectedDate.month, selectedDate.day)];
 
   /* 보이스룸 */
+  late final int myId;
   late String _channelId;
   String get channelId => _channelId;
   List<int> _voiceRoomUsers = [];
@@ -43,6 +44,7 @@ class CrewsViewModel with ChangeNotifier {
 
   CrewsViewModel() {
     init();
+    getMyId();
   }
 
   void init() async {
@@ -141,6 +143,11 @@ class CrewsViewModel with ChangeNotifier {
     }
   }
 
+  void getMyId() async {
+    myId = await api.getMyId();
+    notifyListeners();
+  }
+
   void setChannelId() {
     _channelId = "crew-$_crewId";
     notifyListeners();
@@ -149,6 +156,8 @@ class CrewsViewModel with ChangeNotifier {
   Future<String> getAgoraToken(bool isActivated) async {
     final Agora agora = await api.getAgoraToken(crewId, isActivated);
     _createReportId = agora.reportId;
+    print("[API] ${agora.expiresIn}");
+    print("[API] ${agora.channelId}");
     return agora.token;
   }
 

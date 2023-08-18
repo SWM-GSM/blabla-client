@@ -171,7 +171,8 @@ class CrewsMainView extends StatelessWidget {
                               MaterialPageRoute(
                                   builder: (context) => CrewsVoiceroomView(
                                       token: token,
-                                      channelId: viewModel.channelId)));
+                                      channelId: viewModel.channelId,
+                                      myId: viewModel.myId)));
                         }
                       } else if (permission ==
                           PermissionStatus.permanentlyDenied) {

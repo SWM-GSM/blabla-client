@@ -375,6 +375,19 @@ class API {
     }
   }
 
+  Future<int> getMyId() async {
+    const storage = FlutterSecureStorage();
+    final res = await api("$baseUrl/members/my-id", HttpMethod.get,
+        token: "Bearer ${await storage.read(key: "accessToken")}",
+        needCheck: true);
+    print(jsonDecode(utf8.decode(res.bodyBytes)));
+    if (res.statusCode == 200) {
+      return jsonDecode(utf8.decode(res.bodyBytes))["data"]["id"];
+    } else {
+      throw Exception("http error :(");
+    }
+  }
+
   Future<Agora> getAgoraToken(int crewId, bool isActivated) async {
     const storage = FlutterSecureStorage();
     final res = await api("$baseUrl/crews/$crewId/voice-room", HttpMethod.post,

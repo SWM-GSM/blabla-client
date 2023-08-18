@@ -13,9 +13,13 @@ import 'package:provider/provider.dart';
 
 class CrewsVoiceroomView extends StatefulWidget {
   const CrewsVoiceroomView(
-      {super.key, required this.token, required this.channelId});
+      {super.key,
+      required this.token,
+      required this.channelId,
+      required this.myId});
   final String token;
   final String channelId;
+  final int myId;
 
   @override
   State<CrewsVoiceroomView> createState() => _CrewsVoiceroomViewState();
@@ -51,13 +55,12 @@ class _CrewsVoiceroomViewState extends State<CrewsVoiceroomView> {
   }
 
   void join() async {
-    print(widget.channelId);
     await _engine.leaveChannel();
     await _engine.joinChannel(
         "007eJxTYEjzst4bndC+QCL2+Y1vRXO3PBdNTZ4mW7Xm7PkKXZnbXvkKDMaW5gapKeZmyWZpRiaphmZJJhbGZkkWFoYpKSnGacaWCg13UxoCGRl4S5RYGBkgEMRnZ0guSi3XNTRkYAAArWwfYg==",
         widget.channelId,
         null,
-        0); // 수정 - 유저 아이디
+        widget.myId);
     await startRecord();
     late List<int> users;
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -86,7 +89,7 @@ class _CrewsVoiceroomViewState extends State<CrewsVoiceroomView> {
   void addAgoraEventHandler() {
     _engine.setEventHandler(RtcEngineEventHandler(
       error: (code) {
-        print("[TEST] error: $code");
+        print("[H-TEST] error: $code");
         setState(() {});
       },
       joinChannelSuccess: (channel, uid, elapsed) {
@@ -96,9 +99,9 @@ class _CrewsVoiceroomViewState extends State<CrewsVoiceroomView> {
           Provider.of<CrewsViewModel>(context, listen: false).addUser(uid);
           users = Provider.of<CrewsViewModel>(context, listen: false)
               .tempGetUsers();
-          print("TEST 유저수 체크 ${users.length}");
+          print("[H-TEST] 유저수 체크 ${users.length}");
         });
-        print("[TEST] joinChannelSuccess: $channel, $uid, $elapsed, $users");
+        print("[H-TEST] joinChannelSuccess: $channel, $uid, $elapsed, $users");
       },
       userJoined: (uid, elapsed) {
         late List<int> users;
@@ -106,21 +109,21 @@ class _CrewsVoiceroomViewState extends State<CrewsVoiceroomView> {
           Provider.of<CrewsViewModel>(context, listen: false).addUser(uid);
           users = Provider.of<CrewsViewModel>(context, listen: false)
               .tempGetUsers();
-          print("TEST 유저수 체크 ${users.length}");
+          print("[H-TEST] 유저수 체크 ${users.length}");
         });
-        print("[TEST] userJoined: $uid, $elapsed, $users");
+        print("[[H-TEST] userJoined: $uid, $elapsed, $users");
       },
       leaveChannel: (stats) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
           Provider.of<CrewsViewModel>(context, listen: false).clearUser();
         });
-        print("[TEST] leaveChannel: $stats");
+        print("[H-TEST] leaveChannel: ${stats.userCount}");
       },
       userOffline: (uid, reason) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
           Provider.of<CrewsViewModel>(context, listen: false).removeUser(uid);
         });
-        print("[TEST] userOffline: $uid, $reason");
+        print("[H-TEST] userOffline: $uid, $reason");
       },
     ));
   }
