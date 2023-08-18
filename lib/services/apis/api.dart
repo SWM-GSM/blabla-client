@@ -174,16 +174,18 @@ class API {
     final res = await api("$baseUrl/oauth/login/$loginType", HttpMethod.post,
         token: await storage.read(key: "socialToken"));
     if (res.statusCode == 200) {
-      print("로그인: ${jsonDecode(utf8.decode(res.bodyBytes))}");
-      if (jsonDecode(res.body)["success"]) {
+      print("[Login] res.body: ${jsonDecode(utf8.decode(res.bodyBytes))}");
+      if (jsonDecode(res.body)["success"]) { // 이미 가입된 유저
         await saveToken(res);
         return true;
-      } else {
-        return false;
+      } else { // 알 수 없는 에러
+        throw Error();
       }
     } else {
-      print(res.body);
-      throw jsonDecode(res.body)["code"];
+      print(
+          "[Login - res.statusCode not 200] res.body:  ${jsonDecode(utf8.decode(res.bodyBytes))}");
+      return false; // 가입되지 않은 유저
+      //throw jsonDecode(res.body)["code"];
     }
   }
 
