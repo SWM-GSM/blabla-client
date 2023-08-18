@@ -59,7 +59,8 @@ class _CrewsVoiceroomViewState extends State<CrewsVoiceroomView> {
   void join() async {
     await _engine.leaveChannel();
     await _engine.joinChannel(
-        "007eJxTYEjzst4bndC+QCL2+Y1vRXO3PBdNTZ4mW7Xm7PkKXZnbXvkKDMaW5gapKeZmyWZpRiaphmZJJhbGZkkWFoYpKSnGacaWCg13UxoCGRl4S5RYGBkgEMRnZ0guSi3XNTRkYAAArWwfYg==",
+        widget
+            .token, // "007eJxTYEjzst4bndC+QCL2+Y1vRXO3PBdNTZ4mW7Xm7PkKXZnbXvkKDMaW5gapKeZmyWZpRiaphmZJJhbGZkkWFoYpKSnGacaWCg13UxoCGRl4S5RYGBkgEMRnZ0guSi3XNTRkYAAArWwfYg==",
         widget.channelId,
         null,
         widget.myId);
@@ -93,6 +94,19 @@ class _CrewsVoiceroomViewState extends State<CrewsVoiceroomView> {
       error: (code) {
         print("[H-TEST] error: $code");
         setState(() {});
+      },
+      apiCallExecuted: (error, api, result) {
+        print("[H-TEST] apiCallExecuted: $error, $api, $result");
+      },
+      rejoinChannelSuccess: (channel, uid, elapsed) {
+        late List<int> users;
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          Provider.of<CrewsViewModel>(context, listen: false).addUser(uid);
+          users = Provider.of<CrewsViewModel>(context, listen: false)
+              .tempGetUsers();
+          print("[H-TEST] 유저수 체크 ${users.length}");
+        });
+        print("[H-TEST] rejoinChannelSuccess: $channel, $uid, $elapsed");
       },
       joinChannelSuccess: (channel, uid, elapsed) {
         // isActivated
