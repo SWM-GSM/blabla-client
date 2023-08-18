@@ -31,7 +31,7 @@ class _CrewsVoiceroomViewState extends State<CrewsVoiceroomView> {
   final recorder = FlutterSoundRecorder();
 
   Future<void> initRecorder() async {
-    recorder.openRecorder();
+    await recorder.openRecorder();
   }
 
   Future<void> startRecord() async {
@@ -279,6 +279,7 @@ class _CrewsVoiceroomViewState extends State<CrewsVoiceroomView> {
                       }
                     }
                     leave();
+                    await viewModel.getReports();
                   },
                 ),
               ],
