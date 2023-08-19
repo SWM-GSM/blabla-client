@@ -27,11 +27,11 @@ class CrewsJoinedView extends StatelessWidget {
         body: SafeArea(
             child: viewModel.myCrewList != null && viewModel.myCrewList!.isEmpty
                 ? Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Expanded(
-                      child: Center(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        child: Center(
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
@@ -48,8 +48,8 @@ class CrewsJoinedView extends StatelessWidget {
                               ),
                               Text(
                                 "아직 가입한 크루가 없어요!\n직접 크루를 생성하거나\n크루에 가입해보세요!",
-                                style:
-                                    BlaTxt.txt14R.copyWith(color: BlaColor.grey800),
+                                style: BlaTxt.txt14R
+                                    .copyWith(color: BlaColor.grey800),
                                 textAlign: TextAlign.center,
                               ),
                               const SizedBox(
@@ -58,9 +58,9 @@ class CrewsJoinedView extends StatelessWidget {
                             ],
                           ),
                         ),
-                    ),
-                  ],
-                )
+                      ),
+                    ],
+                  )
                 : GridView.count(
                     padding: const EdgeInsets.symmetric(
                         vertical: 20, horizontal: 20),
@@ -82,17 +82,30 @@ class CrewsJoinedView extends StatelessWidget {
                             viewModel.myCrewList!.length,
                             (idx) => GestureDetector(
                                   onTap: () async {
-                                    await viewModel
-                                        .initCrew(viewModel.myCrewList![idx].id,
-                                            viewModel.myCrewList![idx].name)
-                                        .then((value) {
-                                      Navigator.of(context, rootNavigator: true)
-                                          .push(MaterialPageRoute(
-                                              settings: const RouteSettings(
-                                                  name: "/CrewsMainView"),
-                                              builder: (context) =>
-                                                  CrewsMainView()));
-                                    });
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => CrewsMainView(
+                                                  crewId: viewModel
+                                                      .myCrewList![idx].id,
+                                                  crewName: viewModel
+                                                      .myCrewList![idx].name,
+                                                )));
+                                    await viewModel.initCrew(
+                                        viewModel.myCrewList![idx].id,
+                                        viewModel.myCrewList![idx].name);
+                                    // await viewModel
+                                    //     .initCrew(viewModel.myCrewList![idx].id,
+                                    //         viewModel.myCrewList![idx].name)
+                                    //     .then((value) {
+
+                                    //   Navigator.of(context, rootNavigator: true)
+                                    //       .push(MaterialPageRoute(context,
+                                    //           settings: const RouteSettings(
+                                    //               name: "/CrewsMainView"),
+                                    //           builder: (context) =>
+                                    //               CrewsMainView()));
+                                    // });
                                   },
                                   child: Stack(
                                     children: [

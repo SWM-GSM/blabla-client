@@ -13,6 +13,7 @@ class CrewsViewModel with ChangeNotifier {
   List<CrewSimple>? get myCrewList => _myCrewList;
 
   /* 개별 크루 스페이스 */
+  bool _isLoading = true;
   late int _crewId;
   late String _crewName;
   List<Report> _reportList = [];
@@ -22,6 +23,7 @@ class CrewsViewModel with ChangeNotifier {
   Map<DateTime, List<Schedule>> _schedulesForCalendar = {};
   DateTime _selectedDate = DateTime.now();
 
+  bool get isLoading => _isLoading;
   int get crewId => _crewId;
   String get crewName => _crewName;
   List<Report> get reportList => _reportList;
@@ -65,6 +67,12 @@ class CrewsViewModel with ChangeNotifier {
       getUpcomingSchedule(),
       getSchedules(),
     ]);
+    setLoading(false);
+  }
+
+  void setLoading(bool isLoading) async {
+    _isLoading = isLoading;
+    notifyListeners();
   }
 
   void setCrewId(int input) {
