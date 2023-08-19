@@ -22,6 +22,19 @@ enum CrewProfile {
   cooking,
   exercise,
   book,
+  cat,
+  culture,
+  develop,
+  dog,
+  friend,
+  food,
+  picture,
+  play,
+  sports,
+  study,
+  trip,
+  pen,
+  love,
 }
 
 enum CrewCycle {

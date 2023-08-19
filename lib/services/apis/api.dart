@@ -579,6 +579,7 @@ class API {
       "$langUrl/contents",
       HttpMethod.get,
       token: "Bearer ${await storage.read(key: "accessToken")}",
+      needCheck: true,
     );
     if (res.statusCode == 200) {
       print(jsonDecode(utf8.decode(res.bodyBytes)));
@@ -614,6 +615,7 @@ class API {
     final res = await api(
         "$baseUrl/contents/$contentId/feedback", HttpMethod.post,
         token: "Bearer ${await storage.read(key: "accessToken")}",
+        needCheck: true,
         body: jsonEncode({"userAnswer": userAnswer}));
     if (res.statusCode == 200) {
       return ContentFeedback.fromJson(
