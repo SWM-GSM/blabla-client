@@ -1,10 +1,12 @@
 import 'dart:convert';
+import 'package:blabla/models/agora.dart';
 import 'package:blabla/models/content.dart';
 import 'package:blabla/models/content_category.dart';
 import 'package:blabla/models/content_feedback.dart';
 import 'package:blabla/models/country.dart';
 import 'package:blabla/models/crew.dart';
 import 'package:blabla/models/emoji_name_tag.dart';
+import 'package:blabla/models/history.dart';
 import 'package:blabla/models/interest.dart';
 import 'package:blabla/models/level.dart';
 import 'package:blabla/models/report.dart';
@@ -162,12 +164,14 @@ class API {
       await saveToken(res);
       return true;
     } else {
+      print(res.body);
       return false;
     }
   }
 
   Future<bool> login(String loginType) async {
     const storage = FlutterSecureStorage();
+    print("[Login] socialToken: ${await storage.read(key: "socialToken")}");
     final res = await api("$baseUrl/oauth/login/$loginType", HttpMethod.post,
         token: await storage.read(key: "socialToken"));
     if (res.statusCode == 200) {
@@ -180,9 +184,9 @@ class API {
       }
     } else {
       print(
-          "[Login - res.statusCode not 200] res.body:  ${jsonDecode(utf8.decode(res.bodyBytes))}");
-      return false; // 가입되지 않은 유저
-      //throw jsonDecode(res.body)["code"];
+          "[Login - res.statusCode not 200] res.body: ${jsonDecode(utf8.decode(res.bodyBytes))}");
+      // return false; // 가입되지 않은 유저
+      throw jsonDecode(res.body)["code"];
     }
   }
 
@@ -277,7 +281,7 @@ class API {
     // 수정 - 테스트 API
     const storage = FlutterSecureStorage();
     // final res = await api("$testUrl/contents/today", HttpMethod.get,
-    final res = await api("$korTestUrl/contents/today", HttpMethod.get,
+    final res = await api("$korBaseUrl/contents/today", HttpMethod.get,
         token: "Bearer ${await storage.read(key: "accessToken")}",
         needCheck: true);
     // print(jsonDecode(utf8.decode(res.bodyBytes)));
@@ -336,6 +340,28 @@ class API {
     }
   }
 
+  Future<bool> joinCrew(int crewId, bool autoApproval,
+      {String msg = ""}) async {
+    const storage = FlutterSecureStorage();
+    late final http.Response res;
+    if (autoApproval) {
+      res = await api("$baseUrl/crews/$crewId/join", HttpMethod.post,
+          token: "Bearer ${await storage.read(key: "accessToken")}",
+          needCheck: true);
+    } else {
+      res = await api("$baseUrl/crews/$crewId/join", HttpMethod.post,
+          body: jsonEncode({"message": msg}),
+          token: "Bearer ${await storage.read(key: "accessToken")}",
+          needCheck: true);
+    }
+    if (res.statusCode == 200) {
+      return jsonDecode(utf8.decode(res.bodyBytes))["success"];
+    } else {
+      print(jsonDecode(utf8.decode(res.bodyBytes)));
+      throw Exception("http error :(");
+    }
+  }
+
   /* 크루 스페이스 */
   Future<List<Report>> getReports(int crewId) async {
     const storage = FlutterSecureStorage();
@@ -348,6 +374,67 @@ class API {
           .map((e) => Report.fromJson(e))
           .toList();
     } else {
+      print(res.body);
+      throw Exception("http error :(");
+    }
+  }
+
+  Future<int> getMyId() async {
+    const storage = FlutterSecureStorage();
+    final res = await api("$baseUrl/members/my-id", HttpMethod.get,
+        token: "Bearer ${await storage.read(key: "accessToken")}",
+        needCheck: true);
+    print(jsonDecode(utf8.decode(res.bodyBytes)));
+    if (res.statusCode == 200) {
+      return jsonDecode(utf8.decode(res.bodyBytes))["data"]["id"];
+    } else {
+      throw Exception("http error :(");
+    }
+  }
+
+  Future<Agora> getAgoraToken(int crewId, bool isActivated) async {
+    const storage = FlutterSecureStorage();
+    final res = await api("$baseUrl/crews/$crewId/voice-room", HttpMethod.post,
+        token: "Bearer ${await storage.read(key: "accessToken")}",
+        body: jsonEncode({"isActivated": isActivated}),
+        needCheck: true);
+    if (res.statusCode == 200) {
+      return Agora.fromJson(jsonDecode(utf8.decode(res.bodyBytes))["data"]);
+    } else {
+      print(res.body);
+      throw Exception("http error :(");
+    }
+  }
+
+  Future<bool> uploadVoiceFile(int reportId, String path) async {
+    const storage = FlutterSecureStorage();
+    final dio = Dio();
+    final formData =
+        FormData.fromMap({"file": MultipartFile.fromFileSync(path)});
+
+    final res = await dio.post("$baseUrl/crews/reports/$reportId/voice-file",
+        data: formData,
+        options: Options(headers: {
+          "Authorization": "Bearer ${await storage.read(key: "accessToken")}",
+        }));
+    print(res.data);
+    if (res.statusCode == 200) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  Future<bool> requestCreateReport(int reportId) async {
+    const storage = FlutterSecureStorage();
+    final res = await api(
+        "$baseUrl/crews/reports/$reportId/request", HttpMethod.post,
+        token: "Bearer ${await storage.read(key: "accessToken")}",
+        needCheck: true);
+    if (res.statusCode == 200) {
+      return true;
+    } else {
+      print(res.body);
       throw Exception("http error :(");
     }
   }
@@ -493,6 +580,7 @@ class API {
       "$langUrl/contents",
       HttpMethod.get,
       token: "Bearer ${await storage.read(key: "accessToken")}",
+      needCheck: true,
     );
     if (res.statusCode == 200) {
       print(jsonDecode(utf8.decode(res.bodyBytes)));
@@ -528,6 +616,7 @@ class API {
     final res = await api(
         "$baseUrl/contents/$contentId/feedback", HttpMethod.post,
         token: "Bearer ${await storage.read(key: "accessToken")}",
+        needCheck: true,
         body: jsonEncode({"userAnswer": userAnswer}));
     if (res.statusCode == 200) {
       return ContentFeedback.fromJson(
@@ -555,6 +644,25 @@ class API {
       return true;
     } else {
       return false;
+    }
+  }
+
+  /* 히스토리 */
+  Future<List<History>> getHistory() async {
+    const storage = FlutterSecureStorage();
+    final res = await api(
+      "$baseUrl/reports/history",
+      HttpMethod.get,
+      token: "Bearer ${await storage.read(key: "accessToken")}",
+    );
+    if (res.statusCode == 200) {
+      return (jsonDecode(utf8.decode(res.bodyBytes))["data"]["histories"]
+              as List)
+          .map((e) => History.fromJson(e))
+          .toList();
+    } else {
+      print(jsonDecode(utf8.decode(res.bodyBytes)));
+      throw Exception("http error :(");
     }
   }
 }

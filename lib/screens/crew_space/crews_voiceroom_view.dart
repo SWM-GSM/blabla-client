@@ -1,15 +1,168 @@
+import 'package:agora_rtc_engine/rtc_engine.dart';
+import 'package:blabla/screens/crew_space/crews_view_model.dart';
 import 'package:blabla/screens/crew_space/widgets/voiceroom_profile_widget.dart';
 import 'package:blabla/styles/colors.dart';
 import 'package:blabla/styles/txt_style.dart';
+import 'package:blabla/utils/change_into_two_digit.dart';
+import 'package:blabla/utils/dotenv.dart';
 import 'package:country_flags/country_flags.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_sound/public/flutter_sound_recorder.dart';
+import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:provider/provider.dart';
 
-class CrewsVoiceroomView extends StatelessWidget {
-  const CrewsVoiceroomView({super.key});
+class CrewsVoiceroomView extends StatefulWidget {
+  const CrewsVoiceroomView(
+      {super.key,
+      required this.token,
+      required this.channelId,
+      required this.myId});
+  final String token;
+  final String channelId;
+  final int myId;
+
+  @override
+  State<CrewsVoiceroomView> createState() => _CrewsVoiceroomViewState();
+}
+
+class _CrewsVoiceroomViewState extends State<CrewsVoiceroomView> {
+  late RtcEngine _engine;
+  late String token;
+  final recorder = FlutterSoundRecorder();
+
+  Future<void> initRecorder() async {
+    await recorder.openRecorder();
+    recorder.setSubscriptionDuration(const Duration(milliseconds: 500));
+  }
+
+  Future<void> startRecord() async {
+    await recorder.startRecorder(toFile: 'crew.wav');
+  }
+
+  Future<String?> stopRecord() async {
+    String? path = await recorder.stopRecorder();
+    print(path);
+    return path;
+  }
+
+  Future<void> initAgora() async {
+    _engine = await RtcEngine.create(env["AGORA_APP_ID"]);
+    await _engine.enableAudio();
+    await _engine.setEnableSpeakerphone(true);
+    await _engine.setChannelProfile(ChannelProfile.LiveBroadcasting);
+    await _engine.setClientRole(ClientRole.Broadcaster);
+    addAgoraEventHandler();
+    join();
+  }
+
+  void join() async {
+    await _engine.leaveChannel();
+    await _engine.joinChannel(
+        widget
+            .token, // "007eJxTYEjzst4bndC+QCL2+Y1vRXO3PBdNTZ4mW7Xm7PkKXZnbXvkKDMaW5gapKeZmyWZpRiaphmZJJhbGZkkWFoYpKSnGacaWCg13UxoCGRl4S5RYGBkgEMRnZ0guSi3XNTRkYAAArWwfYg==",
+        widget.channelId,
+        null,
+        widget.myId);
+    await startRecord();
+    late List<int> users;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      users =
+          Provider.of<CrewsViewModel>(context, listen: false).tempGetUsers();
+      print("TEST 유저수 체크 ${users.length}");
+    });
+  }
+
+  void leave() async {
+    late List<int> users;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      users =
+          Provider.of<CrewsViewModel>(context, listen: false).tempGetUsers();
+      print("TEST - 떠나기");
+      print(users.length);
+      if (users.length <= 1) {
+        print("TEST - 한명 남음");
+        Provider.of<CrewsViewModel>(context, listen: false)
+            .requestCreateReport();
+      }
+    });
+    await _engine.leaveChannel();
+  }
+
+  void addAgoraEventHandler() {
+    _engine.setEventHandler(RtcEngineEventHandler(
+      error: (code) {
+        print("[H-TEST] error: $code");
+        setState(() {});
+      },
+      apiCallExecuted: (error, api, result) {
+        print("[H-TEST] apiCallExecuted: $error, $api, $result");
+      },
+      rejoinChannelSuccess: (channel, uid, elapsed) {
+        late List<int> users;
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          Provider.of<CrewsViewModel>(context, listen: false).addUser(uid);
+          users = Provider.of<CrewsViewModel>(context, listen: false)
+              .tempGetUsers();
+          print("[H-TEST] 유저수 체크 ${users.length}");
+        });
+        print("[H-TEST] rejoinChannelSuccess: $channel, $uid, $elapsed");
+      },
+      joinChannelSuccess: (channel, uid, elapsed) {
+        // isActivated
+        late List<int> users;
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          Provider.of<CrewsViewModel>(context, listen: false).addUser(uid);
+          users = Provider.of<CrewsViewModel>(context, listen: false)
+              .tempGetUsers();
+          print("[H-TEST] 유저수 체크 ${users.length}");
+        });
+        print("[H-TEST] joinChannelSuccess: $channel, $uid, $elapsed, $users");
+      },
+      userJoined: (uid, elapsed) {
+        late List<int> users;
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          Provider.of<CrewsViewModel>(context, listen: false).addUser(uid);
+          users = Provider.of<CrewsViewModel>(context, listen: false)
+              .tempGetUsers();
+          print("[H-TEST] 유저수 체크 ${users.length}");
+        });
+        print("[[H-TEST] userJoined: $uid, $elapsed, $users");
+      },
+      leaveChannel: (stats) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          Provider.of<CrewsViewModel>(context, listen: false).clearUser();
+        });
+        print("[H-TEST] leaveChannel: ${stats.userCount}");
+      },
+      userOffline: (uid, reason) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          Provider.of<CrewsViewModel>(context, listen: false).removeUser(uid);
+        });
+        print("[H-TEST] userOffline: $uid, $reason");
+      },
+    ));
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    initRecorder();
+    initAgora();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    // _users.clear();
+    recorder.closeRecorder();
+    _engine.leaveChannel();
+    _engine.destroy();
+  }
 
   @override
   Widget build(BuildContext context) {
+    final viewModel = Provider.of<CrewsViewModel>(context);
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 64,
@@ -33,13 +186,6 @@ class CrewsVoiceroomView extends StatelessWidget {
           ],
         ),
         centerTitle: true,
-        leading: GestureDetector(
-          onTap: () => Navigator.pop(context),
-          child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: SvgPicture.asset("assets/icons/ic_24_arrow_down.svg")),
-        ),
-        leadingWidth: 64,
       ),
       body: SafeArea(
           child: GridView.count(
@@ -126,7 +272,18 @@ class CrewsVoiceroomView extends StatelessWidget {
           const SizedBox(
             height: 4,
           ),
-          Text("01:23:22", style: BlaTxt.txt16B),
+          StreamBuilder<RecordingDisposition>(
+            stream: recorder.onProgress,
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                return Text(
+                    "${changeIntoTwoDigit(snapshot.data!.duration.inHours.remainder(60))}:${changeIntoTwoDigit(snapshot.data!.duration.inMinutes.remainder(60))}:${changeIntoTwoDigit(snapshot.data!.duration.inSeconds.remainder(60))}",
+                    style: BlaTxt.txt16B);
+              } else {
+                return Text("00:00:00", style: BlaTxt.txt16B);
+              }
+            },
+          ),
           Padding(
             padding: const EdgeInsets.only(top: 20),
             child: Wrap(
@@ -135,7 +292,23 @@ class CrewsVoiceroomView extends StatelessWidget {
               children: [
                 voiceBtn("speaker", BlaColor.grey200, () {}),
                 voiceBtn("mic_on", BlaColor.grey200, () {}),
-                voiceBtn("call_end", BlaColor.red, () {}),
+                voiceBtn(
+                  "call_end",
+                  BlaColor.red,
+                  () async {
+                    final path = await stopRecord() ?? "";
+                    print("저장 경로 $path");
+                    if (path != "" && await viewModel.uploadVoiceFile(path)) {
+                      leave();
+                      await viewModel.getReports();
+                      if (context.mounted) {
+                        Navigator.pop(context);
+                      } else {
+                        showToast("파일 업로드에 실패했습니다");
+                      }
+                    }
+                  },
+                ),
               ],
             ),
           )
@@ -146,7 +319,7 @@ class CrewsVoiceroomView extends StatelessWidget {
 
   Widget voiceBtn(String icon, Color color, onTap) {
     return GestureDetector(
-      onTap: () {},
+      onTap: onTap,
       child: Container(
         height: 56,
         width: 56,

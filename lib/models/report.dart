@@ -28,8 +28,8 @@ class ReportDetail {
   List<MemberSimple> members;
   String bubbleChart;
   List<Word> words;
-  double korRatio;
-  double engRatio;
+  int korRatio;
+  int engRatio;
   List<Feedback> feedbacks;
 
   ReportDetail({

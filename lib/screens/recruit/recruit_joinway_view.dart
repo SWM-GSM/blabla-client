@@ -19,8 +19,8 @@ class RecruitJoinwayView extends StatelessWidget {
           title: "크루 가입 방식을\n선택해주세요",
           widgets: [
             const SizedBox(height: 22),
-            way(context, "승인 없이 가입", "신청과 동시에 크루에 자동으로 가입됩니다", false),
-            way(context, "승인 후 가입", "크루장의 승인을 받은 후 크루에 가입됩니다", true),
+            way(context, "승인 없이 가입", "신청과 동시에 크루에 자동으로 가입됩니다", true),
+            way(context, "승인 후 가입", "크루장의 승인을 받은 후 크루에 가입됩니다", false),
           ],
         ),
       ),

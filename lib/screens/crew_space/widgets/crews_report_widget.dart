@@ -17,8 +17,8 @@ class CrewsReportWidget extends StatelessWidget {
       required this.reportStatus,
       required this.report});
   final ReportType reportType;
-  final bool reportStatus; // 임시 생성 중
-  final Report report;
+  final bool reportStatus;
+  final Report? report;
 
   @override
   Widget build(BuildContext context) {
@@ -26,10 +26,10 @@ class CrewsReportWidget extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         if (reportStatus) {
-          viewModel.setReport(report.id).then((value) => Navigator.push(
+          viewModel.setReport(report!.id).then((value) => Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) => CrewsReportDetailView())));
+                  builder: (context) => const CrewsReportDetailView())));
         }
       },
       child: switch (reportType) {
@@ -53,13 +53,13 @@ class CrewsReportWidget extends StatelessWidget {
                             spacing: -8,
                             direction: Axis.horizontal,
                             children:
-                                List.generate(report.members.length, (idx) {
+                                List.generate(report!.members.length, (idx) {
                               if (idx < 3) {
                                 return ProfileWidget(
                                   profileSize: 16,
-                                  profile: report.members[idx].profileImage,
+                                  profile: report!.members[idx].profileImage,
                                   bgSize: 32,
-                                  bgColor: Color(0xFFFFF6DE),
+                                  bgColor: BlaColor.lightOrange, // 수정 - 프로필 전용 색상으로 교체 Color(0xFFFFF6DE),
                                 );
                               } else if (idx == 3) {
                                 return Container(
@@ -72,12 +72,12 @@ class CrewsReportWidget extends StatelessWidget {
                                         shape: BoxShape.circle,
                                         color: BlaColor.grey300),
                                     child: Text(
-                                      "+${report.members.length - 3}",
+                                      "+${report!.members.length - 3}",
                                       style: BlaTxt.txt12B
                                           .copyWith(color: BlaColor.grey700),
                                     ));
                               } else {
-                                return SizedBox();
+                                return const SizedBox();
                               }
                             }),
                           ),
@@ -89,7 +89,7 @@ class CrewsReportWidget extends StatelessWidget {
                         style: BlaTxt.txt12R.copyWith(color: BlaColor.grey700),
                       ),
                       const SizedBox(height: 4),
-                      Text(report.durationTime, style: BlaTxt.txt12M),
+                      Text(report!.durationTime, style: BlaTxt.txt12M),
                       const SizedBox(
                         height: 12,
                       ),
@@ -100,7 +100,7 @@ class CrewsReportWidget extends StatelessWidget {
                       const SizedBox(height: 4),
                       Text(
                           datetimeToStr(
-                              report.createdAt, StrDatetimeType.dotDelimiter),
+                              report!.createdAt, StrDatetimeType.dotDelimiter),
                           style: BlaTxt.txt12M),
                     ],
                   )
@@ -117,7 +117,7 @@ class CrewsReportWidget extends StatelessWidget {
                       alignment: WrapAlignment.center,
                       crossAxisAlignment: WrapCrossAlignment.center,
                       children: [
-                        CircularProgressIndicator(
+                        const CircularProgressIndicator(
                           strokeWidth: 8,
                           color: BlaColor.orange,
                         ),
@@ -147,12 +147,12 @@ class CrewsReportWidget extends StatelessWidget {
                         direction: Axis.horizontal,
                         children: [
                           Text(
-                            report.members[0].nickname,
+                            report!.members[0].nickname,
                             style: BlaTxt.txt16B,
                           ),
-                          if (report.members.length > 1)
+                          if (report!.members.length > 1)
                             Text(
-                              " 외 ${report.members.length - 1}명",
+                              " 외 ${report!.members.length - 1}명",
                               style: BlaTxt.txt16R,
                             ),
                         ],
@@ -166,11 +166,11 @@ class CrewsReportWidget extends StatelessWidget {
                               direction: Axis.horizontal,
                               spacing: -6,
                               children: List.generate(
-                                  report.members.length,
+                                  report!.members.length,
                                   (idx) => ProfileWidget(
                                         profileSize: 24,
                                         profile:
-                                            report.members[idx].profileImage,
+                                            report!.members[idx].profileImage,
                                         bgSize: 48,
                                         bgColor: BlaColor.lightOrange,
                                       ))),
@@ -191,7 +191,7 @@ class CrewsReportWidget extends StatelessWidget {
                                   height: 4,
                                 ),
                                 Text(
-                                  datetimeToStr(report.createdAt,
+                                  datetimeToStr(report!.createdAt,
                                       StrDatetimeType.dotDelimiter),
                                   style: BlaTxt.txt12M,
                                 ),
@@ -211,7 +211,7 @@ class CrewsReportWidget extends StatelessWidget {
                                   height: 4,
                                 ),
                                 Text(
-                                  report.durationTime,
+                                  report!.durationTime,
                                   style: BlaTxt.txt12M,
                                 ),
                               ],
@@ -221,21 +221,30 @@ class CrewsReportWidget extends StatelessWidget {
                       )
                     ],
                   )
-                : Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      const CircularProgressIndicator(
-                        strokeWidth: 8,
-                        color: BlaColor.orange,
+                : Row(
+                  children: [
+                    Expanded(
+                      child: Container(
+                        padding: const EdgeInsets.only(right: 20),
+                        child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              const CircularProgressIndicator(
+                                strokeWidth: 8,
+                                color: BlaColor.orange,
+                              ),
+                              const SizedBox(height: 16),
+                              Text(
+                                "리포트 생성중...",
+                                style: BlaTxt.txt12SB.copyWith(color: BlaColor.grey700),
+                              ),
+                            ],
+                          ),
                       ),
-                      const SizedBox(height: 16),
-                      Text(
-                        "리포트 생성중...",
-                        style: BlaTxt.txt12SB.copyWith(color: BlaColor.grey700),
-                      ),
-                    ],
-                  ))
+                    ),
+                  ],
+                ))
       },
     );
   }

@@ -19,14 +19,16 @@ class CrewTileWidget extends StatelessWidget {
     final viewModel = Provider.of<CrewViewModel>(context);
     if (tileType == CrewTileType.home) {
       return GestureDetector(
-        onTap: () async {
+        onTap: () {
           if (crew != null) {
-            await viewModel.getCrewDetail(crew.id).then((value) =>
-                Navigator.of(context, rootNavigator: true)
-                    .push(MaterialPageRoute(
-                        builder: (context) => CrewDetailView(
-                              imgWidth: MediaQuery.of(context).size.width,
-                            ))));
+            viewModel.setCrewId(crew.id);
+            Navigator.of(context, rootNavigator: true).push(
+              MaterialPageRoute(
+                builder: (context) => CrewDetailView(
+                  imgWidth: MediaQuery.of(context).size.width,
+                ),
+              ),
+            );
           }
         },
         child: Container(
@@ -76,15 +78,15 @@ class CrewTileWidget extends StatelessWidget {
       );
     } else {
       return GestureDetector(
-        onTap: () async {
-          if (crew != null) {
-            await viewModel.getCrewDetail(crew.id).then((value) =>
-                Navigator.of(context, rootNavigator: true)
-                    .push(MaterialPageRoute(
-                        builder: (context) => CrewDetailView(
-                              imgWidth: MediaQuery.of(context).size.width,
-                            ))));
-          }
+        onTap: () {
+          viewModel.setCrewId(crew.id);
+          Navigator.of(context, rootNavigator: true).push(
+            MaterialPageRoute(
+              builder: (context) => CrewDetailView(
+                imgWidth: MediaQuery.of(context).size.width,
+              ),
+            ),
+          );
         },
         child: Container(
           padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20),

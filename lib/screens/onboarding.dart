@@ -27,32 +27,68 @@ class OnBoarding extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              loginBtn("apple", BlaColor.grey900, () {
-                print("apple btn click");
+              loginBtn("apple", BlaColor.grey900, () async {
+                try {
+                  final socialLoginSuccess =
+                      await Login.apple.service.socialLogin(context);
+                  if (socialLoginSuccess) {
+                    await Login.apple.service.login().then((alreadyJoined) {
+                      // 이미 가입된 유저
+                      if (alreadyJoined) {
+                        Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const Main()),
+                            (route) => false);
+                      } else {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => JoinProfileView()));
+                      }
+                    });
+                  } else {
+                    // 소셜 로그인 실패
+                    throw Exception();
+                  }
+                } catch (e) {
+                  showToast("로그인 실패. 다시 시도해주세요");
+                }
               }),
               loginBtn("google", BlaColor.grey200, () async {
                 try {
-                  await Login.google.service
-                      .socialLogin(context)
-                      .then((value) async {
-                    if (value) {
-                      await Login.google.service.login().then((alreadyJoined) { // 이미 가입된 유저
-                        if (alreadyJoined) {
-                          Navigator.push(context,
-                              MaterialPageRoute(builder: (context) => Main()));
-                        } else {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => JoinProfileView()));
-                        }
-                      });
-                    } else {
-                      showToast("로그인 실패. 다시 시도해주세요");
-                    }
-                  });
+                  final socialLoginSuccess =
+                      await Login.google.service.socialLogin(context);
+                  if (socialLoginSuccess) {
+                    await Login.google.service.login().then((alreadyJoined) {
+                      // 이미 가입된 유저
+                      if (alreadyJoined) {
+                        Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const Main()),
+                            (route) => false);
+                      } else {
+                        throw Exception();
+                      }
+                    });
+                  } else {
+                    // 소셜 로그인 실패
+                    throw Exception();
+                  }
                 } catch (e) {
-                  showToast("로그인 실패. 다시 시도해주세요");
+                  switch (e) {
+                    case "M002":
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => JoinProfileView()));
+                      break;
+                    default:
+                      print(e);
+                      showToast("로그인 실패. 다시 시도해주세요");
+                      break;
+                  }
                 }
               }),
             ],

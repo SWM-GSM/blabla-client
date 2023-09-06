@@ -5,6 +5,7 @@ import 'package:blabla/styles/colors.dart';
 import 'package:blabla/styles/txt_style.dart';
 import 'package:blabla/utils/datetime_to_str.dart';
 import 'package:blabla/widgets/profile_widget.dart';
+import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
@@ -88,7 +89,7 @@ class CrewsReportDetailView extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          viewModel.report.durationTime,
+                          "소요시간",
                           style:
                               BlaTxt.txt14M.copyWith(color: BlaColor.grey700),
                         ),
@@ -124,8 +125,10 @@ class CrewsReportDetailView extends StatelessWidget {
                     ),
                     Wrap(
                         runSpacing: 20,
-                        children: List.generate(viewModel.report.members.length,
-                            (idx) => profileWithName(viewModel.report.members[idx]))),
+                        children: List.generate(
+                            viewModel.report.members.length,
+                            (idx) => profileWithName(
+                                viewModel.report.members[idx]))),
                   ],
                 ),
               ),
@@ -144,8 +147,8 @@ class CrewsReportDetailView extends StatelessWidget {
                     Center(
                       child: Padding(
                         padding: const EdgeInsets.only(top: 20, bottom: 40),
-                        child: Image.asset(
-                          "assets/imgs/img_284_keywords.png",
+                        child: ExtendedImage.network(
+                          viewModel.report.bubbleChart,
                           width: 284,
                         ),
                       ),
@@ -190,10 +193,119 @@ class CrewsReportDetailView extends StatelessWidget {
                     const SizedBox(
                       height: 16,
                     ),
-                    Row(
-                      children: [
-                        Flexible(
-                            flex: viewModel.report.korRatio.toInt(),
+                    if (viewModel.report.korRatio == 100 ||
+                        viewModel.report.engRatio == 100)
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            height: 24,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(12),
+                              color: viewModel.report.korRatio >
+                                      viewModel.report.engRatio
+                                  ? BlaColor.orange
+                                  : BlaColor.green,
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 12,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Container(
+                                width: 8,
+                                height: 8,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: viewModel.report.korRatio >
+                                          viewModel.report.engRatio
+                                      ? BlaColor.orange
+                                      : BlaColor.green,
+                                ),
+                              ),
+                              const SizedBox(
+                                width: 4,
+                              ),
+                              Text(
+                                viewModel.report.korRatio >
+                                        viewModel.report.engRatio
+                                    ? "한국어"
+                                    : "영어",
+                                style: BlaTxt.txt12R
+                                    .copyWith(color: BlaColor.grey800),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(
+                            height: 4,
+                          ),
+                          Text(
+                            viewModel.report.korRatio >
+                                    viewModel.report.engRatio
+                                ? "${viewModel.report.korRatio}%"
+                                : "${viewModel.report.engRatio}%",
+                            style: BlaTxt.txt14B,
+                          ),
+                        ],
+                      )
+                    else
+                      Row(
+                        children: [
+                          Flexible(
+                              flex: viewModel.report.korRatio.toInt(),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Container(
+                                    height: 24,
+                                    decoration: const BoxDecoration(
+                                        borderRadius: BorderRadius.horizontal(
+                                            left: Radius.circular(12),
+                                            right: Radius.circular(4)),
+                                        color: BlaColor.orange),
+                                  ),
+                                  const SizedBox(
+                                    height: 12,
+                                  ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      Container(
+                                        width: 8,
+                                        height: 8,
+                                        decoration: const BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            color: BlaColor.orange),
+                                      ),
+                                      const SizedBox(
+                                        width: 4,
+                                      ),
+                                      Text(
+                                        "한국어",
+                                        style: BlaTxt.txt12R
+                                            .copyWith(color: BlaColor.grey800),
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(
+                                    height: 4,
+                                  ),
+                                  Text(
+                                    "${viewModel.report.korRatio}%",
+                                    style: BlaTxt.txt14B,
+                                  ),
+                                ],
+                              )),
+                          const SizedBox(
+                            width: 4,
+                          ),
+                          Flexible(
+                            flex: viewModel.report.engRatio.toInt(),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -201,9 +313,9 @@ class CrewsReportDetailView extends StatelessWidget {
                                   height: 24,
                                   decoration: const BoxDecoration(
                                       borderRadius: BorderRadius.horizontal(
-                                          left: Radius.circular(12),
-                                          right: Radius.circular(4)),
-                                      color: BlaColor.orange),
+                                          left: Radius.circular(4),
+                                          right: Radius.circular(12)),
+                                      color: BlaColor.green),
                                 ),
                                 const SizedBox(
                                   height: 12,
@@ -217,13 +329,13 @@ class CrewsReportDetailView extends StatelessWidget {
                                       height: 8,
                                       decoration: const BoxDecoration(
                                           shape: BoxShape.circle,
-                                          color: BlaColor.orange),
+                                          color: BlaColor.green),
                                     ),
                                     const SizedBox(
                                       width: 4,
                                     ),
                                     Text(
-                                      "한국어",
+                                      "영어",
                                       style: BlaTxt.txt12R
                                           .copyWith(color: BlaColor.grey800),
                                     ),
@@ -233,63 +345,14 @@ class CrewsReportDetailView extends StatelessWidget {
                                   height: 4,
                                 ),
                                 Text(
-                                  "${viewModel.report.korRatio}%",
+                                  "${viewModel.report.engRatio}%",
                                   style: BlaTxt.txt14B,
                                 ),
                               ],
-                            )),
-                        const SizedBox(
-                          width: 4,
-                        ),
-                        Flexible(
-                          flex: viewModel.report.engRatio.toInt(),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Container(
-                                height: 24,
-                                decoration: const BoxDecoration(
-                                    borderRadius: BorderRadius.horizontal(
-                                        left: Radius.circular(4),
-                                        right: Radius.circular(12)),
-                                    color: BlaColor.green),
-                              ),
-                              const SizedBox(
-                                height: 12,
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Container(
-                                    width: 8,
-                                    height: 8,
-                                    decoration: const BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        color: BlaColor.green),
-                                  ),
-                                  const SizedBox(
-                                    width: 4,
-                                  ),
-                                  Text(
-                                    "영어",
-                                    style: BlaTxt.txt12R
-                                        .copyWith(color: BlaColor.grey800),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(
-                                height: 4,
-                              ),
-                              Text(
-                                "${viewModel.report.engRatio}%",
-                                style: BlaTxt.txt14B,
-                              ),
-                            ],
-                          ),
-                        )
-                      ],
-                    )
+                            ),
+                          )
+                        ],
+                      )
                   ],
                 ),
               ),
@@ -305,13 +368,32 @@ class CrewsReportDetailView extends StatelessWidget {
                         const SizedBox(
                           height: 12,
                         ),
-                        Column(
-                          children: List.generate(
-                            viewModel.report.feedbacks.length,
-                            (idx) => CrewsFeedbackWidget(
-                                feedback: viewModel.report.feedbacks[idx]),
-                          ),
-                        )
+                        viewModel.report.feedbacks.isEmpty
+                            ? SizedBox(
+                              width: MediaQuery.of(context).size.width,
+                              child: Column(
+                                  children: [
+                                    Text(
+                                      "👻",
+                                      style: BlaTxt.txt20BL,
+                                    ),
+                                    const SizedBox(height: 4),
+                                    Text(
+                                      "크루원이 남긴 피드백이 없어요!",
+                                      style: BlaTxt.txt14R
+                                          .copyWith(color: BlaColor.grey800),
+                                    )
+                                  ],
+                                ),
+                            )
+                            : Column(
+                                children: List.generate(
+                                  viewModel.report.feedbacks.length,
+                                  (idx) => CrewsFeedbackWidget(
+                                      feedback:
+                                          viewModel.report.feedbacks[idx]),
+                                ),
+                              )
                       ])),
             ],
           ),
