@@ -1,6 +1,8 @@
 import 'package:blabla/main.dart';
+import 'package:blabla/screens/crew_space/crews_view_model.dart';
 import 'package:blabla/screens/home/crew_detail_view.dart';
 import 'package:blabla/screens/home/crew_view_model.dart';
+import 'package:blabla/screens/home/home_view_model.dart';
 import 'package:blabla/screens/recruit/recruit_view_model.dart';
 import 'package:blabla/styles/colors.dart';
 import 'package:blabla/styles/txt_style.dart';
@@ -13,6 +15,10 @@ class RecruitCompleteView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final viewModel = Provider.of<RecruitViewModel>(context);
+    final homeViewModel =
+        Provider.of<HomeViewModel>(context); // 수정 - 리랙토링 시 삭제 할 수 있는 방향으로 진행
+    final crewsViewModel =
+        Provider.of<CrewsViewModel>(context); // 수정 - 리랙토링 시 삭제 할 수 있는 방향으로 진행
     final crewViewModel =
         Provider.of<CrewViewModel>(context); // 수정 - 리랙토링 시 삭제 할 수 있는 방향으로 진행
     return Scaffold(
@@ -55,7 +61,7 @@ class RecruitCompleteView extends StatelessWidget {
                 GestureDetector(
                   onTap: () {
                     crewViewModel
-                        .getCrewDetail(viewModel.crewId!)
+                        .getCrewDetail(id: viewModel.crewId!)
                         .then((value) {
                       Navigator.push(
                           context,
@@ -81,9 +87,12 @@ class RecruitCompleteView extends StatelessWidget {
                 GestureDetector(
                   onTap: () {
                     viewModel.init();
-                    Navigator.of(context).pushAndRemoveUntil(
+                    homeViewModel.init();
+                    crewsViewModel.init();
+                    Navigator.pushAndRemoveUntil(
+                        context,
                         MaterialPageRoute(builder: (context) => const Main()),
-                        (route) => true);
+                        (route) => false);
                   },
                   child: Container(
                     margin:

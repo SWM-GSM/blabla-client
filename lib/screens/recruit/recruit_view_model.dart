@@ -22,15 +22,28 @@ enum CrewProfile {
   cooking,
   exercise,
   book,
+  cat,
+  culture,
+  develop,
+  dog,
+  friend,
+  food,
+  picture,
+  play,
+  sports,
+  study,
+  trip,
+  pen,
+  love,
 }
 
 enum CrewCycle {
-  free("자율", "FREE"),
-  onceAMonth("월 1회", "ONCEAMONTH"),
-  twiceAMonth("월 2회", "TWICEAMONTH"),
-  onceAWeek("주 1회", "ONCEAWEEK"),
-  twiceAWeek("주 2~3회", "TWICEAWEEK"),
-  fourTimesAWeek("주 4~5회", "FOURTIMESAWEEK"),
+  free("자율", "AUTONOMY"),
+  onceAMonth("월 1회", "ONCE_A_MONTH"),
+  twiceAMonth("월 2회", "TWICE_A_MONTH"),
+  onceAWeek("주 1회", "ONCE_A_WEEK"),
+  twiceAWeek("주 2~3회", "TWO_TO_THREE_TIMES_A_WEEK"),
+  fourTimesAWeek("주 4~5회", "FOUR_TO_FIVE_TIMES_A_WEEK"),
   everyday("매일", "EVERYDAY");
 
   const CrewCycle(this.name, this.tag);

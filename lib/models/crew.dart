@@ -74,6 +74,7 @@ class CrewDetail {
   String preferMember;
   String detail;
   bool autoApproval;
+  String status;
   String coverImage;
   List<Member> members;
   List<String> tags;
@@ -89,6 +90,7 @@ class CrewDetail {
     required this.preferMember,
     required this.detail,
     required this.autoApproval,
+    required this.status,
     required this.coverImage,
     required this.members,
     required this.tags,
@@ -112,6 +114,7 @@ class CrewDetail {
         detail: json["detail"],
         autoApproval: json["autoApproval"],
         coverImage: json["coverImage"],
+        status: json["status"],
         members:
             List<Member>.from(json["members"].map((x) => Member.fromJson(x))),
         tags: List<String>.from(json["tags"].map((x) => x)),
@@ -158,4 +161,18 @@ class CrewToJson {
         detail: json["detail"],
         autoApproval: json["autoApproval"],
       );
+
+  Map<String, dynamic> toJson() => {
+        "coverImage": coverImage,
+        "name": name,
+        "description": description,
+        "meetingCycle": meetingCycle,
+        "tags": List<dynamic>.from(tags.map((x) => x)),
+        "maxNum": maxNum,
+        "engLevel": engLevel,
+        "korLevel": korLevel,
+        "preferMember": preferMember,
+        "detail": detail,
+        "autoApproval": autoApproval,
+      };
 }

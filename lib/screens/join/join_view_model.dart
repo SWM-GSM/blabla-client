@@ -1,13 +1,10 @@
 import 'dart:math';
-
 import 'package:blabla/models/country.dart';
 import 'package:blabla/models/emoji_name_tag.dart';
 import 'package:blabla/models/interest.dart';
 import 'package:blabla/models/level.dart';
 import 'package:blabla/models/user.dart';
 import 'package:blabla/services/apis/api.dart';
-import 'package:blabla/styles/colors.dart';
-import 'package:blabla/styles/txt_style.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
@@ -64,7 +61,7 @@ class JoinViewModel with ChangeNotifier {
   final api = API();
 
   late String _socialLoginType;
-  late String _identifier;
+  // late String _identifier;
   late String _nickname;
   late String _birthdate;
   String _gender = "";
@@ -72,7 +69,7 @@ class JoinViewModel with ChangeNotifier {
   int _korLangLevel = 0;
   int _engLangLevel = 0;
   List<String> _keywords = [];
-  bool _pushNotification = true;
+  final bool _pushNotification = true;
   late String _profileImg;
 
   List<Country> _countries = [];
@@ -126,7 +123,7 @@ class JoinViewModel with ChangeNotifier {
 
   void initUser(String loginType, String identifier, String nickname,
       {birthdate, gender}) {
-    _identifier = identifier;
+    // _identifier = identifier;
     _socialLoginType = loginType.toUpperCase();
     _nickname = nickname;
   }
