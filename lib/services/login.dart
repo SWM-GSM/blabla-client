@@ -63,6 +63,69 @@ class GoogleLoginService extends LoginService {
   }
 }
 
+class AppleLoginService extends LoginService {
+  const AppleLoginService();
+
+  @override
+  Login get platform => Login.google;
+
+  @override
+  Future<bool> socialLogin(BuildContext context) async {
+    final viewModel = Provider.of<JoinViewModel>(context, listen: false);
+    const storage = FlutterSecureStorage();
+    try {
+      final AuthorizationCredentialAppleID credential =
+          await SignInWithApple.getAppleIDCredential(
+        scopes: [
+          AppleIDAuthorizationScopes.email,
+          AppleIDAuthorizationScopes.fullName,
+        ],
+        webAuthenticationOptions: WebAuthenticationOptions(
+            clientId: "net.blablah.prod.blabla",
+            redirectUri: Uri.parse("https://dev.blablah.shop/apple/callback")),
+      );
+
+      final email = credential.email;
+      final name = credential.givenName;
+
+      if (email != null && name != null) {
+        viewModel.initUser(Login.apple.name, email, name);
+      }
+
+      await storage.write(
+          key: "platform", value: Login.google.name.toUpperCase());
+      await storage.write(key: "socialToken", value: credential.identityToken);
+
+      print(
+          "[socialLogin] socialToken: ${await storage.read(key: "socialToken")}");
+
+      if (await storage.read(key: "socialToken") != null) {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (e) {
+      return false;
+    }
+  }
+
+  @override
+  Future<bool> login() async {
+    final api = API();
+    return await api.login(Login.apple.name.toUpperCase());
+  }
+
+  @override
+  Future<void> logout() {
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> withdraw() {
+    throw UnimplementedError();
+  }
+}
+
 abstract class LoginService {
   const LoginService();
 
