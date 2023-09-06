@@ -171,6 +171,7 @@ class API {
 
   Future<bool> login(String loginType) async {
     const storage = FlutterSecureStorage();
+    print("[Login] socialToken: ${await storage.read(key: "socialToken")}");
     final res = await api("$baseUrl/oauth/login/$loginType", HttpMethod.post,
         token: await storage.read(key: "socialToken"));
     if (res.statusCode == 200) {
@@ -183,9 +184,9 @@ class API {
       }
     } else {
       print(
-          "[Login - res.statusCode not 200] res.body:  ${jsonDecode(utf8.decode(res.bodyBytes))}");
-      return false; // 가입되지 않은 유저
-      //throw jsonDecode(res.body)["code"];
+          "[Login - res.statusCode not 200] res.body: ${jsonDecode(utf8.decode(res.bodyBytes))}");
+      // return false; // 가입되지 않은 유저
+      throw jsonDecode(res.body)["code"];
     }
   }
 
@@ -280,7 +281,7 @@ class API {
     // 수정 - 테스트 API
     const storage = FlutterSecureStorage();
     // final res = await api("$testUrl/contents/today", HttpMethod.get,
-    final res = await api("$korTestUrl/contents/today", HttpMethod.get,
+    final res = await api("$korBaseUrl/contents/today", HttpMethod.get,
         token: "Bearer ${await storage.read(key: "accessToken")}",
         needCheck: true);
     // print(jsonDecode(utf8.decode(res.bodyBytes)));

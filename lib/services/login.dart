@@ -4,10 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:provider/provider.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 enum Login {
-  google('구글', GoogleLoginService());
-  // apple('애플', false, AppleLoginService());
+  google('구글', GoogleLoginService()),
+  apple('애플', AppleLoginService());
 
   const Login(this.kor, this.service);
   final String kor;
@@ -26,22 +27,25 @@ class GoogleLoginService extends LoginService {
     const storage = FlutterSecureStorage();
     final account = await GoogleSignIn().signIn();
     if (account != null) {
-      account.authentication.then((value) async {
-        await Future.wait([
-          storage.write(
-              key: "platform", value: Login.google.name.toUpperCase()),
-          storage.write(key: "socialToken", value: value.accessToken),
-        ]);
-        print("[socialLogin] socialToken: ${await storage.read(key: "socialToken")}");
+      await account.authentication.then((value) async {
+        await storage.write(
+            key: "platform", value: Login.google.name.toUpperCase());
+        await storage.write(key: "socialToken", value: value.accessToken);
+        print(
+            "[socialLogin] socialToken: ${await storage.read(key: "socialToken")}");
         viewModel.initUser(
             Login.google.name, account.email, account.displayName!);
       });
-      return true;
+      if (await storage.read(key: "socialToken") != null) {
+        return true;
+      } else {
+        return false;
+      }
     } else {
       return false;
     }
   }
-  
+
   @override
   Future<bool> login() async {
     final api = API();
