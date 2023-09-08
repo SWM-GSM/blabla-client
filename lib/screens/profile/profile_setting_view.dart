@@ -3,9 +3,12 @@ import 'package:blabla/styles/colors.dart';
 import 'package:blabla/styles/txt_style.dart';
 import 'package:blabla/widgets/setting_box_widget.dart';
 import 'package:blabla/widgets/setting_row_widget.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
+import 'package:restart_app/restart_app.dart';
 
 class ProfileSettingView extends StatelessWidget {
   const ProfileSettingView({super.key});
@@ -82,17 +85,75 @@ class ProfileSettingView extends StatelessWidget {
                   SettingRowWidget(
                     type: SettingRowType.radio,
                     txt: "한국어",
-                    status: true,
+                    status: viewModel.lang == "ko",
                     onTap: () {
-                      print("테스트");
+                      if (viewModel.lang != "ko") {
+                        viewModel.setLang("ko");
+                        showCupertinoDialog(
+                            context: context,
+                            builder: (context) => CupertinoAlertDialog(
+                                  title: Text(
+                                    "앱을 재시작해야\n설정 언어가 반영됩니다.\n바로 재시작 하시겠습니까?",
+                                    style: BlaTxt.txt14R,
+                                  ),
+                                  actions: [
+                                    CupertinoDialogAction(
+                                      child: Text(
+                                        "나중에",
+                                        style: BlaTxt.txt14R,
+                                      ),
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
+                                    ),
+                                    CupertinoDialogAction(
+                                      child: Text("재시작",
+                                          style: BlaTxt.txt14R
+                                              .copyWith(color: BlaColor.black)),
+                                      onPressed: () {
+                                        Restart.restartApp(webOrigin: "/");
+                                      },
+                                    ),
+                                  ],
+                                ));
+                      }
                     },
                   ),
                   SettingRowWidget(
                     type: SettingRowType.radio,
                     txt: "영어",
-                    status: true,
+                    status: viewModel.lang == "en",
                     onTap: () {
-                      print("테스트");
+                      if (viewModel.lang != "en") {
+                        viewModel.setLang("en");
+                        showCupertinoDialog(
+                            context: context,
+                            builder: (context) => CupertinoAlertDialog(
+                                  title: Text(
+                                    "앱을 재시작해야\n설정 언어가 반영됩니다.\n바로 재시작 하시겠습니까?",
+                                    style: BlaTxt.txt14R,
+                                  ),
+                                  actions: [
+                                    CupertinoDialogAction(
+                                      child: Text(
+                                        "나중에",
+                                        style: BlaTxt.txt14R,
+                                      ),
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
+                                    ),
+                                    CupertinoDialogAction(
+                                      child: Text("재시작",
+                                          style: BlaTxt.txt14R
+                                              .copyWith(color: BlaColor.black)),
+                                      onPressed: () {
+                                        Restart.restartApp(webOrigin: "/");
+                                      },
+                                    ),
+                                  ],
+                                ));
+                      }
                     },
                   ),
                 ],
