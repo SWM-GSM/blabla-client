@@ -4,6 +4,7 @@ import 'package:blabla/screens/profile/profile_modify_desc_view.dart';
 import 'package:blabla/screens/profile/profile_modify_interest_view.dart';
 import 'package:blabla/screens/profile/profile_modify_main_view.dart';
 import 'package:blabla/screens/profile/profile_modify_view_model.dart';
+import 'package:blabla/screens/profile/profile_setting_view.dart';
 import 'package:blabla/screens/profile/profile_view_model.dart';
 import 'package:blabla/styles/colors.dart';
 import 'package:blabla/styles/txt_style.dart';
@@ -36,7 +37,10 @@ class ProfileMainView extends StatelessWidget {
         actions: [
           GestureDetector(
             onTap: () {
-              print("설정 버튼 클릭");
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const ProfileSettingView()));
             },
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),

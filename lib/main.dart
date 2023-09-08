@@ -22,6 +22,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
@@ -31,13 +32,19 @@ void main() async {
   await EasyLocalization.ensureInitialized();
   await dotenv.load();
   FlutterNativeSplash.preserve(widgetsBinding: widgetBinding);
-
   AnalyticsConfig().init();
+
+  const storage = FlutterSecureStorage();
+  final lang = await storage.read(key: "language");
+  print(lang);
+
   runApp(
     EasyLocalization(
-      supportedLocales: const [Locale('en'), Locale('ko')],
+      supportedLocales:
+          lang == null ? const [Locale('en'), Locale('ko')] : [Locale(lang)],
       path: 'assets/translations',
       fallbackLocale: const Locale('en'),
+      useOnlyLangCode: true,
       child: MultiProvider(providers: [
         ChangeNotifierProvider(create: (_) => JoinViewModel()),
         ChangeNotifierProvider(create: (_) => RecruitViewModel()),
@@ -60,7 +67,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StyledToast(
-      locale: const Locale("ko"),
+      locale: context.locale,
       textStyle: BlaTxt.txt16R.copyWith(color: BlaColor.white),
       backgroundColor: BlaColor.grey800.withOpacity(0.8),
       toastPositions: StyledToastPosition.bottom,
@@ -69,12 +76,13 @@ class MyApp extends StatelessWidget {
       toastAnimation: StyledToastAnimation.fade,
       reverseAnimation: StyledToastAnimation.fade,
       child: MaterialApp(
-          localizationsDelegates: context.localizationDelegates,
-          supportedLocales: context.supportedLocales,
-          title: 'BlaBla',
-          theme: BlaTheme.blaTheme,
-          home: const Splash(),
-          ),
+        locale: context.locale,
+        localizationsDelegates: context.localizationDelegates,
+        supportedLocales: context.supportedLocales,
+        title: 'BlaBla',
+        theme: BlaTheme.blaTheme,
+        home: const Splash(),
+      ),
     );
   }
 }
@@ -85,7 +93,7 @@ class Main extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final navProvider = Provider.of<NavProvider>(context);
-    final navKeyList = List.generate(5, (idx) => GlobalKey<NavigatorState>()); 
+    final navKeyList = List.generate(5, (idx) => GlobalKey<NavigatorState>());
     final botNavList = ["home", "team", "play", "notepad", "person"];
     final pageList = [
       HomeView(),

@@ -11,6 +11,7 @@ import 'package:blabla/models/interest.dart';
 import 'package:blabla/models/level.dart';
 import 'package:blabla/models/report.dart';
 import 'package:blabla/models/schedule.dart';
+import 'package:blabla/models/setting.dart';
 import 'package:blabla/models/user.dart';
 import 'package:blabla/screens/my_space/mys_view_model.dart';
 import 'package:blabla/utils/dotenv.dart';
@@ -176,10 +177,12 @@ class API {
         token: await storage.read(key: "socialToken"));
     if (res.statusCode == 200) {
       print("[Login] res.body: ${jsonDecode(utf8.decode(res.bodyBytes))}");
-      if (jsonDecode(res.body)["success"]) { // 이미 가입된 유저
+      if (jsonDecode(res.body)["success"]) {
+        // 이미 가입된 유저
         await saveToken(res);
         return true;
-      } else { // 알 수 없는 에러
+      } else {
+        // 알 수 없는 에러
         throw Error();
       }
     } else {
@@ -565,6 +568,75 @@ class API {
     final res = await api("$baseUrl/profile/keywords", HttpMethod.patch,
         token: "Bearer ${await storage.read(key: "accessToken")}",
         body: jsonEncode({"keywords": interests}));
+    if (res.statusCode == 200) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  /* 설정 */
+  Future<Setting> getSetting() async {
+    const storage = FlutterSecureStorage();
+    final res = await api(
+      "$baseUrl/profile/settings",
+      HttpMethod.get,
+      token: "Bearer ${await storage.read(key: "accessToken")}",
+      needCheck: true,
+    );
+    print(jsonDecode(utf8.decode(res.bodyBytes)));
+    if (res.statusCode == 200) {
+      return Setting.fromJson(
+          jsonDecode(utf8.decode(res.bodyBytes))["data"]["settings"]);
+    } else {
+      throw Exception("http error :(");
+    }
+  }
+
+  Future<bool> patchOpenBirthdate(bool status) async {
+    const storage = FlutterSecureStorage();
+    final res = await api(
+      "$baseUrl/members/birth-date-disclosure",
+      HttpMethod.patch,
+      token: "Bearer ${await storage.read(key: "accessToken")}",
+      needCheck: true,
+      body: jsonEncode({"birthDateDisclosure": status}),
+    );
+    print(jsonDecode(utf8.decode(res.bodyBytes)));
+    if (res.statusCode == 200) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  Future<bool> patchOpenGender(bool status) async {
+    const storage = FlutterSecureStorage();
+    final res = await api(
+      "$baseUrl/members/gender-disclosure",
+      HttpMethod.patch,
+      token: "Bearer ${await storage.read(key: "accessToken")}",
+      needCheck: true,
+      body: jsonEncode({"genderDisclosure": status}),
+    );
+    print(jsonDecode(utf8.decode(res.bodyBytes)));
+    if (res.statusCode == 200) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  Future<bool> patchAllowNotification(bool status) async {
+    const storage = FlutterSecureStorage();
+    final res = await api(
+      "$baseUrl/members/push-notification",
+      HttpMethod.patch,
+      token: "Bearer ${await storage.read(key: "accessToken")}",
+      needCheck: true,
+      body: jsonEncode({"pushNotification": status}),
+    );
+    print(jsonDecode(utf8.decode(res.bodyBytes)));
     if (res.statusCode == 200) {
       return true;
     } else {

@@ -19,6 +19,7 @@ class BlaColor {
   static const yellow = Color(0xFFFFCC00);
   static const red = Color(0xFFFF5050);
   static const green = Color(0xFF14B393);
+  static const defGreen = Color(0xFF40BD56);
 
   static const coral100 = Color(0xFFFFF2ED);
   static const coral200 = Color(0xFFFFE5DC);
