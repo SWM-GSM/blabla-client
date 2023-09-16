@@ -47,7 +47,6 @@ void main() async {
         ChangeNotifierProvider(create: (_) => NavProvider()),
         ChangeNotifierProvider(create: (_) => HomeViewModel()),
         ChangeNotifierProvider(create: (_) => CrewViewModel()),
-        ChangeNotifierProvider(create: (_) => ReportViewModel()),
         ChangeNotifierProvider(create: (_) => ProfileModifyViewModel()),
         ChangeNotifierProvider(create: (_) => ProfileViewModel()),
         ChangeNotifierProvider(create: (_) => PracticeViewModel()),

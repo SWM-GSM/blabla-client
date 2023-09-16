@@ -520,6 +520,7 @@ class API {
       "$baseUrl/reports/history",
       HttpMethod.get,
       token: "Bearer ${await storage.read(key: "accessToken")}",
+      needCheck: true,
     );
     if (res.statusCode == 200) {
       return (jsonDecode(utf8.decode(res.bodyBytes))["data"]["histories"]
