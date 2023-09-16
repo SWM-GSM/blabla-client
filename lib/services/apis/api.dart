@@ -456,7 +456,6 @@ class API {
       return ContentDetail.fromJson(
           jsonDecode(utf8.decode(res.bodyBytes))["data"]);
     } else {
-      print(jsonDecode(utf8.decode(res.bodyBytes)));
       throw Exception("http error :(");
     }
   }
@@ -528,7 +527,10 @@ class API {
           .map((e) => History.fromJson(e))
           .toList();
     } else {
-      print(jsonDecode(utf8.decode(res.bodyBytes)));
+      // print(jsonDecode(utf8.decode(res.bodyBytes)));
+      throw Exception("http error :(");
+    }
+  }
       throw Exception("http error :(");
     }
   }

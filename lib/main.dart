@@ -3,6 +3,8 @@ import 'package:blabla/screens/home/crew_view_model.dart';
 import 'package:blabla/screens/home/home_view.dart';
 import 'package:blabla/screens/home/home_view_model.dart';
 import 'package:blabla/screens/join/join_view_model.dart';
+import 'package:blabla/screens/practice/practice_main_view.dart';
+import 'package:blabla/screens/practice/practice_view_model.dart';
 import 'package:blabla/screens/profile/profile_main_view.dart';
 import 'package:blabla/screens/profile/profile_modify_view_model.dart';
 import 'package:blabla/screens/profile/profile_view_model.dart';
@@ -48,7 +50,7 @@ void main() async {
         ChangeNotifierProvider(create: (_) => ReportViewModel()),
         ChangeNotifierProvider(create: (_) => ProfileModifyViewModel()),
         ChangeNotifierProvider(create: (_) => ProfileViewModel()),
-        ChangeNotifierProvider(create: (_) => MysViewModel()),
+        ChangeNotifierProvider(create: (_) => PracticeViewModel()),
       ], child: const MyApp()),
     ),
   );
@@ -59,6 +61,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print("locale 테스트 ${context.locale}");
     return StyledToast(
       locale: context.locale,
       textStyle: BlaTxt.txt16R.copyWith(color: BlaColor.white),
@@ -90,6 +93,7 @@ class Main extends StatelessWidget {
     final botNavList = ["team", "play", "person"];
     final pageList = [
       HomeView(),
+      const PracticeMainView(),
       const ProfileMainView(),
     ];
 
