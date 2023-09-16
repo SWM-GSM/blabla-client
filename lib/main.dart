@@ -1,6 +1,4 @@
 import 'package:blabla/providers/nav_provider.dart';
-import 'package:blabla/screens/crew_space/crews_joined_view.dart';
-import 'package:blabla/screens/crew_space/crews_view_model.dart';
 import 'package:blabla/screens/home/crew_view_model.dart';
 import 'package:blabla/screens/home/home_view.dart';
 import 'package:blabla/screens/home/home_view_model.dart';
@@ -47,11 +45,9 @@ void main() async {
       useOnlyLangCode: true,
       child: MultiProvider(providers: [
         ChangeNotifierProvider(create: (_) => JoinViewModel()),
-        ChangeNotifierProvider(create: (_) => RecruitViewModel()),
         ChangeNotifierProvider(create: (_) => NavProvider()),
         ChangeNotifierProvider(create: (_) => HomeViewModel()),
         ChangeNotifierProvider(create: (_) => CrewViewModel()),
-        ChangeNotifierProvider(create: (_) => CrewsViewModel()),
         ChangeNotifierProvider(create: (_) => ReportViewModel()),
         ChangeNotifierProvider(create: (_) => ProfileModifyViewModel()),
         ChangeNotifierProvider(create: (_) => ProfileViewModel()),
@@ -93,14 +89,12 @@ class Main extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final navProvider = Provider.of<NavProvider>(context);
-    final navKeyList = List.generate(5, (idx) => GlobalKey<NavigatorState>());
-    final botNavList = ["home", "team", "play", "notepad", "person"];
+    final navKeyList = List.generate(3, (idx) => GlobalKey<NavigatorState>());
+    final botNavList = ["team", "play", "person"];
     final pageList = [
       HomeView(),
-      CrewsJoinedView(),
       MysMainView(),
-      ReportMainView(),
-      ProfileMainView(),
+      const ProfileMainView(),
     ];
 
     return Scaffold(
