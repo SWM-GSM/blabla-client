@@ -540,40 +540,6 @@ class API {
   Future<bool> patchAllowNotification(bool status) async {
     const storage = FlutterSecureStorage();
     final res = await api(
-      "$baseUrl/members/birth-date-disclosure",
-      HttpMethod.patch,
-      token: "Bearer ${await storage.read(key: "accessToken")}",
-      needCheck: true,
-      body: jsonEncode({"birthDateDisclosure": status}),
-    );
-    print(jsonDecode(utf8.decode(res.bodyBytes)));
-    if (res.statusCode == 200) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  Future<bool> patchOpenGender(bool status) async {
-    const storage = FlutterSecureStorage();
-    final res = await api(
-      "$baseUrl/members/gender-disclosure",
-      HttpMethod.patch,
-      token: "Bearer ${await storage.read(key: "accessToken")}",
-      needCheck: true,
-      body: jsonEncode({"genderDisclosure": status}),
-    );
-    print(jsonDecode(utf8.decode(res.bodyBytes)));
-    if (res.statusCode == 200) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  Future<bool> patchAllowNotification(bool status) async {
-    const storage = FlutterSecureStorage();
-    final res = await api(
       "$baseUrl/members/push-notification",
       HttpMethod.patch,
       token: "Bearer ${await storage.read(key: "accessToken")}",
@@ -588,8 +554,30 @@ class API {
     }
   }
 
-  /* 마이스페이스 */
-  Future<List<ContentCategory>> getContentList(ContentLangType type) async {
+  Future<bool> withdrawal() async {
+    const storage = FlutterSecureStorage();
+    final res = await api("$baseUrl/members/withdrawal", HttpMethod.delete,
+        token: "Bearer ${await storage.read(key: "accessToken")}",
+        needCheck: true);
+    print(jsonDecode(utf8.decode(res.bodyBytes)));
+    if (res.statusCode == 200) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+    const storage = FlutterSecureStorage();
+    final res = await api(
+      token: "Bearer ${await storage.read(key: "accessToken")}",
+      needCheck: true,
+    );
+    print(jsonDecode(utf8.decode(res.bodyBytes)));
+    if (res.statusCode == 200) {
+    } else {
+    }
+  }
+
     final langUrl = (type == ContentLangType.kor ? korBaseUrl : engBaseUrl);
     const storage = FlutterSecureStorage();
     final res = await api(

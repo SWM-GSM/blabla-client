@@ -33,8 +33,7 @@ class GoogleLoginService extends LoginService {
         await storage.write(key: "socialToken", value: value.accessToken);
         print(
             "[socialLogin] socialToken: ${await storage.read(key: "socialToken")}");
-        viewModel.initUser(
-            Login.google.name, account.email, account.displayName!);
+        viewModel.initUser(Login.google.name);
       });
       if (await storage.read(key: "socialToken") != null) {
         return true;
@@ -53,13 +52,10 @@ class GoogleLoginService extends LoginService {
   }
 
   @override
-  Future<void> logout() {
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<void> withdraw() {
-    throw UnimplementedError();
+  Future<void> logout() async {
+    const storage = FlutterSecureStorage();
+    await GoogleSignIn().signOut();
+    await storage.deleteAll();
   }
 }
 
@@ -89,12 +85,13 @@ class AppleLoginService extends LoginService {
       final name = credential.givenName;
 
       if (email != null && name != null) {
-        viewModel.initUser(Login.apple.name, email, name);
+        viewModel.initUser(Login.apple.name);
       }
 
       await storage.write(
-          key: "platform", value: Login.google.name.toUpperCase());
-      await storage.write(key: "socialToken", value: credential.identityToken);
+          key: "platform", value: Login.apple.name.toUpperCase());
+      await storage.write(
+          key: "socialToken", value: "Bearer ${credential.authorizationCode}");
 
       print(
           "[socialLogin] socialToken: ${await storage.read(key: "socialToken")}");
@@ -116,13 +113,9 @@ class AppleLoginService extends LoginService {
   }
 
   @override
-  Future<void> logout() {
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<void> withdraw() {
-    throw UnimplementedError();
+  Future<void> logout() async {
+    const storage = FlutterSecureStorage();
+    await storage.deleteAll();
   }
 }
 
@@ -136,6 +129,4 @@ abstract class LoginService {
   Future<bool> login();
 
   Future<void> logout();
-
-  Future<void> withdraw();
 }

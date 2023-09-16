@@ -27,6 +27,7 @@ class SettingBoxWidget extends StatelessWidget {
             borderRadius: BorderRadius.circular(12),
           ),
           child: ListView.builder(
+              padding: EdgeInsets.zero,
               itemBuilder: ((context, index) => Column(
                     children: [
                       widgets[index],
