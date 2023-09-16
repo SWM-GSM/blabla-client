@@ -13,6 +13,9 @@ import 'package:blabla/styles/colors.dart';
 import 'package:blabla/styles/theme.dart';
 import 'package:blabla/styles/txt_style.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:blabla/firebase_options.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
@@ -25,12 +28,24 @@ void main() async {
   WidgetsBinding widgetBinding = WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
   await dotenv.load();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   FlutterNativeSplash.preserve(widgetsBinding: widgetBinding);
   AnalyticsConfig().init();
 
   const storage = FlutterSecureStorage();
   final lang = await storage.read(key: "language");
   print(lang);
+
+  FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage? message) {
+    if (message != null) {
+      if (message.notification != null) {
+        print("[FCM] ${message.notification!.title}");
+        print("[FCM] ${message.notification!.body}");
+      }
+    }
+  });
 
   runApp(
     EasyLocalization(
