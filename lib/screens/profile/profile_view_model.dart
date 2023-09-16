@@ -1,53 +1,55 @@
+import 'package:blabla/models/history.dart';
 import 'package:blabla/models/user.dart';
 import 'package:blabla/services/apis/api.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
+enum HistoryFilter {
+  personal("play_circle", "개인"),
+  crew("team", "크루");
+
+  const HistoryFilter(this.icon, this.tag);
+  final String icon;
+  final String tag;
+}
+
 class ProfileViewModel with ChangeNotifier {
   final api = API();
-  
+
   ProfileViewModel() {
-    init();
+    initProfile();
+    initHistories(); // 수정
   }
 
+  /* 유저 정보 */
   UserProfile? _user;
-  late bool _openBirthdate;
-  late bool _openGender;
-  late bool _allowNotification;
-  late String _lang;
+  bool? _allowNotification;
+  String? _lang;
 
   UserProfile? get user => _user;
-  bool get openBirthdate => _openBirthdate;
-  bool get openGender => _openGender;
-  bool get allowNotification => _allowNotification;
-  String get lang => _lang;
+  bool? get allowNotification => _allowNotification;
+  String? get lang => _lang;
 
-  void init() async {
+  /* 히스토리 */
+  HistoryFilter _filter = HistoryFilter.personal;
+  List<History> _histories = [];
+  List<History> _historyList = [];
+
+  HistoryFilter get filter => _filter;
+  List<History> get histories => _histories;
+
+  void initProfile() async {
     const storage = FlutterSecureStorage();
     _user = await api.getMyProfile();
     final setting = await api.getSetting();
-    _openBirthdate = setting.birthDateDisclosure;
-    _openGender = setting.genderDisclosure;
-    _allowNotification = setting.pushNotification;  
+    _allowNotification = setting.pushNotification;
     _lang = (await storage.read(key: "language"))!;
     notifyListeners();
   }
 
-  void changeOpenBirthdate() async {
-    await api.patchOpenBirthdate(!_openBirthdate);
-    _openBirthdate = !_openBirthdate;
-    notifyListeners();
-  }
-
-  void changeOpenGender() async {
-    await api.patchOpenGender(!_openGender);
-    _openGender = !_openGender;
-    notifyListeners();
-  }
-
   void changePushNotification() async {
-    await api.patchAllowNotification(!_allowNotification);
-    _allowNotification = !_allowNotification;
+    await api.patchAllowNotification(!_allowNotification!);
+    _allowNotification = !_allowNotification!;
     notifyListeners();
   }
 
@@ -55,6 +57,39 @@ class ProfileViewModel with ChangeNotifier {
     const storage = FlutterSecureStorage();
     _lang = lang;
     await storage.write(key: "language", value: _lang);
+    notifyListeners();
+  }
+
+  Future<bool> withdrawal() async {
+    const storage = FlutterSecureStorage();
+    if (await api.withdrawal()) {
+      await storage.deleteAll();
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  void initHistories() async {
+    _historyList = [...await api.getHistory()];
+    makeHistories();
+    notifyListeners();
+  }
+
+  void setHistoryFilter(HistoryFilter input) {
+    _filter = input;
+    makeHistories();
+    notifyListeners();
+  }
+
+  void makeHistories() {
+    _histories = _historyList
+        .map((history) => History(
+            datetime: history.datetime,
+            reports: history.reports
+                .where((historyReport) => historyReport.type == _filter.name)
+                .toList()))
+        .toList();
     notifyListeners();
   }
 }

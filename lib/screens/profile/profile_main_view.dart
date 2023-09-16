@@ -1,19 +1,15 @@
-import 'package:blabla/models/emoji_name_tag.dart';
-import 'package:blabla/screens/join/join_view_model.dart';
-import 'package:blabla/screens/profile/profile_modify_desc_view.dart';
-import 'package:blabla/screens/profile/profile_modify_interest_view.dart';
-import 'package:blabla/screens/profile/profile_modify_main_view.dart';
+import 'package:blabla/screens/profile/profile_modify_view.dart';
 import 'package:blabla/screens/profile/profile_modify_view_model.dart';
 import 'package:blabla/screens/profile/profile_setting_view.dart';
 import 'package:blabla/screens/profile/profile_view_model.dart';
+import 'package:blabla/screens/profile/widgets/profile_history_tile.dart';
 import 'package:blabla/styles/colors.dart';
 import 'package:blabla/styles/txt_style.dart';
-import 'package:blabla/utils/datetime_to_str.dart';
-import 'package:blabla/widgets/keyword_widget.dart';
 import 'package:blabla/widgets/profile_widget.dart';
 import 'package:blabla/widgets/skeleton_ui_widget.dart';
 import 'package:country_flags/country_flags.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 
@@ -37,10 +33,15 @@ class ProfileMainView extends StatelessWidget {
         actions: [
           GestureDetector(
             onTap: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const ProfileSettingView()));
+              if (viewModel.user != null &&
+                  viewModel.allowNotification != null &&
+                  viewModel.lang != null) {
+                Navigator.of(context, rootNavigator: true).push(
+                    MaterialPageRoute(
+                        builder: (context) => const ProfileSettingView()));
+              } else {
+                showToast("로딩 중입니다. 잠시후 다시 시도해주세요.");
+              }
             },
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -62,7 +63,7 @@ class ProfileMainView extends StatelessWidget {
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -81,16 +82,29 @@ class ProfileMainView extends StatelessWidget {
                               viewModel.user!.nickname,
                               style: BlaTxt.txt24BKH,
                             ),
-                      const SizedBox(
-                        height: 4,
-                      ),
+                      const SizedBox(height: 8),
                       viewModel.user == null
-                          ? SkeletonTxtWidget(style: BlaTxt.txt12R, width: 120)
-                          : Text(
-                              "${datetimeToStr(viewModel.user!.birthDate, StrDatetimeType.dotDelOnlyDate)} | ${Gender.getByStr(viewModel.user!.gender).emoji} ${Gender.getByStr(viewModel.user!.gender).kr}",
-                              style: BlaTxt.txt12R
-                                  .copyWith(color: BlaColor.grey700),
-                            ),
+                          ? SkeletonBoxWidget(
+                              child: Container(
+                              width: 100,
+                              height: 24,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(12),
+                                  color: BlaColor.grey100),
+                            ))
+                          : Container(
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 4, horizontal: 8),
+                              decoration: BoxDecoration(
+                                color: BlaColor.lightOrange,
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: Text(
+                                "${viewModel.user!.language == "ko" ? "한국어" : "영어"} 배우는 중!",
+                                style: BlaTxt.txt12M
+                                    .copyWith(color: BlaColor.orange),
+                              ),
+                            )
                     ],
                   ),
                   viewModel.user == null
@@ -104,254 +118,150 @@ class ProfileMainView extends StatelessWidget {
                             ),
                           ),
                         )
-                      : ProfileWidget(
-                          profileSize: 48,
-                          profile: viewModel.user!.profileImage,
-                          bgSize: 80,
-                          bgColor: BlaColor.lightOrange,
+                      : Stack(
+                          children: [
+                            ProfileWidget(
+                              profileSize: 48,
+                              profile: viewModel.user!.profileImage,
+                              bgSize: 80,
+                              bgColor: BlaColor.lightOrange,
+                            ),
+                            Positioned(
+                              right: 0,
+                              bottom: 0,
+                              child: GestureDetector(
+                                onTap: () {
+                                  modifyViewModel.init(
+                                      viewModel.user!.profileImage,
+                                      viewModel.user!.nickname,
+                                      viewModel.user!.language);
+                                  Navigator.of(context, rootNavigator: true)
+                                      .push(MaterialPageRoute(
+                                          builder: (context) =>
+                                              ProfileModifyView(
+                                                  initNick: viewModel
+                                                      .user!.nickname)));
+                                },
+                                child: Container(
+                                  width: 24,
+                                  height: 24,
+                                  padding: const EdgeInsets.all(5),
+                                  decoration: BoxDecoration(
+                                    color: BlaColor.orange,
+                                    border: Border.all(
+                                        color: BlaColor.white, width: 1),
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: SvgPicture.asset(
+                                    "assets/icons/ic_12_edit.svg",
+                                    width: 12,
+                                    height: 12,
+                                    colorFilter: const ColorFilter.mode(
+                                        BlaColor.white, BlendMode.srcIn),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
                         )
                 ],
               ),
-              GestureDetector(
-                onTap: () {
-                  if (viewModel.user != null) {
-                    modifyViewModel.init(
-                        viewModel.user!.profileImage,
-                        viewModel.user!.nickname,
-                        datetimeToStr(viewModel.user!.birthDate,
-                            StrDatetimeType.dotDelOnlyDate),
-                        viewModel.user!.gender,
-                        viewModel.user!.countryCode,
-                        viewModel.user!.korLevel,
-                        viewModel.user!.engLevel);
-                    Navigator.of(context, rootNavigator: true).push(
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                const ProfileModifyMainView()));
-                  }
-                },
-                child: Container(
-                  height: 48,
-                  margin: const EdgeInsets.symmetric(vertical: 20),
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(12),
-                    color: BlaColor.grey100,
-                  ),
-                  child: Text(
-                    "프로필 수정",
-                    style: BlaTxt.txt14M.copyWith(color: BlaColor.grey800),
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 20),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    infoCol(
-                        viewModel.user == null
-                            ? ""
-                            : "Lv. ${viewModel.user!.korLevel}",
-                        "한국어 스킬",
-                        isSkeleton: viewModel.user == null),
-                    Container(width: 1, height: 20, color: BlaColor.grey200),
-                    infoCol(
-                        viewModel.user == null
-                            ? ""
-                            : "Lv. ${viewModel.user!.engLevel}",
-                        "영어 스킬",
-                        isSkeleton: viewModel.user == null),
-                    Container(width: 1, height: 20, color: BlaColor.grey200),
-                    infoCol(
-                        viewModel.user == null
-                            ? ""
-                            : "${viewModel.user!.signedUpAfter}일",
-                        "가입한지",
-                        isSkeleton: viewModel.user == null),
-                    Container(width: 1, height: 20, color: BlaColor.grey200),
-                    infoCol(
-                        viewModel.user == null
-                            ? ""
-                            : viewModel.user!.countryCode.toUpperCase(),
-                        "국적",
-                        isSkeleton: viewModel.user == null,
-                        isCountry: true)
-                  ],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text(
-                          "자기소개",
-                          style: BlaTxt.txt20B,
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            modifyViewModel
-                                .initDescription(viewModel.user!.description);
-                            Navigator.of(context, rootNavigator: true).push(
-                                MaterialPageRoute(
-                                    builder: (context) => ProfileModifyDescView(
-                                        initDesc:
-                                            viewModel.user!.description)));
-                          },
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Text(
-                                "수정하기",
-                                style: BlaTxt.txt14ML
-                                    .copyWith(color: BlaColor.grey600),
-                              ),
-                              SvgPicture.asset(
-                                  "assets/icons/ic_16_arrow_right.svg",
-                                  width: 16,
-                                  height: 16)
-                            ],
+              const SizedBox(height: 40),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text("히스토리", style: BlaTxt.txt20B),
+                  Wrap(
+                    spacing: 12,
+                    children: List.generate(
+                      HistoryFilter.values.length,
+                      (idx) => GestureDetector(
+                        onTap: () {
+                          viewModel.setHistoryFilter(HistoryFilter.values[idx]);
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 6, horizontal: 12),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(14),
+                            color: viewModel.filter == HistoryFilter.values[idx]
+                                ? BlaColor.lightOrange
+                                : BlaColor.grey100,
                           ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 8,
-                    ),
-                    viewModel.user == null
-                        ? Column(
-                            children: List.generate(
-                            3,
-                            (idx) => SkeletonTxtWidget(
-                                style: BlaTxt.txt14R,
-                                width: MediaQuery.of(context).size.width - 40),
-                          ))
-                        : viewModel.user!.description == ""
-                            ? Container(
-                                height: 56,
-                                alignment: Alignment.center,
-                                child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text("😋", style: BlaTxt.txt20BL),
-                                      const SizedBox(height: 8),
-                                      Text(
-                                        "아직 등록된 자기소개가 없어요!",
-                                        style: BlaTxt.txt14R
-                                            .copyWith(color: BlaColor.grey800),
-                                      )
-                                    ]),
-                              )
-                            : Text(
-                                viewModel.user!.description,
-                                style: BlaTxt.txt14R.copyWith(
-                                    color: BlaColor.grey800,
-                                    overflow: TextOverflow.visible),
-                                softWrap: true,
-                              )
-                  ],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text(
-                          "관심사",
-                          style: BlaTxt.txt20B,
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            modifyViewModel
-                                .initInterestList(viewModel.user!.keywords);
-                            Navigator.of(context, rootNavigator: true).push(
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        const ProfileModifyInterestView()));
-                          },
                           child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Text(
-                                "수정하기",
-                                style: BlaTxt.txt14ML
-                                    .copyWith(color: BlaColor.grey600),
-                              ),
-                              SvgPicture.asset(
-                                  "assets/icons/ic_16_arrow_right.svg",
-                                  width: 16,
-                                  height: 16)
-                            ],
-                          ),
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                SvgPicture.asset(
+                                    "assets/icons/ic_16_${HistoryFilter.values[idx].icon}.svg",
+                                    width: 16,
+                                    height: 16,
+                                    colorFilter: ColorFilter.mode(
+                                        viewModel.filter ==
+                                                HistoryFilter.values[idx]
+                                            ? BlaColor.orange
+                                            : BlaColor.grey600,
+                                        BlendMode.srcIn)),
+                                const SizedBox(
+                                  width: 8,
+                                ),
+                                Text(
+                                  HistoryFilter.values[idx].tag,
+                                  style: viewModel.filter ==
+                                          HistoryFilter.values[idx]
+                                      ? BlaTxt.txt12B
+                                          .copyWith(color: BlaColor.orange)
+                                      : BlaTxt.txt12M
+                                          .copyWith(color: BlaColor.grey600),
+                                )
+                              ]),
                         ),
-                      ],
+                      ),
                     ),
-                    const SizedBox(
-                      height: 8,
-                    ),
-                    viewModel.user == null
-                        ? Wrap(
-                            spacing: 8,
-                            runSpacing: 8,
-                            children: List.generate(
-                                6,
-                                (index) => SkeletonBoxWidget(
-                                        child: Container(
-                                      width:
-                                          (MediaQuery.of(context).size.width -
-                                                  57) /
-                                              3,
-                                      height: 36,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(18),
-                                        color: BlaColor.grey100,
+                  )
+                ],
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              Column(
+                children: List.generate(
+                  viewModel.histories.length,
+                  (calendarIdx) => Column(
+                      children: List.generate(
+                          viewModel.histories[calendarIdx].reports.length,
+                          (idx) => Row(
+                                children: [
+                                  if (idx == 0)
+                                    SizedBox(
+                                      width: 30,
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            "${viewModel.histories[calendarIdx].datetime.month}월",
+                                            style: BlaTxt.txt12R.copyWith(
+                                                color: BlaColor.grey700),
+                                          ),
+                                          Text(
+                                            "${viewModel.histories[calendarIdx].datetime.day}",
+                                            style: BlaTxt.txt20B,
+                                          )
+                                        ],
                                       ),
-                                    ))))
-                        : viewModel.user!.keywords.isEmpty
-                            ? Container(
-                                height: 56,
-                                alignment: Alignment.center,
-                                child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text("💝", style: BlaTxt.txt20BL),
-                                      const SizedBox(height: 8),
-                                      Text(
-                                        "관심사를 등록해 나를 표현해보세요!",
-                                        style: BlaTxt.txt14R
-                                            .copyWith(color: BlaColor.grey800),
-                                      )
-                                    ]),
-                              )
-                            : Wrap(
-                                spacing: 8,
-                                runSpacing: 8,
-                                children: List.generate(
-                                    viewModel.user!.keywords.length,
-                                    (idx) => KeywordWidget(
-                                        keyword: EmojiNameTag(
-                                            emoji: viewModel
-                                                .user!.keywords[idx].emoji,
-                                            name: viewModel
-                                                .user!.keywords[idx].name,
-                                            tag: viewModel
-                                                .user!.keywords[idx].tag),
-                                        selected: false)),
-                              )
-                  ],
+                                    ),
+                                  SizedBox(width: idx == 0 ? 16 : 46),
+                                  Expanded(
+                                      child: ProfileHistoryTile(
+                                    report: viewModel
+                                        .histories[calendarIdx].reports[idx],
+                                  )),
+                                ],
+                              ))),
                 ),
               ),
+              const SizedBox(height: 10),
             ],
           ),
         ),
