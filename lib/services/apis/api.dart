@@ -1,16 +1,17 @@
 import 'dart:convert';
 import 'package:blabla/models/agora.dart';
+import 'package:blabla/models/video.dart';
 import 'package:blabla/models/content.dart';
-import 'package:blabla/models/content_category.dart';
 import 'package:blabla/models/content_feedback.dart';
 import 'package:blabla/models/history.dart';
 import 'package:blabla/models/report.dart';
 import 'package:blabla/models/schedule.dart';
 import 'package:blabla/models/setting.dart';
 import 'package:blabla/models/user.dart';
-import 'package:blabla/screens/my_space/mys_view_model.dart';
+import 'package:blabla/screens/practice/practice_view_model.dart';
 import 'package:blabla/utils/dotenv.dart';
 import 'package:dio/dio.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 
@@ -173,31 +174,6 @@ class API {
     }
   }
 
-  Future<List<EmojiNameTag>> getCrewTags() async {
-    // 수정 - 설정 언어 별
-    final res = await api("$korBaseUrl/common/crew-tags", HttpMethod.get);
-    if (res.statusCode == 200) {
-      return (jsonDecode(utf8.decode(res.bodyBytes))["data"]["tags"] as List)
-          .map((e) => EmojiNameTag.fromJson(e))
-          .toList();
-    } else {
-      throw Exception("http error :(");
-    }
-  }
-
-  Future<List<EmojiNameTag>> getMemProps() async {
-    // 수정 - 설정 언어 별
-    final res = await api("$korBaseUrl/common/prefer-members", HttpMethod.get);
-    if (res.statusCode == 200) {
-      return (jsonDecode(utf8.decode(res.bodyBytes))["data"]["preferMembers"]
-              as List)
-          .map((e) => EmojiNameTag.fromJson(e))
-          .toList();
-    } else {
-      throw Exception("http error :(");
-    }
-  }
-
   /* 홈 API */
   Future<UserProfile> getMyProfile() async {
     const storage = FlutterSecureStorage();
@@ -210,124 +186,6 @@ class API {
       return UserProfile.fromJson(
           jsonDecode(utf8.decode(res.bodyBytes))["data"]);
     } else {
-      throw Exception("http error :(");
-    }
-  }
-
-  Future<List<CrewSimple>> getMyCrews() async {
-    // 수정 - 테스트 API
-    const storage = FlutterSecureStorage();
-    // final res = await api("$testUrl/crews/me", HttpMethod.get);
-    final res = await api("$baseUrl/crews/me", HttpMethod.get,
-        token: "Bearer ${await storage.read(key: "accessToken")}",
-        needCheck: true);
-    if (res.statusCode == 200) {
-      return (jsonDecode(utf8.decode(res.bodyBytes))["data"]["crews"] as List)
-          .map((e) => CrewSimple.fromJson(e))
-          .toList();
-    } else {
-      throw Exception("http error :(");
-    }
-  }
-
-  Future<List<CrewSimple>> getNowCrews() async {
-    // 수정 - 테스트 API
-    const storage = FlutterSecureStorage();
-    // final res = await api("$testUrl/crews/me/can-join", HttpMethod.get);
-    final res = await api("$baseUrl/crews/can-join", HttpMethod.get,
-        token: "Bearer ${await storage.read(key: "accessToken")}",
-        needCheck: true);
-    // print(jsonDecode(utf8.decode(res.bodyBytes)));
-    if (res.statusCode == 200) {
-      return (jsonDecode(utf8.decode(res.bodyBytes))["data"]["crews"] as List)
-          .map((e) => CrewSimple.fromJson(e))
-          .toList();
-    } else {
-      throw Exception("http error :(");
-    }
-  }
-
-  Future<Content> getTodayContent() async {
-    // 수정 - 테스트 API
-    const storage = FlutterSecureStorage();
-    // final res = await api("$testUrl/contents/today", HttpMethod.get,
-    final res = await api("$korBaseUrl/contents/today", HttpMethod.get,
-        token: "Bearer ${await storage.read(key: "accessToken")}",
-        needCheck: true);
-    // print(jsonDecode(utf8.decode(res.bodyBytes)));
-    if (res.statusCode == 200) {
-      return Content.fromJson(jsonDecode(utf8.decode(res.bodyBytes))["data"]);
-    } else {
-      throw Exception("http error :(");
-    }
-  }
-
-  /* 홈 - 크루 API */
-  Future<List<Crew>> getCrews() async {
-    // 수정 - page, sort
-    const storage = FlutterSecureStorage();
-    // final res = await api("$korTestUrl/crews", HttpMethod.get);
-    final res = await api("$korBaseUrl/crews", HttpMethod.get,
-        token: "Bearer ${await storage.read(key: "accessToken")}",
-        needCheck: true);
-    if (res.statusCode == 200) {
-      return (jsonDecode(utf8.decode(res.bodyBytes))["data"]["content"] as List)
-          .map((e) => Crew.fromJson(e))
-          .toList();
-    } else {
-      throw Exception("http error :(");
-    }
-  }
-
-  Future<CrewDetail> getCrewDetail(int crewId) async {
-    const storage = FlutterSecureStorage();
-    // 수정 - 테스트 API & crewId, 한글
-    // final res = await api("$korTestUrl/crews/$crewId", HttpMethod.get);
-    final res = await api("$korBaseUrl/crews/$crewId", HttpMethod.get,
-        token: "Bearer ${await storage.read(key: "accessToken")}",
-        needCheck: true);
-    if (res.statusCode == 200) {
-      return (CrewDetail.fromJson(
-          jsonDecode(utf8.decode(res.bodyBytes))["data"]));
-    } else {
-      throw Exception("http error :(");
-    }
-  }
-
-  Future<int> createCrew(CrewToJson crew) async {
-    // 수정 - 테스트 API
-    const storage = FlutterSecureStorage();
-    final res = await api("$baseUrl/crews", HttpMethod.post,
-        token: "Bearer ${await storage.read(key: "accessToken")}",
-        body: jsonEncode(crew.toJson()),
-        needCheck: true);
-    // final res =
-    //     await api("$testUrl/crews", HttpMethod.post, body: jsonEncode(crew));
-    if (res.statusCode == 200) {
-      return jsonDecode(utf8.decode(res.bodyBytes))["data"]["crewId"];
-    } else {
-      throw Exception("http error :(");
-    }
-  }
-
-  Future<bool> joinCrew(int crewId, bool autoApproval,
-      {String msg = ""}) async {
-    const storage = FlutterSecureStorage();
-    late final http.Response res;
-    if (autoApproval) {
-      res = await api("$baseUrl/crews/$crewId/join", HttpMethod.post,
-          token: "Bearer ${await storage.read(key: "accessToken")}",
-          needCheck: true);
-    } else {
-      res = await api("$baseUrl/crews/$crewId/join", HttpMethod.post,
-          body: jsonEncode({"message": msg}),
-          token: "Bearer ${await storage.read(key: "accessToken")}",
-          needCheck: true);
-    }
-    if (res.statusCode == 200) {
-      return jsonDecode(utf8.decode(res.bodyBytes))["success"];
-    } else {
-      print(jsonDecode(utf8.decode(res.bodyBytes)));
       throw Exception("http error :(");
     }
   }
@@ -362,9 +220,9 @@ class API {
     }
   }
 
-  Future<Agora> getAgoraToken(int crewId, bool isActivated) async {
+  Future<Agora> getAgoraToken(bool isActivated) async {
     const storage = FlutterSecureStorage();
-    final res = await api("$baseUrl/crews/$crewId/voice-room", HttpMethod.post,
+    final res = await api("$baseUrl/crews/voice-room", HttpMethod.post,
         token: "Bearer ${await storage.read(key: "accessToken")}",
         body: jsonEncode({"isActivated": isActivated}),
         needCheck: true);
@@ -410,13 +268,11 @@ class API {
   }
 
   /* 크루 스페이스 - 일정 */
-  Future<ScheduleSimple?> getUpcomingSchedule(int crewId) async {
     const storage = FlutterSecureStorage();
-    final res = await api(
-        "$baseUrl/crews/$crewId/schedules/upcoming", HttpMethod.get,
+    final res = await api("$baseUrl/crews/schedules/upcoming", HttpMethod.get,
         token: "Bearer ${await storage.read(key: "accessToken")}",
         needCheck: true);
-    print(crewId);
+    print(jsonDecode(utf8.decode(res.bodyBytes)));
     if (res.statusCode == 200) {
       if (jsonDecode(utf8.decode(res.bodyBytes))["data"].toString() == "{}") {
         return null;
@@ -429,9 +285,9 @@ class API {
     }
   }
 
-  Future<List<Schedule>> getSchedules(int crewId) async {
+  Future<List<Schedule>> getSchedules() async {
     const storage = FlutterSecureStorage();
-    final res = await api("$baseUrl/crews/$crewId/schedules", HttpMethod.get,
+    final res = await api("$baseUrl/crews/schedules", HttpMethod.get,
         token: "Bearer ${await storage.read(key: "accessToken")}",
         needCheck: true);
     print(jsonDecode(utf8.decode(res.bodyBytes)));
@@ -445,10 +301,9 @@ class API {
     }
   }
 
-  Future<bool> createSchedule(
-      int crewId, String title, String meetingTime) async {
+  Future<bool> createSchedule(String title, String meetingTime) async {
     const storage = FlutterSecureStorage();
-    final res = await api("$baseUrl/crews/$crewId/schedules", HttpMethod.post,
+    final res = await api("$baseUrl/crews/schedules", HttpMethod.post,
         token: "Bearer ${await storage.read(key: "accessToken")}",
         needCheck: true,
         body: jsonEncode({"title": title, "meetingTime": meetingTime}));
@@ -459,13 +314,12 @@ class API {
     }
   }
 
-  Future<bool> joinSchedule(int crewId, int scheduleId) async {
+  Future<bool> joinSchedule(int scheduleId) async {
     const storage = FlutterSecureStorage();
-    final res = await api(
-        "$baseUrl/crews/$crewId/schedules/join", HttpMethod.post,
+    final res = await api("$baseUrl/crews/schedules/join", HttpMethod.post,
         token: "Bearer ${await storage.read(key: "accessToken")}",
         needCheck: true,
-        body: jsonEncode({"id": scheduleId}));
+        body: jsonEncode({"scheduleId": scheduleId}));
     print(jsonDecode(utf8.decode(res.bodyBytes)));
     if (res.statusCode == 200) {
       return true;
@@ -489,7 +343,7 @@ class API {
   }
 
   /* 크루 리포트 */
-  Future<ReportDetail> getDetailReport(int crewId, int reportId) async {
+  Future<ReportDetail> getDetailReport(int reportId) async {
     const storage = FlutterSecureStorage();
     final res = await api(
       "$baseUrl/crews/reports/$reportId",
