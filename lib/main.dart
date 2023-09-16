@@ -8,9 +8,9 @@ import 'package:blabla/screens/practice/practice_view_model.dart';
 import 'package:blabla/screens/profile/profile_main_view.dart';
 import 'package:blabla/screens/profile/profile_modify_view_model.dart';
 import 'package:blabla/screens/profile/profile_view_model.dart';
-import 'package:blabla/screens/report/report_main_view.dart';
-import 'package:blabla/screens/report/report_view_model.dart';
 import 'package:blabla/screens/splash.dart';
+import 'package:blabla/screens/square/square_main_view.dart';
+import 'package:blabla/screens/square/square_view_model.dart';
 import 'package:blabla/services/amplitude.dart';
 import 'package:blabla/styles/colors.dart';
 import 'package:blabla/styles/theme.dart';
@@ -50,6 +50,7 @@ void main() async {
         ChangeNotifierProvider(create: (_) => ProfileModifyViewModel()),
         ChangeNotifierProvider(create: (_) => ProfileViewModel()),
         ChangeNotifierProvider(create: (_) => PracticeViewModel()),
+        ChangeNotifierProvider(create: (_) => SquareViewModel()),
       ], child: const MyApp()),
     ),
   );
@@ -91,7 +92,7 @@ class Main extends StatelessWidget {
     final navKeyList = List.generate(3, (idx) => GlobalKey<NavigatorState>());
     final botNavList = ["team", "play", "person"];
     final pageList = [
-      HomeView(),
+      const SquareMainView(),
       const PracticeMainView(),
       const ProfileMainView(),
     ];
