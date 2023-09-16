@@ -224,43 +224,71 @@ class ProfileMainView extends StatelessWidget {
               const SizedBox(
                 height: 20,
               ),
-              Column(
-                children: List.generate(
-                  viewModel.histories.length,
-                  (calendarIdx) => Column(
+              viewModel.histories.isEmpty
+                  ? Container(
+                    padding: const EdgeInsets.symmetric(vertical: 80),
+                    width: MediaQuery.of(context).size.width,
+                    child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Text(
+                            "🥺",
+                            style: TextStyle(
+                              fontSize: 44,
+                              fontWeight: FontWeight.bold,
+                              color: BlaColor.grey900,
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 12,
+                          ),
+                          Text(
+                            "표시할 히스토리가 없습니다!\n${viewModel.filter == HistoryFilter.personal ? "마이" : "크루"} 스페이스 활동을 통해\n히스토리를 만들어보세요!",
+                            style:
+                                BlaTxt.txt14R.copyWith(color: BlaColor.grey800),
+                            textAlign: TextAlign.center,
+                          ),
+                        ],
+                      ),
+                  )
+                  : Column(
                       children: List.generate(
-                          viewModel.histories[calendarIdx].reports.length,
-                          (idx) => Row(
-                                children: [
-                                  if (idx == 0)
-                                    SizedBox(
-                                      width: 30,
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        children: [
-                                          Text(
-                                            "${viewModel.histories[calendarIdx].datetime.month}월",
-                                            style: BlaTxt.txt12R.copyWith(
-                                                color: BlaColor.grey700),
+                        viewModel.histories.length,
+                        (calendarIdx) => Column(
+                            children: List.generate(
+                                viewModel.histories[calendarIdx].reports.length,
+                                (idx) => Row(
+                                      children: [
+                                        if (idx == 0)
+                                          SizedBox(
+                                            width: 30,
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              children: [
+                                                Text(
+                                                  "${viewModel.histories[calendarIdx].datetime.month}월",
+                                                  style: BlaTxt.txt12R.copyWith(
+                                                      color: BlaColor.grey700),
+                                                ),
+                                                Text(
+                                                  "${viewModel.histories[calendarIdx].datetime.day}",
+                                                  style: BlaTxt.txt20B,
+                                                )
+                                              ],
+                                            ),
                                           ),
-                                          Text(
-                                            "${viewModel.histories[calendarIdx].datetime.day}",
-                                            style: BlaTxt.txt20B,
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                  SizedBox(width: idx == 0 ? 16 : 46),
-                                  Expanded(
-                                      child: ProfileHistoryTile(
-                                    report: viewModel
-                                        .histories[calendarIdx].reports[idx],
-                                  )),
-                                ],
-                              ))),
-                ),
-              ),
+                                        SizedBox(width: idx == 0 ? 16 : 46),
+                                        Expanded(
+                                            child: ProfileHistoryTile(
+                                          report: viewModel
+                                              .histories[calendarIdx]
+                                              .reports[idx],
+                                        )),
+                                      ],
+                                    ))),
+                      ),
+                    ),
               const SizedBox(height: 10),
             ],
           ),
