@@ -268,6 +268,7 @@ class API {
   }
 
   /* 크루 스페이스 - 일정 */
+  Future<ScheduleSimple?> getUpcomingSchedule() async {
     const storage = FlutterSecureStorage();
     final res = await api("$baseUrl/crews/schedules/upcoming", HttpMethod.get,
         token: "Bearer ${await storage.read(key: "accessToken")}",
@@ -421,44 +422,36 @@ class API {
     }
   }
 
+  /* 마이스페이스 */
+  Future<List<Content>> getContentList(ContentLangType type) async {
     const storage = FlutterSecureStorage();
     final res = await api(
+      "$baseUrl/contents",
+      HttpMethod.get,
+      lang: type.name,
       token: "Bearer ${await storage.read(key: "accessToken")}",
       needCheck: true,
     );
     print(jsonDecode(utf8.decode(res.bodyBytes)));
     if (res.statusCode == 200) {
-    } else {
-    }
-  }
-
-    final langUrl = (type == ContentLangType.kor ? korBaseUrl : engBaseUrl);
-    const storage = FlutterSecureStorage();
-    final res = await api(
-      "$langUrl/contents",
-      HttpMethod.get,
-      token: "Bearer ${await storage.read(key: "accessToken")}",
-      needCheck: true,
-    );
-    if (res.statusCode == 200) {
-      print(jsonDecode(utf8.decode(res.bodyBytes)));
-      return (jsonDecode(utf8.decode(res.bodyBytes))["data"]["category"]
+      return (jsonDecode(utf8.decode(res.bodyBytes))["data"]["contents"]
               as List)
-          .map((e) => ContentCategory.fromJson(e))
+          .map((e) => Content.fromJson(e))
           .toList();
     } else {
-      print(jsonDecode(utf8.decode(res.bodyBytes)));
       throw Exception("http error :(");
     }
   }
 
-  Future<ContentDetail> getContent(int contentId) async {
+  Future<ContentDetail> getVideoList(int contentId) async {
     const storage = FlutterSecureStorage();
     final res = await api(
       "$baseUrl/contents/$contentId",
       HttpMethod.get,
       token: "Bearer ${await storage.read(key: "accessToken")}",
+      needCheck: true,
     );
+    print(jsonDecode(utf8.decode(res.bodyBytes)));
     if (res.statusCode == 200) {
       return ContentDetail.fromJson(
           jsonDecode(utf8.decode(res.bodyBytes))["data"]);
@@ -468,8 +461,24 @@ class API {
     }
   }
 
+  Future<VideoDetail> getVideo(int videoId) async {
+    const storage = FlutterSecureStorage();
+    final res = await api(
+      "$baseUrl/contents/detail/$videoId",
+      HttpMethod.get,
+      token: "Bearer ${await storage.read(key: "accessToken")}",
+    );
+    print(jsonDecode(utf8.decode(res.bodyBytes)));
+    if (res.statusCode == 200) {
+      return VideoDetail.fromJson(
+          jsonDecode(utf8.decode(res.bodyBytes))["data"]);
+    } else {
+      throw Exception("http error :(");
+    }
+  }
+
   Future<ContentFeedback> getContentFeedback(
-      int contentId, String userAnswer) async {
+      int videoId, String userAnswer) async {
     const storage = FlutterSecureStorage();
     final res = await api(
         "$baseUrl/contents/detail/$videoId/feedback", HttpMethod.post,
