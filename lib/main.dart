@@ -3,12 +3,9 @@ import 'package:blabla/screens/home/crew_view_model.dart';
 import 'package:blabla/screens/home/home_view.dart';
 import 'package:blabla/screens/home/home_view_model.dart';
 import 'package:blabla/screens/join/join_view_model.dart';
-import 'package:blabla/screens/my_space/mys_main_view.dart';
-import 'package:blabla/screens/my_space/mys_view_model.dart';
 import 'package:blabla/screens/profile/profile_main_view.dart';
 import 'package:blabla/screens/profile/profile_modify_view_model.dart';
 import 'package:blabla/screens/profile/profile_view_model.dart';
-import 'package:blabla/screens/recruit/recruit_view_model.dart';
 import 'package:blabla/screens/report/report_main_view.dart';
 import 'package:blabla/screens/report/report_view_model.dart';
 import 'package:blabla/screens/splash.dart';
@@ -93,7 +90,6 @@ class Main extends StatelessWidget {
     final botNavList = ["team", "play", "person"];
     final pageList = [
       HomeView(),
-      MysMainView(),
       const ProfileMainView(),
     ];
 
