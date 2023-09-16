@@ -3,12 +3,7 @@ import 'package:blabla/models/agora.dart';
 import 'package:blabla/models/content.dart';
 import 'package:blabla/models/content_category.dart';
 import 'package:blabla/models/content_feedback.dart';
-import 'package:blabla/models/country.dart';
-import 'package:blabla/models/crew.dart';
-import 'package:blabla/models/emoji_name_tag.dart';
 import 'package:blabla/models/history.dart';
-import 'package:blabla/models/interest.dart';
-import 'package:blabla/models/level.dart';
 import 'package:blabla/models/report.dart';
 import 'package:blabla/models/schedule.dart';
 import 'package:blabla/models/setting.dart';
@@ -41,17 +36,19 @@ class API {
   API();
 
   Future<http.Response> api(String url, HttpMethod method,
-      {String? token, body, bool needCheck = false}) async {
+      {String? token, String? lang, body, bool needCheck = false}) async {
     Map<String, String> headers;
 
     if (token != null) {
       headers = {
         "Authorization": token,
+        "Content-language": lang ?? "ko",
         "Content-Type": "application/json",
         "Accept": "application/json",
       };
     } else {
       headers = {
+        "Content-language": lang ?? "ko",
         "Content-Type": "application/json",
         "Accept": "application/json",
       };
@@ -116,44 +113,6 @@ class API {
     }
   }
 
-  Future<List<Country>> getCountries() async {
-    final res = await api(countryAPI, HttpMethod.get);
-    if (res.statusCode == 200) {
-      return (jsonDecode(res.body)["data"] as List)
-          .map((e) => Country.fromJson(e))
-          .toList();
-    } else {
-      print(res.body);
-      throw Exception("http error :(");
-    }
-  }
-
-  Future<List<Level>> getLevels() async {
-    // 수정 - 설정 언어 별
-    final res = await api("$korBaseUrl/common/levels", HttpMethod.get);
-    if (res.statusCode == 200) {
-      return (jsonDecode(utf8.decode(res.bodyBytes))["data"]["levels"] as List)
-          .map((e) => Level.fromJson(e))
-          .toList();
-    } else {
-      print(res.body);
-      throw Exception("http error :()");
-    }
-  }
-
-  Future<List<Interest>> getInterests() async {
-    // 수정 - 설정 언어 별
-    final res = await api("$korBaseUrl/common/keywords", HttpMethod.get);
-    if (res.statusCode == 200) {
-      return (jsonDecode(utf8.decode(res.bodyBytes))["data"]["keywords"]
-              as List)
-          .map((e) => Interest.fromJson(e))
-          .toList();
-    } else {
-      throw Exception("http error :(");
-    }
-  }
-
   Future<bool> reissue() async {
     const storage = FlutterSecureStorage();
     final res = await api("$baseUrl/oauth/reissue", HttpMethod.post,
@@ -193,10 +152,14 @@ class API {
     }
   }
 
-  Future<bool> join(User user) async {
+  Future<bool> join(String socialLoginType, String language) async {
     const storage = FlutterSecureStorage();
     final res = await api("$baseUrl/oauth/sign-up", HttpMethod.post,
-        token: await storage.read(key: "socialToken"), body: jsonEncode(user));
+        token: await storage.read(key: "socialToken"),
+        body: jsonEncode({
+          "socialLoginType": socialLoginType,
+          "learningLanguage": language,
+        }));
     if (res.statusCode == 200) {
       await saveToken(res);
       return true;
@@ -235,7 +198,7 @@ class API {
   Future<UserProfile> getMyProfile() async {
     const storage = FlutterSecureStorage();
     // final res = await api("$korTestUrl/profile", HttpMethod.get);
-    final res = await api("$korBaseUrl/profile", HttpMethod.get,
+    final res = await api("$baseUrl/profile", HttpMethod.get,
         token: "Bearer ${await storage.read(key: "accessToken")}",
         needCheck: true);
     //print(jsonDecode(utf8.decode(res.bodyBytes)));
@@ -544,6 +507,7 @@ class API {
     final res = await api("$baseUrl/profile", HttpMethod.patch,
         token: "Bearer ${await storage.read(key: "accessToken")}",
         body: jsonEncode(user.toJson()));
+    print(jsonDecode(utf8.decode(res.bodyBytes)));
     if (res.statusCode == 200) {
       return true;
     } else {

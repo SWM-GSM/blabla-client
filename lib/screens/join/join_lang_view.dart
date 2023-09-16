@@ -1,88 +1,65 @@
-import 'package:blabla/screens/join/join_interest_view.dart';
+import 'package:blabla/main.dart';
 import 'package:blabla/screens/join/join_view_model.dart';
 import 'package:blabla/widgets/create_widget.dart';
 import 'package:blabla/screens/join/widgets/join_level_widget.dart';
 import 'package:blabla/styles/colors.dart';
 import 'package:blabla/styles/txt_style.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:provider/provider.dart';
 
 class JoinLangView extends StatelessWidget {
-  const JoinLangView({super.key, required this.lang});
-  final String lang;
+  const JoinLangView({super.key});
 
   @override
   Widget build(BuildContext context) {
     final viewModel = Provider.of<JoinViewModel>(context);
-
     return Scaffold(
       body: SafeArea(
         child: Column(
           children: [
-            CreateWidget(
-              page: lang == "eng" ? JoinPage.engLv : JoinPage.korLv,
-              title: "${viewModel.nickname}님의",
+            const CreateWidget(
+              page: JoinPage.lang,
+              title: "배우고 싶은 언어를\n선택해주세요",
               widgets: [
-                Text("${lang == "eng" ? "영어" : "한국어"} 스피킹 레벨",
-                    style: BlaTxt.txt28B.copyWith(color: BlaColor.orange)),
-                Text(
-                  "어디쯤이라고 생각하시나요?",
-                  style: BlaTxt.txt28R,
-                ),
-                const SizedBox(height: 22),
+                SizedBox(height: 22),
               ],
             ),
-            Expanded(
-              child: ListView.builder(
-                itemCount: viewModel.levels.length,
-                itemBuilder: (context, idx) => GestureDetector(
-                  onTap: () {
-                    if (lang == "eng") {
-                      viewModel.setEngLangLevel(viewModel.levels[idx].degree);
-                    } else {
-                      viewModel.setKorLangLevel(viewModel.levels[idx].degree);
-                    }
-                  },
-                  child: JoinLevelWidget(
-                      degree: viewModel.levels[idx].degree,
-                      desc: viewModel.levels[idx].desc,
-                      selected: (() {
-                        if (lang == "eng") {
-                          return viewModel.engLangLevel ==
-                                  viewModel.levels[idx].degree
-                              ? true
-                              : false;
-                        } else {
-                          return viewModel.korLangLevel ==
-                                  viewModel.levels[idx].degree
-                              ? true
-                              : false;
-                        }
-                      })()),
-                ),
+            GestureDetector(
+              onTap: () {
+                viewModel.setLang("ko");
+              },
+              child: JoinLangWidget(
+                title: "한국어",
+                desc: "한국어를 배우고 싶은 사용자입니다",
+                selected: viewModel.lang == "ko" ? true : false,
+              ),
+            ),
+            GestureDetector(
+              onTap: () {
+                viewModel.setLang("en");
+              },
+              child: JoinLangWidget(
+                title: "영어",
+                desc: "영어를 배우고 싶은 사용자입니다",
+                selected: viewModel.lang == "en" ? true : false,
               ),
             ),
           ],
         ),
       ),
       bottomSheet: GestureDetector(
-        onTap: () {
-          if (lang == "eng") {
-            if (viewModel.engLangLevel != 0) {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => JoinLangView(lang: "kor")),
-              );
+        onTap: () async {
+          await viewModel.join().then((value) {
+            if (value) {
+              Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (context) => const Main()),
+                  (route) => false);
+            } else {
+              showToast("회원가입에 실패했습니다. 다시 시도해주세요.");
             }
-          } else {
-            if (viewModel.korLangLevel != 0) {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => JoinInterestView()),
-              );
-            }
-          }
+          });
         },
         child: Container(
           margin: EdgeInsets.fromLTRB(
@@ -92,23 +69,15 @@ class JoinLangView extends StatelessWidget {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(12),
             color: () {
-              if (lang == "eng") {
-                if (viewModel.engLangLevel == 0) {
-                  return BlaColor.grey400;
-                } else {
-                  return BlaColor.orange;
-                }
+              if (viewModel.lang == null) {
+                return BlaColor.grey400;
               } else {
-                if (viewModel.korLangLevel == 0) {
-                  return BlaColor.grey400;
-                } else {
-                  return BlaColor.orange;
-                }
+                return BlaColor.orange;
               }
             }(),
           ),
           child:
-              Text("다음", style: BlaTxt.txt16B.copyWith(color: BlaColor.white)),
+              Text("블라블라 시작하기", style: BlaTxt.txt16B.copyWith(color: BlaColor.white)),
         ),
       ),
     );

@@ -2,13 +2,13 @@ import 'package:blabla/styles/colors.dart';
 import 'package:blabla/styles/txt_style.dart';
 import 'package:flutter/material.dart';
 
-class JoinLevelWidget extends StatelessWidget {
-  const JoinLevelWidget(
+class JoinLangWidget extends StatelessWidget {
+  const JoinLangWidget(
       {super.key,
-      required this.degree,
+      required this.title,
       required this.desc,
       required this.selected});
-  final int degree;
+  final String title;
   final String desc;
   final bool selected;
 
@@ -17,6 +17,7 @@ class JoinLevelWidget extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.fromLTRB(20, 8, 20, 8),
       height: 84,
+      width: MediaQuery.of(context).size.width - 40,
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(12),
           color: selected ? BlaColor.lightOrange : BlaColor.grey100),
@@ -25,7 +26,7 @@ class JoinLevelWidget extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            "Lv. $degree",
+            title,
             style: selected
                 ? BlaTxt.txt16BK.copyWith(color: BlaColor.orange)
                 : BlaTxt.txt16B,

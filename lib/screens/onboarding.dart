@@ -1,5 +1,5 @@
 import 'package:blabla/main.dart';
-import 'package:blabla/screens/join/join_profile_view.dart';
+import 'package:blabla/screens/join/join_lang_view.dart';
 import 'package:blabla/services/login.dart';
 import 'package:blabla/styles/colors.dart';
 import 'package:blabla/styles/txt_style.dart';
@@ -41,10 +41,7 @@ class OnBoarding extends StatelessWidget {
                                 builder: (context) => const Main()),
                             (route) => false);
                       } else {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => JoinProfileView()));
+                        throw Exception();
                       }
                     });
                   } else {
@@ -82,7 +79,7 @@ class OnBoarding extends StatelessWidget {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => JoinProfileView()));
+                              builder: (context) => const JoinLangView()));
                       break;
                     default:
                       print(e);
