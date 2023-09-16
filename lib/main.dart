@@ -1,7 +1,4 @@
 import 'package:blabla/providers/nav_provider.dart';
-import 'package:blabla/screens/home/crew_view_model.dart';
-import 'package:blabla/screens/home/home_view.dart';
-import 'package:blabla/screens/home/home_view_model.dart';
 import 'package:blabla/screens/join/join_view_model.dart';
 import 'package:blabla/screens/practice/practice_main_view.dart';
 import 'package:blabla/screens/practice/practice_view_model.dart';
@@ -45,8 +42,6 @@ void main() async {
       child: MultiProvider(providers: [
         ChangeNotifierProvider(create: (_) => JoinViewModel()),
         ChangeNotifierProvider(create: (_) => NavProvider()),
-        ChangeNotifierProvider(create: (_) => HomeViewModel()),
-        ChangeNotifierProvider(create: (_) => CrewViewModel()),
         ChangeNotifierProvider(create: (_) => ProfileModifyViewModel()),
         ChangeNotifierProvider(create: (_) => ProfileViewModel()),
         ChangeNotifierProvider(create: (_) => PracticeViewModel()),
