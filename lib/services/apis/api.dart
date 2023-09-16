@@ -100,10 +100,14 @@ class API {
   }
 
   Future<bool> getNicknameDup(String nickname) async {
-    final res =
-        await api("$baseUrl/members/nicknames/$nickname", HttpMethod.get);
+    final res = await api(
+      "$baseUrl/members/nicknames/$nickname",
+      HttpMethod.get,
+      needCheck: true,
+    );
+    print(jsonDecode(utf8.decode(res.bodyBytes)));
     if (res.statusCode == 200) {
-      if (!jsonDecode(res.body)["data"]["isDuplicated"]) {
+      if (!jsonDecode(utf8.decode(res.bodyBytes))["data"]["isDuplicated"]) {
         return true;
       } else {
         return false;
@@ -470,12 +474,12 @@ class API {
     }
   }
 
-  Future<bool> cancelSchedule(int crewId, int scheduleId) async {
+  Future<bool> cancelSchedule(int scheduleId) async {
     const storage = FlutterSecureStorage();
-    final res = await api("$baseUrl/crews/$crewId/schedules", HttpMethod.delete,
+    final res = await api("$baseUrl/crews/schedules", HttpMethod.delete,
         token: "Bearer ${await storage.read(key: "accessToken")}",
         needCheck: true,
-        body: jsonEncode({"id": scheduleId}));
+        body: jsonEncode({"scheduleId": scheduleId}));
     print(jsonDecode(utf8.decode(res.bodyBytes)));
     if (res.statusCode == 200) {
       return true;
@@ -515,30 +519,6 @@ class API {
     }
   }
 
-  Future<bool> patchProfileDesc(String description) async {
-    const storage = FlutterSecureStorage();
-    final res = await api("$baseUrl/profile/description", HttpMethod.patch,
-        token: "Bearer ${await storage.read(key: "accessToken")}",
-        body: jsonEncode({"description": description}));
-    if (res.statusCode == 200) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  Future<bool> patchProfileInterest(List<String> interests) async {
-    const storage = FlutterSecureStorage();
-    final res = await api("$baseUrl/profile/keywords", HttpMethod.patch,
-        token: "Bearer ${await storage.read(key: "accessToken")}",
-        body: jsonEncode({"keywords": interests}));
-    if (res.statusCode == 200) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
   /* 설정 */
   Future<Setting> getSetting() async {
     const storage = FlutterSecureStorage();
@@ -557,7 +537,7 @@ class API {
     }
   }
 
-  Future<bool> patchOpenBirthdate(bool status) async {
+  Future<bool> patchAllowNotification(bool status) async {
     const storage = FlutterSecureStorage();
     final res = await api(
       "$baseUrl/members/birth-date-disclosure",
@@ -650,7 +630,7 @@ class API {
       int contentId, String userAnswer) async {
     const storage = FlutterSecureStorage();
     final res = await api(
-        "$baseUrl/contents/$contentId/feedback", HttpMethod.post,
+        "$baseUrl/contents/detail/$videoId/feedback", HttpMethod.post,
         token: "Bearer ${await storage.read(key: "accessToken")}",
         needCheck: true,
         body: jsonEncode({"userAnswer": userAnswer}));
