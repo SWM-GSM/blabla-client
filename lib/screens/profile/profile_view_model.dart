@@ -1,4 +1,5 @@
 import 'package:blabla/models/history.dart';
+import 'package:blabla/models/report.dart';
 import 'package:blabla/models/user.dart';
 import 'package:blabla/services/apis/api.dart';
 import 'package:flutter/material.dart';
@@ -37,6 +38,15 @@ class ProfileViewModel with ChangeNotifier {
 
   HistoryFilter get filter => _filter;
   List<History> get histories => _histories;
+
+  /* 리포트 */
+  ReportDetail? _report;
+  ReportDetail? get report => _report;
+
+  void setReport(int reportId) async {
+    _report = await api.getDetailReport(reportId);
+    notifyListeners();
+  }
 
   void initProfile() async {
     const storage = FlutterSecureStorage();
