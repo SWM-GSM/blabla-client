@@ -49,7 +49,18 @@ class OnBoarding extends StatelessWidget {
                     throw Exception();
                   }
                 } catch (e) {
-                  showToast("로그인 실패. 다시 시도해주세요");
+                  switch (e) {
+                    case "M002":
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const JoinLangView()));
+                      break;
+                    default:
+                      print(e);
+                      showToast("로그인 실패. 다시 시도해주세요");
+                      break;
+                  }
                 }
               }),
               loginBtn("google", BlaColor.grey200, () async {

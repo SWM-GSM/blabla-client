@@ -81,12 +81,7 @@ class AppleLoginService extends LoginService {
             redirectUri: Uri.parse("https://dev.blablah.shop/apple/callback")),
       );
 
-      final email = credential.email;
-      final name = credential.givenName;
-
-      if (email != null && name != null) {
-        viewModel.initUser(Login.apple.name);
-      }
+      viewModel.initUser(Login.apple.name);
 
       await storage.write(
           key: "platform", value: Login.apple.name.toUpperCase());
