@@ -51,6 +51,9 @@ class PracticeVideoListeningView extends StatelessWidget {
           ),
         ),
         leadingWidth: 64,
+        actions: [
+          Container(width: 64, color: Colors.transparent,),
+        ],
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -101,7 +104,11 @@ class PracticeVideoListeningView extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const PracticeVideoWritingView(),
+                  builder: (context) => PracticeVideoWritingView(
+                    lang: viewModel.contentLangType == ContentLangType.en
+                        ? "ko-KR"
+                        : "en-US",
+                  ),
                 ),
               );
             } else {

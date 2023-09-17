@@ -20,7 +20,8 @@ enum WritingStatus {
 }
 
 class PracticeVideoWritingView extends StatefulWidget {
-  const PracticeVideoWritingView({super.key});
+  const PracticeVideoWritingView({super.key, required this.lang});
+  final String lang;
 
   @override
   State<PracticeVideoWritingView> createState() =>
