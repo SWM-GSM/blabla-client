@@ -19,6 +19,6 @@ class ContentFeedback {
         starRating: json["starRating"],
         contextRating: json["contextRating"],
         userAnswer: json["userAnswer"],
-        targetSentence: json["targetSenetence"],
+        targetSentence: json["targetSentence"],
       );
 }
