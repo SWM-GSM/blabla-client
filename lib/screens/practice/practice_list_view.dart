@@ -1,4 +1,3 @@
-import 'package:blabla/screens/practice/practice_temp_view.dart';
 import 'package:blabla/screens/practice/practice_video_listening_view.dart';
 import 'package:blabla/screens/practice/practice_view_model.dart';
 import 'package:blabla/screens/practice/widgets/practice_video_tile_widget.dart';
@@ -6,6 +5,7 @@ import 'package:blabla/styles/colors.dart';
 import 'package:blabla/styles/txt_style.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 
@@ -35,9 +35,6 @@ class _PracticeListViewState extends State<PracticeListView> {
           _appBarCollapsed = false;
         }
       });
-    });
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      // Provider.of<CrewViewModel>(context, listen: false).getCrewDetail();
     });
   }
 
@@ -150,10 +147,9 @@ class _PracticeListViewState extends State<PracticeListView> {
                                         context,
                                         MaterialPageRoute(
                                             builder: ((context) =>
-                                                const PracticeTempView())));
-                                    // PracticeVideoListeningView(
-                                    //     videoId: e.id,
-                                    //     title: e.title))));
+                                                PracticeVideoListeningView(
+                                                    videoId: e.id,
+                                                    title: e.title))));
                                   },
                                   child: PracticeVideoTileWidget(video: e)))
                               .toList()),
