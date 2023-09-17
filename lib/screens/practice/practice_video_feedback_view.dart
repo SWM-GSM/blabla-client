@@ -35,6 +35,9 @@ class PracticeVideoFeedbackView extends StatelessWidget {
           ),
         ),
         leadingWidth: 64,
+        actions: [
+          Container(width: 64, color: Colors.transparent,),
+        ],
       ),
       body: Padding(
         padding: EdgeInsets.fromLTRB(

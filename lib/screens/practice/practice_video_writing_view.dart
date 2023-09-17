@@ -181,6 +181,12 @@ class _PracticeVideoWritingViewState extends State<PracticeVideoWritingView> {
               ),
             ),
             leadingWidth: 64,
+            actions: [
+              Container(
+                width: 64,
+                color: Colors.transparent,
+              ),
+            ],
           ),
           body: Padding(
             padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
@@ -271,6 +277,12 @@ class _PracticeVideoWritingViewState extends State<PracticeVideoWritingView> {
               ),
             ),
             leadingWidth: 64,
+            actions: [
+              Container(
+                width: 64,
+                color: Colors.transparent,
+              ),
+            ],
           ),
           body: SingleChildScrollView(
             child: Padding(
@@ -370,6 +382,12 @@ class _PracticeVideoWritingViewState extends State<PracticeVideoWritingView> {
               ),
             ),
             leadingWidth: 64,
+            actions: [
+              Container(
+                width: 64,
+                color: Colors.transparent,
+              ),
+            ],
           ),
           body: SingleChildScrollView(
             child: Padding(
@@ -438,6 +456,12 @@ class _PracticeVideoWritingViewState extends State<PracticeVideoWritingView> {
                 ),
               ),
               leadingWidth: 64,
+              actions: [
+                Container(
+                  width: 64,
+                  color: Colors.transparent,
+                ),
+              ],
             ),
             body: SingleChildScrollView(
               child: Padding(
@@ -570,6 +594,12 @@ class _PracticeVideoWritingViewState extends State<PracticeVideoWritingView> {
               ),
             ),
             leadingWidth: 64,
+            actions: [
+              Container(
+                width: 64,
+                color: Colors.transparent,
+              ),
+            ],
           ),
           body: SingleChildScrollView(
             child: Padding(

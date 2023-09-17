@@ -106,6 +106,12 @@ class _PracticeVideoSpeakingViewState extends State<PracticeVideoSpeakingView> {
           ),
         ),
         leadingWidth: 64,
+        actions: [
+          Container(
+            width: 64,
+            color: Colors.transparent,
+          ),
+        ],
       ),
       body: SingleChildScrollView(
         child: Column(
