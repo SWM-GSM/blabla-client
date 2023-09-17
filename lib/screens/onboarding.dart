@@ -4,6 +4,7 @@ import 'package:blabla/services/login.dart';
 import 'package:blabla/styles/colors.dart';
 import 'package:blabla/styles/txt_style.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 
 class OnBoarding extends StatelessWidget {
@@ -12,109 +13,110 @@ class OnBoarding extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: SafeArea(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Expanded(
-              child: Image.asset("assets/imgs/img_140_logo.png",
-                  height: 140, width: 140)),
-          Text(
-            "SNS 계정으로 간편하게 가입하기",
-            style: BlaTxt.txt14R.copyWith(color: BlaColor.grey700),
-          ),
-          const SizedBox(height: 20),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              loginBtn("apple", BlaColor.grey900, () async {
-                try {
-                  final socialLoginSuccess =
-                      await Login.apple.service.socialLogin(context);
-                  if (socialLoginSuccess) {
-                    await Login.apple.service.login().then((alreadyJoined) {
-                      // 이미 가입된 유저
-                      if (alreadyJoined) {
-                        Navigator.pushAndRemoveUntil(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const Main()),
-                            (route) => false);
-                      } else {
-                        throw Exception();
-                      }
-                    });
-                  } else {
-                    // 소셜 로그인 실패
-                    throw Exception();
-                  }
-                } catch (e) {
-                  switch (e) {
-                    case "M002":
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const JoinLangView()));
-                      break;
-                    default:
-                      print(e);
-                      showToast("로그인 실패. 다시 시도해주세요");
-                      break;
-                  }
-                }
-              }),
-              loginBtn("google", BlaColor.grey200, () async {
-                try {
-                  final socialLoginSuccess =
-                      await Login.google.service.socialLogin(context);
-                  if (socialLoginSuccess) {
-                    await Login.google.service.login().then((alreadyJoined) {
-                      // 이미 가입된 유저
-                      if (alreadyJoined) {
-                        Navigator.pushAndRemoveUntil(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const Main()),
-                            (route) => false);
-                      } else {
-                        throw Exception();
-                      }
-                    });
-                  } else {
-                    // 소셜 로그인 실패
-                    throw Exception();
-                  }
-                } catch (e) {
-                  switch (e) {
-                    case "M002":
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const JoinLangView()));
-                      break;
-                    default:
-                      print(e);
-                      showToast("로그인 실패. 다시 시도해주세요");
-                      break;
-                  }
-                }
-              }),
-            ],
-          ),
-          Container(
-            alignment: Alignment.center,
-            padding: const EdgeInsets.symmetric(vertical: 18),
-            margin: const EdgeInsets.fromLTRB(0, 20, 0, 40),
-            child: Text(
-              "로그인 관련 문의하기",
-              style: BlaTxt.txt14M.copyWith(
-                  color: BlaColor.grey800,
-                  decoration: TextDecoration.underline),
+        body: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Expanded(
+                child: Image.asset("assets/imgs/img_140_logo.png",
+                    height: 140, width: 140)),
+            Text(
+              "SNS 계정으로 간편하게 가입하기",
+              style: BlaTxt.txt14R.copyWith(color: BlaColor.grey700),
             ),
-          )
-        ],
-      ),
-    ));
+            const SizedBox(height: 20),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                loginBtn("apple", BlaColor.grey900, () async {
+                  try {
+                    final socialLoginSuccess =
+                        await Login.apple.service.socialLogin(context);
+                    if (socialLoginSuccess) {
+                      await Login.apple.service.login().then((alreadyJoined) {
+                        // 이미 가입된 유저
+                        if (alreadyJoined) {
+                          Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const Main()),
+                              (route) => false);
+                        } else {
+                          throw Exception();
+                        }
+                      });
+                    } else {
+                      // 소셜 로그인 실패
+                      throw Exception();
+                    }
+                  } catch (e) {
+                    switch (e) {
+                      case "M002":
+                        await Login.apple.service.socialLogin(context);
+                        if (context.mounted) {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const JoinLangView()));
+                        }
+                        break;
+                      default:
+                        print(e);
+                        showToast("로그인 실패. 다시 시도해주세요");
+                        break;
+                    }
+                  }
+                }),
+                loginBtn("google", BlaColor.grey200, () async {
+                  try {
+                    final socialLoginSuccess =
+                        await Login.google.service.socialLogin(context);
+                    if (socialLoginSuccess) {
+                      await Login.google.service.login().then((alreadyJoined) {
+                        // 이미 가입된 유저
+                        if (alreadyJoined) {
+                          Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const Main()),
+                              (route) => false);
+                        } else {
+                          throw Exception();
+                        }
+                      });
+                    } else {
+                      // 소셜 로그인 실패
+                      throw Exception();
+                    }
+                  } catch (e) {
+                    switch (e) {
+                      case "M002":
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const JoinLangView()));
+                        break;
+                      default:
+                        print(e);
+                        showToast("로그인 실패. 다시 시도해주세요");
+                        break;
+                    }
+                  }
+                }),
+              ],
+            ),
+            Container(
+              alignment: Alignment.center,
+              padding: const EdgeInsets.symmetric(vertical: 18),
+              margin: const EdgeInsets.fromLTRB(0, 20, 0, 40),
+              child: Text(
+                "로그인 관련 문의하기",
+                style: BlaTxt.txt14M.copyWith(
+                    color: BlaColor.grey800,
+                    decoration: TextDecoration.underline),
+              ),
+            )
+          ],
+        ));
   }
 
   Widget loginBtn(String icName, Color bgColor, onTap,

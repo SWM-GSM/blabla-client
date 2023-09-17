@@ -22,13 +22,11 @@ class SquareTempView extends StatelessWidget {
         ),
         title: Text("임시"),
       ),
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(20),
-          child: SingleChildScrollView(
-            child: Text(txt,
-                style: BlaTxt.txt10BK.copyWith(overflow: TextOverflow.visible)),
-          ),
+      body: Padding(
+        padding: const EdgeInsets.all(20),
+        child: SingleChildScrollView(
+          child: Text(txt,
+              style: BlaTxt.txt10BK.copyWith(overflow: TextOverflow.visible)),
         ),
       ),
     );

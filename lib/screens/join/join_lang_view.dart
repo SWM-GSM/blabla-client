@@ -15,38 +15,36 @@ class JoinLangView extends StatelessWidget {
   Widget build(BuildContext context) {
     final viewModel = Provider.of<JoinViewModel>(context);
     return Scaffold(
-      body: SafeArea(
-        child: Column(
-          children: [
-            const CreateWidget(
-              page: JoinPage.lang,
-              title: "배우고 싶은 언어를\n선택해주세요",
-              widgets: [
-                SizedBox(height: 22),
-              ],
+      body: Column(
+        children: [
+          const CreateWidget(
+            page: JoinPage.lang,
+            title: "배우고 싶은 언어를\n선택해주세요",
+            widgets: [
+              SizedBox(height: 22),
+            ],
+          ),
+          GestureDetector(
+            onTap: () {
+              viewModel.setLang("ko");
+            },
+            child: JoinLangWidget(
+              title: "한국어",
+              desc: "한국어를 배우고 싶은 사용자입니다",
+              selected: viewModel.lang == "ko" ? true : false,
             ),
-            GestureDetector(
-              onTap: () {
-                viewModel.setLang("ko");
-              },
-              child: JoinLangWidget(
-                title: "한국어",
-                desc: "한국어를 배우고 싶은 사용자입니다",
-                selected: viewModel.lang == "ko" ? true : false,
-              ),
+          ),
+          GestureDetector(
+            onTap: () {
+              viewModel.setLang("en");
+            },
+            child: JoinLangWidget(
+              title: "영어",
+              desc: "영어를 배우고 싶은 사용자입니다",
+              selected: viewModel.lang == "en" ? true : false,
             ),
-            GestureDetector(
-              onTap: () {
-                viewModel.setLang("en");
-              },
-              child: JoinLangWidget(
-                title: "영어",
-                desc: "영어를 배우고 싶은 사용자입니다",
-                selected: viewModel.lang == "en" ? true : false,
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
       bottomSheet: GestureDetector(
         onTap: () async {

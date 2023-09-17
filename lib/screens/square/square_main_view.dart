@@ -30,162 +30,157 @@ class SquareMainView extends StatelessWidget {
         ),
         centerTitle: true,
       ),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.fromLTRB(20, 12, 20, 0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Text("square.upcomingEvents".tr(), style: BlaTxt.txt20B),
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.of(context, rootNavigator: true).push(
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    const SquareCalendarView()));
-                      },
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Text(
-                            "더보기",
-                            style: BlaTxt.txt14ML
-                                .copyWith(color: BlaColor.grey600),
-                          ),
-                          SvgPicture.asset("assets/icons/ic_16_arrow_right.svg",
-                              width: 16, height: 16)
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              viewModel.schedules == null
-                  ? SkeletonBoxWidget(
-                      child: Container(
-                        height: 144,
-                        margin: const EdgeInsets.fromLTRB(20, 16, 20, 20),
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(12),
-                          color: BlaColor.grey100,
-                        ),
-                      ),
-                    )
-                  : SquareScheduleWidget(
-                      type: ScheduleWidgetType.none,
-                      schedule: viewModel.upcomingSchedule),
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-                child: Column(children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Text(
-                        "보이스룸",
-                        style: BlaTxt.txt20B,
-                      ),
-                      Text(
-                        "6명 참여중",
-                        style: BlaTxt.txt14M.copyWith(color: BlaColor.grey700),
-                      ),
-                    ],
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 18, bottom: 16),
-                    child: Wrap(
-                      spacing: 8,
-                      alignment: WrapAlignment.center,
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(20, 12, 20, 0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text("square.upcomingEvents".tr(), style: BlaTxt.txt20B),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.of(context, rootNavigator: true).push(
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  const SquareCalendarView()));
+                    },
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        const ProfileWidget(
-                            profileSize: 36,
-                            profile: "lion",
-                            bgSize: 60,
-                            bgColor: BlaColor.lightOrange),
-                        const ProfileWidget(
-                          profileSize: 36,
-                          profile: "dog",
-                          bgSize: 60,
-                          bgColor: Color(0xFFEDE5E4),
+                        Text(
+                          "더보기",
+                          style:
+                              BlaTxt.txt14ML.copyWith(color: BlaColor.grey600),
                         ),
-                        const ProfileWidget(
-                          profileSize: 36,
-                          profile: "chick",
-                          bgSize: 60,
-                          bgColor: Color(0xFFF8F7F9),
-                        ),
-                        Container(
-                            height: 60,
-                            width: 60,
-                            alignment: Alignment.center,
-                            margin: const EdgeInsets.only(right: 8),
-                            padding: const EdgeInsets.all(12),
-                            decoration: const BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: BlaColor.grey300,
-                            ),
-                            child: Text(
-                              "+2",
-                              style: BlaTxt.txt20B
-                                  .copyWith(color: BlaColor.grey700),
-                            )),
+                        SvgPicture.asset("assets/icons/ic_16_arrow_right.svg",
+                            width: 16, height: 16)
                       ],
                     ),
                   ),
-                  GestureDetector(
-                    onTap: () async {
-                      if (viewModel.myId != null &&
-                          viewModel.agoraToken != null) {
-// final token =
-                        //     "007eJxTYDhiLPevplLza5nAjWaBL09Ezs9pid2ZIbD01fF9y5gttZgVGIwtzQ1SU8zNks3SjExSDc2STCyMzZIsLAxTUlKM04wtGU8ypjYEMjI0s75kZGSAQBCfjSEpJxGIGBgAeX8fNw==";
-                        final permission =
-                            await Permission.microphone.request();
-                        print(permission);
-                        if (permission == PermissionStatus.granted) {
-                          if (context.mounted) {
-                            Navigator.of(context, rootNavigator: true)
-                                .push(MaterialPageRoute(
-                                    builder: (context) => SquareVoiceroomView(
-                                          id: viewModel.myId!,
-                                          token: viewModel.agoraToken!,
-                                          channelId: "blablah",
-                                        )));
-                          }
-                        } else if (permission ==
-                            PermissionStatus.permanentlyDenied) {
-                          openAppSettings();
-                        }
-                      } else {
-                        showToast("잠시 후 다시 시도해주세요");
-                      }
-                    },
+                ],
+              ),
+            ),
+            viewModel.schedules == null
+                ? SkeletonBoxWidget(
                     child: Container(
-                      width: double.infinity,
-                      height: 48,
+                      height: 144,
+                      margin: const EdgeInsets.fromLTRB(20, 16, 20, 20),
                       alignment: Alignment.center,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(12),
-                        color: BlaColor.orange,
-                      ),
-                      child: Text(
-                        "참여하기",
-                        style: BlaTxt.txt14B.copyWith(color: BlaColor.white),
+                        color: BlaColor.grey100,
                       ),
                     ),
                   )
-                ]),
-              ),
-              // ElevatedButton(onPressed: () async {
-              //   API().makeFCMToken();
-              // }, child: Text("FCM 날려보기"))
-            ],
-          ),
+                : SquareScheduleWidget(
+                    type: ScheduleWidgetType.none,
+                    schedule: viewModel.upcomingSchedule),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+              child: Column(children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      "보이스룸",
+                      style: BlaTxt.txt20B,
+                    ),
+                    Row(
+                      children: [
+                        Text(
+                          "6명 참여중",
+                          style:
+                              BlaTxt.txt14M.copyWith(color: BlaColor.grey700),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 18, bottom: 16),
+                  child: Wrap(
+                    spacing: 8,
+                    alignment: WrapAlignment.center,
+                    children: [
+                      const ProfileWidget(
+                          profileSize: 36,
+                          profile: "lion",
+                          bgSize: 60,
+                          bgColor: BlaColor.lightOrange),
+                      const ProfileWidget(
+                        profileSize: 36,
+                        profile: "dog",
+                        bgSize: 60,
+                        bgColor: Color(0xFFEDE5E4),
+                      ),
+                      const ProfileWidget(
+                        profileSize: 36,
+                        profile: "chick",
+                        bgSize: 60,
+                        bgColor: Color(0xFFF8F7F9),
+                      ),
+                      Container(
+                          height: 60,
+                          width: 60,
+                          alignment: Alignment.center,
+                          margin: const EdgeInsets.only(right: 8),
+                          padding: const EdgeInsets.all(12),
+                          decoration: const BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: BlaColor.grey300,
+                          ),
+                          child: Text(
+                            "+2",
+                            style:
+                                BlaTxt.txt20B.copyWith(color: BlaColor.grey700),
+                          )),
+                    ],
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () async {
+                    if (viewModel.myId != null && viewModel.agora != null) {
+                      final permission = await Permission.microphone.request();
+                      if (permission == PermissionStatus.granted) {
+                        if (context.mounted) {
+                          viewModel.joinChannel();
+                          Navigator.of(context, rootNavigator: true)
+                              .push(MaterialPageRoute(
+                                  builder: (context) => SquareVoiceroomView(
+                                        id: viewModel.myId!,
+                                        token: viewModel.agora!.token,
+                                        channelId: "blablah",
+                                      )));
+                        }
+                      } else if (permission ==
+                          PermissionStatus.permanentlyDenied) {
+                        openAppSettings();
+                      }
+                    } else {
+                      showToast("잠시 후 다시 시도해주세요");
+                    }
+                  },
+                  child: Container(
+                    width: double.infinity,
+                    height: 48,
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(12),
+                      color: BlaColor.orange,
+                    ),
+                    child: Text(
+                      "참여하기",
+                      style: BlaTxt.txt14B.copyWith(color: BlaColor.white),
+                    ),
+                  ),
+                )
+              ]),
+            ),
+          ],
         ),
       ),
     );
