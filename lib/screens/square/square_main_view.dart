@@ -192,25 +192,18 @@ class SquareMainView extends StatelessWidget {
                           ),
                 GestureDetector(
                   onTap: () async {
-                    if (viewModel.myId != null && viewModel.agora != null) {
-                      final permission = await Permission.microphone.request();
-                      if (permission == PermissionStatus.granted) {
-                        if (context.mounted) {
-                          viewModel.joinChannel();
-                          Navigator.of(context, rootNavigator: true)
-                              .push(MaterialPageRoute(
-                                  builder: (context) => SquareVoiceroomView(
-                                        id: viewModel.myId!,
-                                        token: viewModel.agora!.token,
-                                        channelId: "blablah",
-                                      )));
-                        }
-                      } else if (permission ==
-                          PermissionStatus.permanentlyDenied) {
-                        openAppSettings();
+                    final permission = await Permission.microphone.request();
+                    if (permission == PermissionStatus.granted) {
+                      if (context.mounted) {
+                        viewModel.joinChannel();
+                        Navigator.of(context, rootNavigator: true)
+                            .push(MaterialPageRoute(
+                                builder: (context) => SquareVoiceroomView(
+                                    )));
                       }
-                    } else {
-                      showToast("잠시 후 다시 시도해주세요");
+                    } else if (permission ==
+                        PermissionStatus.permanentlyDenied) {
+                      openAppSettings();
                     }
                   },
                   child: Container(
