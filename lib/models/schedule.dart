@@ -20,7 +20,8 @@ class ScheduleSimple {
         title: json["title"],
         dday: json["dday"],
         meetingTime: DateTime.parse(json["meetingTime"]),
-        profiles: List<String>.from(json["profiles"].map((x) => x)),
+        profiles: List<String>.from(
+            json["profiles"].map((x) => x.toString().toLowerCase())),
       );
 }
 
