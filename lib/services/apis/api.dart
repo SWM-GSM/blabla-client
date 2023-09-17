@@ -226,10 +226,25 @@ class API {
         token: "Bearer ${await storage.read(key: "accessToken")}",
         body: jsonEncode({"isActivated": isActivated}),
         needCheck: true);
+    print(jsonDecode(utf8.decode(res.bodyBytes)));
     if (res.statusCode == 200) {
       return Agora.fromJson(jsonDecode(utf8.decode(res.bodyBytes))["data"]);
     } else {
-      print(res.body);
+      throw Exception("http error :(");
+    }
+  }
+
+  Future<List<MemberSimple>> getVoiceRoomList() async {
+    const storage = FlutterSecureStorage();
+    final res = await api("$baseUrl/crews/voice-room", HttpMethod.get,
+        token: "Bearer ${await storage.read(key: "accessToken")}",
+        needCheck: true);
+    print(jsonDecode(utf8.decode(res.bodyBytes)));
+    if (res.statusCode == 200) {
+      return (jsonDecode(utf8.decode(res.bodyBytes))["data"]["members"] as List)
+          .map((e) => MemberSimple.fromJson(e))
+          .toList();
+    } else {
       throw Exception("http error :(");
     }
   }

@@ -4,6 +4,7 @@ import 'package:blabla/screens/square/square_view_model.dart';
 import 'package:blabla/screens/square/square_voiceroom_view.dart';
 import 'package:blabla/styles/colors.dart';
 import 'package:blabla/styles/txt_style.dart';
+import 'package:blabla/utils/datetime_to_str.dart';
 import 'package:blabla/widgets/profile_widget.dart';
 import 'package:blabla/widgets/skeleton_ui_widget.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -89,58 +90,102 @@ class SquareMainView extends StatelessWidget {
                       "보이스룸",
                       style: BlaTxt.txt20B,
                     ),
-                    Row(
-                      children: [
-                        Text(
-                          "6명 참여중",
-                          style:
-                              BlaTxt.txt14M.copyWith(color: BlaColor.grey700),
-                        ),
-                      ],
-                    ),
+                    viewModel.updateTime == null
+                        ? SkeletonTxtWidget(style: BlaTxt.txt12R, width: 190)
+                        : Row(
+                            children: [
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 4),
+                                child: Text(
+                                  "${datetimeToStr(viewModel.updateTime!, StrDatetimeType.hypenDelimiter)} 업데이트",
+                                  style: BlaTxt.txt12R
+                                      .copyWith(color: BlaColor.grey700),
+                                ),
+                              ),
+                              const SizedBox(width: 4),
+                              GestureDetector(
+                                  onTap: () {
+                                    viewModel.getVoiceRoomList();
+                                  },
+                                  child: SvgPicture.asset(
+                                      "assets/icons/ic_20_refresh.svg",
+                                      width: 20,
+                                      height: 20))
+                            ],
+                          ),
                   ],
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 18, bottom: 16),
-                  child: Wrap(
-                    spacing: 8,
-                    alignment: WrapAlignment.center,
-                    children: [
-                      const ProfileWidget(
-                          profileSize: 36,
-                          profile: "lion",
-                          bgSize: 60,
-                          bgColor: BlaColor.lightOrange),
-                      const ProfileWidget(
-                        profileSize: 36,
-                        profile: "dog",
-                        bgSize: 60,
-                        bgColor: Color(0xFFEDE5E4),
-                      ),
-                      const ProfileWidget(
-                        profileSize: 36,
-                        profile: "chick",
-                        bgSize: 60,
-                        bgColor: Color(0xFFF8F7F9),
-                      ),
-                      Container(
-                          height: 60,
-                          width: 60,
-                          alignment: Alignment.center,
-                          margin: const EdgeInsets.only(right: 8),
-                          padding: const EdgeInsets.all(12),
-                          decoration: const BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: BlaColor.grey300,
+                viewModel.voiceroomList == null
+                    ? Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        child: Wrap(
+                            spacing: 8,
+                            alignment: WrapAlignment.center,
+                            children: List.generate(
+                                3,
+                                (_) => SkeletonBoxWidget(
+                                        child: Container(
+                                      height: 60,
+                                      width: 60,
+                                      alignment: Alignment.center,
+                                      margin: const EdgeInsets.only(right: 8),
+                                      padding: const EdgeInsets.all(12),
+                                      decoration: const BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        color: BlaColor.grey300,
+                                      ),
+                                    )))),
+                      )
+                    : viewModel.voiceroomList!.isEmpty
+                        ? Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 20),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Text("🔊", style: BlaTxt.txt20BL),
+                                const SizedBox(height: 8),
+                                Text("보이스룸을 시작해보세요!",
+                                    style: BlaTxt.txt14R.copyWith(color: BlaColor.grey700)),
+                              ],
+                            ),
+                          )
+                        : Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 16),
+                            child: Row(
+                              children: [
+                                Wrap(
+                                    spacing: 8,
+                                    alignment: WrapAlignment.center,
+                                    children: List.generate(
+                                        3,
+                                        (idx) => ProfileWidget(
+                                              profileSize: 36,
+                                              profile: viewModel
+                                                  .voiceroomList![idx]
+                                                  .profileImage,
+                                              bgSize: 60,
+                                              bgColor: BlaColor.lightOrange,
+                                            ))),
+                                if (viewModel.voiceroomList!.length > 3)
+                                  Container(
+                                      height: 60,
+                                      width: 60,
+                                      alignment: Alignment.center,
+                                      margin: const EdgeInsets.only(right: 8),
+                                      padding: const EdgeInsets.all(12),
+                                      decoration: const BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        color: BlaColor.grey300,
+                                      ),
+                                      child: Text(
+                                        "+${viewModel.voiceroomList!.length - 3}}",
+                                        style: BlaTxt.txt20B
+                                            .copyWith(color: BlaColor.grey700),
+                                      )),
+                              ],
+                            ),
                           ),
-                          child: Text(
-                            "+2",
-                            style:
-                                BlaTxt.txt20B.copyWith(color: BlaColor.grey700),
-                          )),
-                    ],
-                  ),
-                ),
                 GestureDetector(
                   onTap: () async {
                     if (viewModel.myId != null && viewModel.agora != null) {
