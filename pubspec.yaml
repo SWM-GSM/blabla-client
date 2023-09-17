@@ -72,6 +72,7 @@ dependencies:
   firebase_core: ^2.15.1
   firebase_messaging: ^14.6.7
   firebase_auth: ^4.9.0
+  webview_flutter: ^4.2.4
 
 dev_dependencies:
   flutter_test:
