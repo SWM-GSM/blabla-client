@@ -188,6 +188,7 @@ class ProfileSettingView extends StatelessWidget {
                                         case "APPLE":
                                           Login.apple.service.logout();
                                       }
+                                      await storage.deleteAll();
                                       if (context.mounted) {
                                         Navigator.pushAndRemoveUntil(
                                             context,
