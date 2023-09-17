@@ -154,12 +154,15 @@ class SquareMainView extends StatelessWidget {
                         : Padding(
                             padding: const EdgeInsets.symmetric(vertical: 16),
                             child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Wrap(
                                     spacing: 8,
                                     alignment: WrapAlignment.center,
                                     children: List.generate(
-                                        3,
+                                        viewModel.voiceroomList!.length > 3
+                                            ? 3
+                                            : viewModel.voiceroomList!.length,
                                         (idx) => ProfileWidget(
                                               profileSize: 36,
                                               profile: viewModel
@@ -173,7 +176,7 @@ class SquareMainView extends StatelessWidget {
                                       height: 60,
                                       width: 60,
                                       alignment: Alignment.center,
-                                      margin: const EdgeInsets.only(right: 8),
+                                      margin: const EdgeInsets.only(left: 8),
                                       padding: const EdgeInsets.all(12),
                                       decoration: const BoxDecoration(
                                         shape: BoxShape.circle,
