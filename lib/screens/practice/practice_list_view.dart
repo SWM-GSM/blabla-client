@@ -5,7 +5,7 @@ import 'package:blabla/styles/colors.dart';
 import 'package:blabla/styles/txt_style.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 
@@ -142,14 +142,18 @@ class _PracticeListViewState extends State<PracticeListView> {
                           children: viewModel.videoList!.contentDetails
                               .map((e) => GestureDetector(
                                   onTap: () {
-                                    viewModel.getVideo(e.id);
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: ((context) =>
-                                                PracticeVideoListeningView(
-                                                    videoId: e.id,
-                                                    title: e.title))));
+                                    if (e.isCompleted) {
+                                      showToast("이미 학습한 컨텐츠 입니다!");
+                                    } else {
+                                      viewModel.getVideo(e.id);
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: ((context) =>
+                                                  PracticeVideoListeningView(
+                                                      videoId: e.id,
+                                                      title: e.title))));
+                                    }
                                   },
                                   child: PracticeVideoTileWidget(video: e)))
                               .toList()),
