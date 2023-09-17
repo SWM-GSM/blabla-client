@@ -16,7 +16,6 @@ class JoinLangWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.fromLTRB(20, 8, 20, 8),
-      height: 84,
       width: MediaQuery.of(context).size.width - 40,
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(12),
