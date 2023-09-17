@@ -201,7 +201,7 @@ class _PracticeVideoWritingViewState extends State<PracticeVideoWritingView> {
                 ),
                 ChatBubbleWidget(
                     type: ChatBubbleType.receiver,
-                    txt: viewModel.video!.targetSentence)
+                    txt: viewModel.video!.guideSentence)
               ],
             ),
           ),
@@ -298,7 +298,7 @@ class _PracticeVideoWritingViewState extends State<PracticeVideoWritingView> {
                   ),
                   ChatBubbleWidget(
                       type: ChatBubbleType.receiver,
-                      txt: viewModel.video!.targetSentence),
+                      txt: viewModel.video!.guideSentence),
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 4),
                     child: ChatBubbleWidget(
@@ -403,7 +403,7 @@ class _PracticeVideoWritingViewState extends State<PracticeVideoWritingView> {
                   ),
                   ChatBubbleWidget(
                       type: ChatBubbleType.receiver,
-                      txt: viewModel.video!.targetSentence),
+                      txt: viewModel.video!.guideSentence),
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 4),
                     child: ChatBubbleWidget(
@@ -477,7 +477,7 @@ class _PracticeVideoWritingViewState extends State<PracticeVideoWritingView> {
                     ),
                     ChatBubbleWidget(
                         type: ChatBubbleType.receiver,
-                        txt: viewModel.video!.targetSentence),
+                        txt: viewModel.video!.guideSentence),
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 4),
                       child: ChatBubbleWidget(
@@ -615,7 +615,7 @@ class _PracticeVideoWritingViewState extends State<PracticeVideoWritingView> {
                   ),
                   ChatBubbleWidget(
                       type: ChatBubbleType.receiver,
-                      txt: viewModel.video!.targetSentence),
+                      txt: viewModel.video!.guideSentence),
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 4),
                     child: ChatBubbleWidget(
