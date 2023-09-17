@@ -548,19 +548,16 @@ class API {
     }
   }
 
-  Future<void> makeFCMToken() async {
+  Future<ContentFeedback> getContentFeedback(int videoId) async {
     const storage = FlutterSecureStorage();
-    String? _fcmToken = await FirebaseMessaging.instance.getToken();
-    print("[FCM] token: $_fcmToken");
-    final res = await api("$baseUrl/admin/fcm", HttpMethod.post,
+    final res = await api(
+        "$baseUrl/contents/detail/$videoId/feedback", HttpMethod.get,
         token: "Bearer ${await storage.read(key: "accessToken")}",
-        body: jsonEncode({
-          "targetToken": _fcmToken,
-          "title": "민감자 곧 묵사발 먹으러감",
-          "body": "안물어봤다면 클릭!"
-        }));
+        needCheck: true);
     print(jsonDecode(utf8.decode(res.bodyBytes)));
     if (res.statusCode == 200) {
+      return ContentFeedback.fromJson(
+          jsonDecode(utf8.decode(res.bodyBytes))["data"]);
     } else {
       throw Exception("http error :(");
     }

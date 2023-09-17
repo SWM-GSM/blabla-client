@@ -1,3 +1,4 @@
+import 'package:blabla/models/content_feedback.dart';
 import 'package:blabla/models/history.dart';
 import 'package:blabla/models/report.dart';
 import 'package:blabla/models/user.dart';
@@ -42,9 +43,26 @@ class ProfileViewModel with ChangeNotifier {
   /* 리포트 */
   ReportDetail? _report;
   ReportDetail? get report => _report;
+  ContentFeedback? _feedback;
+  ContentFeedback? get feedback => _feedback;
 
-  void setReport(int reportId) async {
+  void initCrewReport() async {
+    _report = null;
+    notifyListeners();
+  }
+
+  void initPersonalReport() async {
+    _feedback = null;
+    notifyListeners();
+  }
+
+  void setCrewReport(int reportId) async {
     _report = await api.getDetailReport(reportId);
+    notifyListeners();
+  }
+
+  void setPersonalReport(int reportId) async {
+    _feedback = await api.getContentFeedback(reportId);
     notifyListeners();
   }
 

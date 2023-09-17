@@ -34,7 +34,10 @@ class ReportCrewView extends StatelessWidget {
         elevation: 0,
         centerTitle: true,
         leading: GestureDetector(
-          onTap: () => Navigator.pop(context),
+          onTap: () {
+            viewModel.initCrewReport();
+            Navigator.pop(context);
+          },
           child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: SvgPicture.asset(

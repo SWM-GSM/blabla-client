@@ -2,6 +2,8 @@ import 'package:blabla/screens/profile/profile_modify_view.dart';
 import 'package:blabla/screens/profile/profile_modify_view_model.dart';
 import 'package:blabla/screens/profile/profile_setting_view.dart';
 import 'package:blabla/screens/profile/profile_view_model.dart';
+import 'package:blabla/screens/profile/report_crew_view.dart';
+import 'package:blabla/screens/profile/report_personal_view.dart';
 import 'package:blabla/screens/profile/widgets/profile_history_tile.dart';
 import 'package:blabla/styles/colors.dart';
 import 'package:blabla/styles/txt_style.dart';
@@ -58,239 +60,267 @@ class ProfileMainView extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
           child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Column(
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    "오늘도 블라블라해요!",
-                    style: BlaTxt.txt16M.copyWith(color: BlaColor.orange),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "오늘도 블라블라해요!",
+                        style: BlaTxt.txt16M.copyWith(color: BlaColor.orange),
+                      ),
+                      const SizedBox(
+                        height: 4,
+                      ),
+                      viewModel.user == null
+                          ? SkeletonTxtWidget(
+                              style: BlaTxt.txt24BKH, width: 120)
+                          : Text(
+                              viewModel.user!.nickname,
+                              style: BlaTxt.txt24BKH,
+                            ),
+                      const SizedBox(height: 8),
+                      viewModel.user == null
+                          ? SkeletonBoxWidget(
+                              child: Container(
+                              width: 100,
+                              height: 24,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(12),
+                                  color: BlaColor.grey100),
+                            ))
+                          : Container(
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 4, horizontal: 8),
+                              decoration: BoxDecoration(
+                                color: BlaColor.lightOrange,
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: Text(
+                                "${viewModel.user!.language == "ko" ? "한국어" : "영어"} 배우는 중!",
+                                style: BlaTxt.txt12M
+                                    .copyWith(color: BlaColor.orange),
+                              ),
+                            )
+                    ],
                   ),
-                  const SizedBox(
-                    height: 4,
-                  ),
-                  viewModel.user == null
-                      ? SkeletonTxtWidget(
-                          style: BlaTxt.txt24BKH, width: 120)
-                      : Text(
-                          viewModel.user!.nickname,
-                          style: BlaTxt.txt24BKH,
-                        ),
-                  const SizedBox(height: 8),
                   viewModel.user == null
                       ? SkeletonBoxWidget(
                           child: Container(
-                          width: 100,
-                          height: 24,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(12),
-                              color: BlaColor.grey100),
-                        ))
-                      : Container(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 4, horizontal: 8),
-                          decoration: BoxDecoration(
-                            color: BlaColor.lightOrange,
-                            borderRadius: BorderRadius.circular(12),
+                            width: 80,
+                            height: 80,
+                            decoration: const BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: BlaColor.grey100,
+                            ),
                           ),
-                          child: Text(
-                            "${viewModel.user!.language == "ko" ? "한국어" : "영어"} 배우는 중!",
-                            style: BlaTxt.txt12M
-                                .copyWith(color: BlaColor.orange),
-                          ),
+                        )
+                      : Stack(
+                          children: [
+                            ProfileWidget(
+                              profileSize: 48,
+                              profile: viewModel.user!.profileImage,
+                              bgSize: 80,
+                              bgColor: BlaColor.lightOrange,
+                            ),
+                            Positioned(
+                              right: 0,
+                              bottom: 0,
+                              child: GestureDetector(
+                                onTap: () {
+                                  modifyViewModel.init(
+                                      viewModel.user!.profileImage,
+                                      viewModel.user!.nickname,
+                                      viewModel.user!.language);
+                                  Navigator.of(context, rootNavigator: true)
+                                      .push(MaterialPageRoute(
+                                          builder: (context) =>
+                                              ProfileModifyView(
+                                                  initNick: viewModel
+                                                      .user!.nickname)));
+                                },
+                                child: Container(
+                                  width: 24,
+                                  height: 24,
+                                  padding: const EdgeInsets.all(5),
+                                  decoration: BoxDecoration(
+                                    color: BlaColor.orange,
+                                    border: Border.all(
+                                        color: BlaColor.white, width: 1),
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: SvgPicture.asset(
+                                    "assets/icons/ic_12_edit.svg",
+                                    width: 12,
+                                    height: 12,
+                                    colorFilter: const ColorFilter.mode(
+                                        BlaColor.white, BlendMode.srcIn),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
                         )
                 ],
               ),
-              viewModel.user == null
-                  ? SkeletonBoxWidget(
-                      child: Container(
-                        width: 80,
-                        height: 80,
-                        decoration: const BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: BlaColor.grey100,
+              const SizedBox(height: 40),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text("히스토리", style: BlaTxt.txt20B),
+                  Wrap(
+                    spacing: 12,
+                    children: List.generate(
+                      HistoryFilter.values.length,
+                      (idx) => GestureDetector(
+                        onTap: () {
+                          viewModel.setHistoryFilter(HistoryFilter.values[idx]);
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 6, horizontal: 12),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(14),
+                            color: viewModel.filter == HistoryFilter.values[idx]
+                                ? BlaColor.lightOrange
+                                : BlaColor.grey100,
+                          ),
+                          child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                SvgPicture.asset(
+                                    "assets/icons/ic_16_${HistoryFilter.values[idx].icon}.svg",
+                                    width: 16,
+                                    height: 16,
+                                    colorFilter: ColorFilter.mode(
+                                        viewModel.filter ==
+                                                HistoryFilter.values[idx]
+                                            ? BlaColor.orange
+                                            : BlaColor.grey600,
+                                        BlendMode.srcIn)),
+                                const SizedBox(
+                                  width: 8,
+                                ),
+                                Text(
+                                  HistoryFilter.values[idx].tag,
+                                  style: viewModel.filter ==
+                                          HistoryFilter.values[idx]
+                                      ? BlaTxt.txt12B
+                                          .copyWith(color: BlaColor.orange)
+                                      : BlaTxt.txt12M
+                                          .copyWith(color: BlaColor.grey600),
+                                )
+                              ]),
                         ),
                       ),
-                    )
-                  : Stack(
-                      children: [
-                        ProfileWidget(
-                          profileSize: 48,
-                          profile: viewModel.user!.profileImage,
-                          bgSize: 80,
-                          bgColor: BlaColor.lightOrange,
-                        ),
-                        Positioned(
-                          right: 0,
-                          bottom: 0,
-                          child: GestureDetector(
-                            onTap: () {
-                              modifyViewModel.init(
-                                  viewModel.user!.profileImage,
-                                  viewModel.user!.nickname,
-                                  viewModel.user!.language);
-                              Navigator.of(context, rootNavigator: true)
-                                  .push(MaterialPageRoute(
-                                      builder: (context) =>
-                                          ProfileModifyView(
-                                              initNick: viewModel
-                                                  .user!.nickname)));
-                            },
-                            child: Container(
-                              width: 24,
-                              height: 24,
-                              padding: const EdgeInsets.all(5),
-                              decoration: BoxDecoration(
-                                color: BlaColor.orange,
-                                border: Border.all(
-                                    color: BlaColor.white, width: 1),
-                                shape: BoxShape.circle,
-                              ),
-                              child: SvgPicture.asset(
-                                "assets/icons/ic_12_edit.svg",
-                                width: 12,
-                                height: 12,
-                                colorFilter: const ColorFilter.mode(
-                                    BlaColor.white, BlendMode.srcIn),
-                              ),
+                    ),
+                  )
+                ],
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              viewModel.histories.isEmpty
+                  ? Container(
+                      padding: const EdgeInsets.symmetric(vertical: 80),
+                      width: MediaQuery.of(context).size.width,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Text(
+                            "🥺",
+                            style: TextStyle(
+                              fontSize: 44,
+                              fontWeight: FontWeight.bold,
+                              color: BlaColor.grey900,
                             ),
                           ),
-                        ),
-                      ],
+                          const SizedBox(
+                            height: 12,
+                          ),
+                          Text(
+                            "표시할 히스토리가 없습니다!\n${viewModel.filter == HistoryFilter.personal ? "마이" : "크루"} 스페이스 활동을 통해\n히스토리를 만들어보세요!",
+                            style:
+                                BlaTxt.txt14R.copyWith(color: BlaColor.grey800),
+                            textAlign: TextAlign.center,
+                          ),
+                        ],
+                      ),
                     )
-            ],
-          ),
-          const SizedBox(height: 40),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Text("히스토리", style: BlaTxt.txt20B),
-              Wrap(
-                spacing: 12,
-                children: List.generate(
-                  HistoryFilter.values.length,
-                  (idx) => GestureDetector(
-                    onTap: () {
-                      viewModel.setHistoryFilter(HistoryFilter.values[idx]);
-                    },
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 6, horizontal: 12),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(14),
-                        color: viewModel.filter == HistoryFilter.values[idx]
-                            ? BlaColor.lightOrange
-                            : BlaColor.grey100,
-                      ),
-                      child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            SvgPicture.asset(
-                                "assets/icons/ic_16_${HistoryFilter.values[idx].icon}.svg",
-                                width: 16,
-                                height: 16,
-                                colorFilter: ColorFilter.mode(
-                                    viewModel.filter ==
-                                            HistoryFilter.values[idx]
-                                        ? BlaColor.orange
-                                        : BlaColor.grey600,
-                                    BlendMode.srcIn)),
-                            const SizedBox(
-                              width: 8,
-                            ),
-                            Text(
-                              HistoryFilter.values[idx].tag,
-                              style: viewModel.filter ==
-                                      HistoryFilter.values[idx]
-                                  ? BlaTxt.txt12B
-                                      .copyWith(color: BlaColor.orange)
-                                  : BlaTxt.txt12M
-                                      .copyWith(color: BlaColor.grey600),
-                            )
-                          ]),
-                    ),
-                  ),
-                ),
-              )
-            ],
-          ),
-          const SizedBox(
-            height: 20,
-          ),
-          viewModel.histories.isEmpty
-              ? Container(
-                padding: const EdgeInsets.symmetric(vertical: 80),
-                width: MediaQuery.of(context).size.width,
-                child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Text(
-                        "🥺",
-                        style: TextStyle(
-                          fontSize: 44,
-                          fontWeight: FontWeight.bold,
-                          color: BlaColor.grey900,
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 12,
-                      ),
-                      Text(
-                        "표시할 히스토리가 없습니다!\n${viewModel.filter == HistoryFilter.personal ? "마이" : "크루"} 스페이스 활동을 통해\n히스토리를 만들어보세요!",
-                        style:
-                            BlaTxt.txt14R.copyWith(color: BlaColor.grey800),
-                        textAlign: TextAlign.center,
-                      ),
-                    ],
-                  ),
-              )
-              : Column(
-                  children: List.generate(
-                    viewModel.histories.length,
-                    (calendarIdx) => Column(
-                        children: List.generate(
-                            viewModel.histories[calendarIdx].reports.length,
-                            (idx) => Row(
-                                  children: [
-                                    if (idx == 0)
-                                      SizedBox(
-                                        width: 30,
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          children: [
-                                            Text(
-                                              "${viewModel.histories[calendarIdx].datetime.month}월",
-                                              style: BlaTxt.txt12R.copyWith(
-                                                  color: BlaColor.grey700),
+                  : Column(
+                      children: List.generate(
+                        viewModel.histories.length,
+                        (calendarIdx) => Column(
+                            children: List.generate(
+                                viewModel.histories[calendarIdx].reports.length,
+                                (idx) => Row(
+                                      children: [
+                                        if (idx == 0)
+                                          SizedBox(
+                                            width: 30,
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              children: [
+                                                Text(
+                                                  "${viewModel.histories[calendarIdx].datetime.month}월",
+                                                  style: BlaTxt.txt12R.copyWith(
+                                                      color: BlaColor.grey700),
+                                                ),
+                                                Text(
+                                                  "${viewModel.histories[calendarIdx].datetime.day}",
+                                                  style: BlaTxt.txt20B,
+                                                )
+                                              ],
                                             ),
-                                            Text(
-                                              "${viewModel.histories[calendarIdx].datetime.day}",
-                                              style: BlaTxt.txt20B,
-                                            )
-                                          ],
-                                        ),
-                                      ),
-                                    SizedBox(width: idx == 0 ? 16 : 46),
-                                    Expanded(
-                                        child: ProfileHistoryTile(
-                                      report: viewModel
-                                          .histories[calendarIdx]
-                                          .reports[idx],
-                                    )),
-                                  ],
-                                ))),
-                  ),
-                ),
-          const SizedBox(height: 10),
-        ],
-      ),
+                                          ),
+                                        SizedBox(width: idx == 0 ? 16 : 46),
+                                        Expanded(
+                                            child: GestureDetector(
+                                          onTap: () {
+                                            if (viewModel.histories[calendarIdx]
+                                                    .reports[idx].type ==
+                                                "crew") {
+                                              viewModel.setCrewReport(viewModel
+                                                  .histories[calendarIdx]
+                                                  .reports[idx]
+                                                  .id);
+                                              Navigator.of(context,
+                                                      rootNavigator: true)
+                                                  .push(MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          const ReportCrewView()));
+                                            } else {
+                                              viewModel.setPersonalReport(
+                                                  viewModel
+                                                      .histories[calendarIdx]
+                                                      .reports[idx]
+                                                      .id);
+                                              Navigator.of(context,
+                                                      rootNavigator: true)
+                                                  .push(MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          const ReportPersonalView()));
+                                            }
+                                          },
+                                          child: ProfileHistoryTile(
+                                            report: viewModel
+                                                .histories[calendarIdx]
+                                                .reports[idx],
+                                          ),
+                                        )),
+                                      ],
+                                    ))),
+                      ),
+                    ),
+              const SizedBox(height: 10),
+            ],
+          ),
         ),
       ),
     );

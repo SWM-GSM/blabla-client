@@ -96,7 +96,7 @@ class PracticeViewModel with ChangeNotifier {
   }
 
   Future<void> getFeedback(String userAnswer) async {
-    _feedback = await api.getContentFeedback(_videoId, userAnswer);
+    _feedback = await api.postContentFeedback(_videoId, userAnswer);
     notifyListeners();
   }
 
