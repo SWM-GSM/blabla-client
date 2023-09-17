@@ -549,10 +549,14 @@ class _PracticeVideoWritingViewState extends State<PracticeVideoWritingView> {
                   ),
                   GestureDetector(
                     onTap: () {
-                      setState(() {
-                        _status = WritingStatus.beforeFeedback;
-                        _getFeedBack(context);
-                      });
+                      if (_txt != "") {
+                        setState(() {
+                          _status = WritingStatus.beforeFeedback;
+                          _getFeedBack(context);
+                        });
+                      } else {
+                        showToast("문장을 입력해주세요");
+                      }
                     },
                     child: Container(
                       alignment: Alignment.center,
