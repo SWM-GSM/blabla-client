@@ -1,3 +1,4 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:blabla/main.dart';
 import 'package:blabla/providers/nav_provider.dart';
 import 'package:blabla/screens/practice/practice_view_model.dart';
@@ -6,10 +7,12 @@ import 'package:blabla/screens/practice/widgets/practice_video_widget.dart';
 import 'package:blabla/styles/colors.dart';
 import 'package:blabla/styles/txt_style.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_sound/flutter_sound.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
+import 'package:record/record.dart';
 
 class PracticeVideoSpeakingView extends StatefulWidget {
   const PracticeVideoSpeakingView({super.key});
@@ -20,44 +23,58 @@ class PracticeVideoSpeakingView extends StatefulWidget {
 }
 
 class _PracticeVideoSpeakingViewState extends State<PracticeVideoSpeakingView> {
-  final recorders = List.generate(3, (idx) => FlutterSoundRecorder());
-  final players = List.generate(3, (idx) => FlutterSoundPlayer());
+  late final List<Record> recorders;
+  late final List<AudioPlayer> players;
   final statuses = List.generate(3, (idx) => RecordStatus.beforeRecord);
+  bool canRecord = true;
 
   Future<void> initRecorder() async {
-    for (final recorder in recorders) {
-      await recorder.openRecorder();
-    }
+    recorders = List.generate(3, (idx) => Record());
   }
 
   Future<void> initPlayer() async {
-    for (final player in players) {
-      await player.openPlayer();
+    players = List.generate(3, (idx) => AudioPlayer());
+    for (var player in players) {
+      player = AudioPlayer();
+      player.setReleaseMode(ReleaseMode.stop);
     }
   }
 
   Future<void> startRecord(int idx) async {
-    await recorders[idx].startRecorder(toFile: 'audio$idx.wav');
+    if (await Permission.microphone.status != PermissionStatus.granted) {
+      await Permission.microphone.request();
+    } else {
+      final dir = (await getTemporaryDirectory()).path;
+      try {
+        await recorders[idx].start(path: "$dir/audio$idx.wav");
+      } catch (e) {
+        showToast("녹음을 진행할 수 없습니다.");
+        setState(() {
+          canRecord = false;
+          statuses[idx] = RecordStatus.beforeRecord;
+        });
+      }
+    }
   }
 
   Future<String?> stopRecord(int idx) async {
-    String? path = await recorders[idx].stopRecorder();
+    String? path = await recorders[idx].stop();
     print(path);
     return path;
   }
 
   void startPlay(int idx, String path) async {
-    await players[idx].startPlayer(
-        fromURI: path,
-        whenFinished: () {
-          setState(() {
-            statuses[idx] = RecordStatus.afterRecord;
-          });
-        });
+    await players[idx].play(UrlSource(path));
+    players[idx].onPlayerComplete.listen((event) {
+      print("재생");
+      setState(() {
+        statuses[players.indexOf(players[idx])] = RecordStatus.afterRecord;
+      });
+    });
   }
 
   void stopPlay(int idx) async {
-    await players[idx].stopPlayer();
+    await players[idx].stop();
   }
 
   @override
@@ -70,11 +87,17 @@ class _PracticeVideoSpeakingViewState extends State<PracticeVideoSpeakingView> {
   @override
   void dispose() {
     super.dispose();
+    // for (final recorder in recorders) {
+    //   recorder.closeRecorder();
+    // }
+    // for (final player in players) {
+    //   player.closePlayer();
+    // }
     for (final recorder in recorders) {
-      recorder.closeRecorder();
+      recorder.dispose();
     }
     for (final player in players) {
-      player.closePlayer();
+      player.dispose();
     }
   }
 
@@ -138,14 +161,23 @@ class _PracticeVideoSpeakingViewState extends State<PracticeVideoSpeakingView> {
                     endAt: viewModel.video!.endedAtSec,
                   )),
             ),
-            Text(
-              viewModel.video!.targetSentence,
-              style: BlaTxt.txt24B,
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Text(
+                viewModel.video!.targetSentence,
+                style: BlaTxt.txt24B.copyWith(overflow: TextOverflow.visible),
+                textAlign: TextAlign.center,
+              ),
             ),
             const SizedBox(height: 8),
-            Text(
-              viewModel.video!.guideSentence,
-              style: BlaTxt.txt14R.copyWith(color: BlaColor.grey700),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Text(
+                viewModel.video!.guideSentence,
+                style: BlaTxt.txt14R.copyWith(
+                    color: BlaColor.grey700, overflow: TextOverflow.visible),
+                textAlign: TextAlign.center,
+              ),
             ),
             const SizedBox(height: 40),
             Wrap(
@@ -189,7 +221,10 @@ class _PracticeVideoSpeakingViewState extends State<PracticeVideoSpeakingView> {
           ],
         ),
       ),
-      bottomSheet: statuses.where((e) => e != RecordStatus.afterRecord).isEmpty
+      bottomSheet: statuses
+                  .where((e) => e != RecordStatus.afterRecord)
+                  .isEmpty ||
+              canRecord == false
           ? Container(
               padding: EdgeInsets.fromLTRB(
                   20, 12, 20, 12 + MediaQuery.of(context).padding.bottom),
@@ -201,17 +236,25 @@ class _PracticeVideoSpeakingViewState extends State<PracticeVideoSpeakingView> {
               ),
               child: GestureDetector(
                 onTap: () {
-                  viewModel.uploadRecords().then((value) {
-                    if (value) {
-                      navProvider.changeIdx(2);
-                      Navigator.pushAndRemoveUntil(
-                          context,
-                          MaterialPageRoute(builder: (context) => const Main()),
-                          (route) => false);
-                    } else {
-                      showToast("업로드 실패. 다시 시도해주세요");
-                    }
-                  });
+                  if (canRecord) {
+                    viewModel.uploadRecords().then((value) {
+                      if (value) {
+                        navProvider.changeIdx(2);
+                        Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const Main()),
+                            (route) => false);
+                      } else {
+                        showToast("업로드 실패. 다시 시도해주세요");
+                      }
+                    });
+                  } else {
+                    Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(builder: (context) => const Main()),
+                        (route) => false);
+                  }
                 },
                 child: Container(
                   alignment: Alignment.center,
