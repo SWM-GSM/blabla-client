@@ -3,6 +3,7 @@ import 'package:blabla/screens/square/widgets/square_bottom_sheet_widget.dart';
 import 'package:blabla/screens/square/widgets/square_schedule_widget.dart';
 import 'package:blabla/styles/colors.dart';
 import 'package:blabla/styles/txt_style.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
@@ -47,6 +48,7 @@ class SquareCalendarView extends StatelessWidget {
             child: Column(
               children: [
                 TableCalendar(
+                  locale: context.locale.languageCode.toString(),
                   headerStyle: HeaderStyle(
                     titleCentered: true,
                     formatButtonVisible: false,
