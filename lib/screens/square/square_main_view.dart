@@ -64,7 +64,7 @@ class SquareMainView extends StatelessWidget {
                 ],
               ),
             ),
-            viewModel.schedules == null
+            viewModel.upcomingSchedule == null
                 ? SkeletonBoxWidget(
                     child: Container(
                       height: 144,
@@ -77,7 +77,7 @@ class SquareMainView extends StatelessWidget {
                     ),
                   )
                 : SquareScheduleWidget(
-                    type: ScheduleWidgetType.none,
+                    type: ScheduleWidgetType.upcodming,
                     schedule: viewModel.upcomingSchedule),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
@@ -146,7 +146,8 @@ class SquareMainView extends StatelessWidget {
                                 Text("🔊", style: BlaTxt.txt20BL),
                                 const SizedBox(height: 8),
                                 Text("보이스룸을 시작해보세요!",
-                                    style: BlaTxt.txt14R.copyWith(color: BlaColor.grey700)),
+                                    style: BlaTxt.txt14R
+                                        .copyWith(color: BlaColor.grey700)),
                               ],
                             ),
                           )
