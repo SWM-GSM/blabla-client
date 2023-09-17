@@ -12,7 +12,7 @@ class ProfileHistoryTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 6),
-      padding: const EdgeInsets.fromLTRB(20, 16, 16, 16),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
         color: BlaColor.grey100,
@@ -24,7 +24,12 @@ class ProfileHistoryTile extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(report.title, style: BlaTxt.txt14SB),
+              SizedBox(
+                width: MediaQuery.of(context).size.width -
+                    164, // 기본패딩 + 날짜타일 + 타일 패딩 + 아이콘 + 아이콘간격 = 40 + 40(30여유) + 32 + 40 + 12
+                child: Text(report.title,
+                    style: BlaTxt.txt14SB),
+              ),
               const SizedBox(
                 height: 4,
               ),
@@ -33,7 +38,7 @@ class ProfileHistoryTile extends StatelessWidget {
             ],
           ),
           Container(
-            width: 48,
+            width: 40,
             padding: const EdgeInsets.all(8),
             decoration: const BoxDecoration(
               shape: BoxShape.circle,
