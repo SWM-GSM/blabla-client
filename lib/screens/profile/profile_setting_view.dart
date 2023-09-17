@@ -1,8 +1,10 @@
 import 'package:blabla/screens/onboarding.dart';
+import 'package:blabla/screens/profile/profile_setting_web_view.dart';
 import 'package:blabla/screens/profile/profile_view_model.dart';
 import 'package:blabla/services/login.dart';
 import 'package:blabla/styles/colors.dart';
 import 'package:blabla/styles/txt_style.dart';
+import 'package:blabla/utils/dotenv.dart';
 import 'package:blabla/widgets/setting_box_widget.dart';
 import 'package:blabla/widgets/setting_row_widget.dart';
 import 'package:flutter/cupertino.dart';
@@ -147,14 +149,20 @@ class ProfileSettingView extends StatelessWidget {
                     type: SettingRowType.link,
                     txt: "이용약관",
                     onTap: () {
-                      print("테스트");
+                      Navigator.of(context, rootNavigator: true).push(
+                          MaterialPageRoute(
+                              builder: (context) => ProfileSettingTermView(
+                                  title: "이용약관", url: env["TERM_URL"])));
                     },
                   ),
                   SettingRowWidget(
                     type: SettingRowType.link,
                     txt: "개인정보처리방침",
                     onTap: () {
-                      print("테스트");
+                      Navigator.of(context, rootNavigator: true).push(
+                          MaterialPageRoute(
+                              builder: (context) => ProfileSettingTermView(
+                                  title: "개인정보처리방침", url: env["PRIVACY_URL"])));
                     },
                   ),
                 ],
