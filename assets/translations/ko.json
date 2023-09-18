@@ -38,14 +38,13 @@
     "noUpcomingEvents": "다가오는 일정이 없어요!",
     "voiceRoom": "보이스룸",
     "tryStartingVoiceRoom": "보이스룸을 시작해보세요!",
-    "participants": "크루 스페이스, 보이스룸",
     "join": "참여하기",
     "createSchedule": "일정 만들기",
     "title": "제목",
     "cancelParticipation": "참여 취소하기",
     "inVoiceCall": "음성 통화 중",
     "voiceRoom__1": "보이스룸이 종료되었습니다.",
-    "participants__1": "참여자",
+    "participants": "참여자",
     "members": "명",
     "enjoyExperience": "재밌게 즐기셨나요?",
     "leaveFeedback": "함께한 참여자들에게 피드백을 남겨주세요!",
@@ -75,7 +74,6 @@
     "basicInfo": "기본 정보",
     "creationTime": "생성 시간",
     "timeTaken": "소요 시간",
-    "participants__2": "참여자",
     "keyKeywords": "핵심 키워드",
     "languageUsageRatio": "언어 사용 비율",
     "usesEnglishMore": "영어를 한국어보다 더 많이 사용하고 있어요!",
@@ -107,5 +105,7 @@
     "setting": "설정",
     "notification": "알림",
     "logout": "로그아웃",
-    "failToWithdrawal": "회원 탈퇴 실패. 다시 시도 해주세요"
+    "failToWithdrawal": "회원 탈퇴 실패. 다시 시도 해주세요",
+    "noFeedback": "크루원이 남긴 피드백이 없어요!",
+    "times": "회"
 }

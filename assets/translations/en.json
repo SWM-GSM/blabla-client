@@ -38,14 +38,13 @@
     "noUpcomingEvents": "There are no upcoming events!",
     "voiceRoom": "Voice Room",
     "tryStartingVoiceRoom": "Try starting a voice room!",
-    "participants": "participants",
     "join": "Join",
     "createSchedule": "Create Schedule",
     "title": "Title",
     "cancelParticipation": "Cancel Participation",
     "inVoiceCall": "In Voice Call",
     "voiceRoom__1": "The voice room has ended.",
-    "participants__1": "Participants",
+    "participants": "Participants",
     "members": "Members",
     "enjoyExperience": "Did you enjoy the experience?",
     "leaveFeedback": "Please leave feedback on the participants you were with!",
@@ -75,7 +74,6 @@
     "basicInfo": "Basic Information",
     "creationTime": "Creation Time",
     "timeTaken": "Time Taken",
-    "participants__2": "Participants",
     "keyKeywords": "Key Keywords",
     "languageUsageRatio": "Language Usage Ratio",
     "usesEnglishMore": "Uses more English than Korean!",
@@ -107,5 +105,7 @@
     "setting": "Setting",
     "notification": "Notification",
     "logout": "Logout",
-    "failToWithdrawal": "Fail to withdrawal. Try again"
+    "failToWithdrawal": "Fail to withdrawal. Try again",
+    "noFeedback": "No feedback left!",
+    "times": "times"
   }

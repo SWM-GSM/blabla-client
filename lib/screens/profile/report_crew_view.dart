@@ -4,6 +4,7 @@ import 'package:blabla/styles/colors.dart';
 import 'package:blabla/styles/txt_style.dart';
 import 'package:blabla/utils/datetime_to_str.dart';
 import 'package:blabla/widgets/profile_width_name_widget.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -23,248 +24,310 @@ class ReportCrewView extends StatelessWidget {
       BlaColor.coral100
     ];
 
-    return Scaffold(
-      appBar: AppBar(
-        toolbarHeight: 64,
-        title: Text(
-          "크루 리포트",
-          style: BlaTxt.txt18B,
+    return WillPopScope(
+      onWillPop: () async {
+        viewModel.initCrewReport();
+        return true;
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          toolbarHeight: 64,
+          title: Text(
+            "crewReport".tr(),
+            style: BlaTxt.txt18B,
+          ),
+          backgroundColor: BlaColor.white,
+          elevation: 0,
+          centerTitle: true,
+          leading: GestureDetector(
+            onTap: () {
+              viewModel.initCrewReport();
+              Navigator.pop(context);
+            },
+            child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: SvgPicture.asset(
+                  "assets/icons/ic_32_arrow_left.svg",
+                  width: 24,
+                  height: 24,
+                  colorFilter:
+                      const ColorFilter.mode(BlaColor.black, BlendMode.srcIn),
+                )),
+          ),
+          leadingWidth: 64,
         ),
-        backgroundColor: BlaColor.white,
-        elevation: 0,
-        centerTitle: true,
-        leading: GestureDetector(
-          onTap: () {
-            viewModel.initCrewReport();
-            Navigator.pop(context);
-          },
-          child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: SvgPicture.asset(
-                "assets/icons/ic_32_arrow_left.svg",
-                width: 24,
-                height: 24,
-                colorFilter:
-                    const ColorFilter.mode(BlaColor.black, BlendMode.srcIn),
-              )),
-        ),
-        leadingWidth: 64,
-      ),
-      body: viewModel.report == null
-          ? const Center(
-              child: CircularProgressIndicator(
-              color: BlaColor.orange,
-            ))
-          : Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 20),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "기본 정보",
-                            style: BlaTxt.txt20B,
-                          ),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                "생성시간",
-                                style: BlaTxt.txt14M
-                                    .copyWith(color: BlaColor.grey700),
-                              ),
-                              Text(
-                                datetimeToStr(viewModel.report!.createdAt,
-                                    StrDatetimeType.dotDelimiter),
-                                style: BlaTxt.txt16SB,
-                              )
-                            ],
-                          ),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                "소요시간",
-                                style: BlaTxt.txt14M
-                                    .copyWith(color: BlaColor.grey700),
-                              ),
-                              Text(
-                                viewModel.report!.durationTime,
-                                style: BlaTxt.txt16SB,
-                              )
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 20),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            children: [
-                              Text(
-                                "참여자",
-                                style: BlaTxt.txt20B,
-                              ),
-                              Text(
-                                " ${viewModel.report!.members.length}명",
-                                style: BlaTxt.txt20R
-                                    .copyWith(color: BlaColor.grey700),
-                              )
-                            ],
-                          ),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          Wrap(
-                              runSpacing: 20,
-                              children: List.generate(
-                                  viewModel.report!.members.length,
-                                  (idx) => ProfileWidthNameWidget(
-                                      member: viewModel.report!.members[idx]))),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 20),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "핵심 키워드",
-                            style: BlaTxt.txt20B,
-                          ),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          Center(
-                            child: Padding(
-                              padding:
-                                  const EdgeInsets.only(top: 20, bottom: 40),
-                              child: ExtendedImage.network(
-                                viewModel.report!.bubbleChart,
-                                width: 284,
-                              ),
+        body: viewModel.report == null
+            ? const Center(
+                child: CircularProgressIndicator(
+                color: BlaColor.orange,
+              ))
+            : Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 20),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "basicInfo".tr(),
+                              style: BlaTxt.txt20B,
                             ),
-                          ),
-                          Column(
-                              children: List.generate(
-                            viewModel.report!.words.length,
-                            (idx) => Column(
-                              children: [
-                                chartLabel(
-                                    bubbleColors[idx],
-                                    viewModel.report!.words[idx].name,
-                                    viewModel.report!.words[idx].count),
-                                if (idx - 1 != viewModel.report!.words.length)
-                                  const SizedBox(
-                                    height: 16,
-                                  )
-                              ],
+                            const SizedBox(
+                              height: 20,
                             ),
-                          ))
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 20),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "언어 사용 비율",
-                            style: BlaTxt.txt20B,
-                          ),
-                          const SizedBox(
-                            height: 8,
-                          ),
-                          Text(
-                            viewModel.report!.korRatio >
-                                    viewModel.report!.engRatio
-                                ? "한국어를 영어보다 더 많이 사용하고 있어요!"
-                                : "영어를 한국어보다 더 많이 사용하고 있어요!",
-                            style:
-                                BlaTxt.txt12R.copyWith(color: BlaColor.grey700),
-                          ),
-                          const SizedBox(
-                            height: 16,
-                          ),
-                          if (viewModel.report!.korRatio == 100 ||
-                              viewModel.report!.engRatio == 100)
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Container(
-                                  height: 24,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(12),
-                                    color: viewModel.report!.korRatio >
-                                            viewModel.report!.engRatio
-                                        ? BlaColor.orange
-                                        : BlaColor.green,
-                                  ),
-                                ),
-                                const SizedBox(
-                                  height: 12,
-                                ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Container(
-                                      width: 8,
-                                      height: 8,
-                                      decoration: BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        color: viewModel.report!.korRatio >
-                                                viewModel.report!.engRatio
-                                            ? BlaColor.orange
-                                            : BlaColor.green,
-                                      ),
-                                    ),
-                                    const SizedBox(
-                                      width: 4,
-                                    ),
-                                    Text(
-                                      viewModel.report!.korRatio >
-                                              viewModel.report!.engRatio
-                                          ? "한국어"
-                                          : "영어",
-                                      style: BlaTxt.txt12R
-                                          .copyWith(color: BlaColor.grey800),
-                                    ),
-                                  ],
-                                ),
-                                const SizedBox(
-                                  height: 4,
+                                Text(
+                                  "creationTime".tr(),
+                                  style: BlaTxt.txt14M
+                                      .copyWith(color: BlaColor.grey700),
                                 ),
                                 Text(
-                                  viewModel.report!.korRatio >
-                                          viewModel.report!.engRatio
-                                      ? "${viewModel.report!.korRatio}%"
-                                      : "${viewModel.report!.engRatio}%",
-                                  style: BlaTxt.txt14B,
-                                ),
+                                  datetimeToStr(viewModel.report!.createdAt,
+                                      StrDatetimeType.dotDelimiter),
+                                  style: BlaTxt.txt16SB,
+                                )
                               ],
-                            )
-                          else
+                            ),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  "timeTaken".tr(),
+                                  style: BlaTxt.txt14M
+                                      .copyWith(color: BlaColor.grey700),
+                                ),
+                                Text(
+                                  viewModel.report!.durationTime,
+                                  style: BlaTxt.txt16SB,
+                                )
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 20),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
                             Row(
                               children: [
-                                Flexible(
-                                    flex: viewModel.report!.korRatio.toInt(),
+                                Text(
+                                  "participants".tr(),
+                                  style: BlaTxt.txt20B,
+                                ),
+                                Text(
+                                  " ${viewModel.report!.members.length}${"members".tr()}",
+                                  style: BlaTxt.txt20R
+                                      .copyWith(color: BlaColor.grey700),
+                                )
+                              ],
+                            ),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            Wrap(
+                                runSpacing: 20,
+                                children: List.generate(
+                                    viewModel.report!.members.length,
+                                    (idx) => ProfileWidthNameWidget(
+                                        member:
+                                            viewModel.report!.members[idx]))),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 20),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "keyKeywords".tr(),
+                              style: BlaTxt.txt20B,
+                            ),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            Center(
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.only(top: 20, bottom: 40),
+                                child: ExtendedImage.network(
+                                  viewModel.report!.bubbleChart,
+                                  width: 284,
+                                ),
+                              ),
+                            ),
+                            Column(
+                                children: List.generate(
+                              viewModel.report!.words.length,
+                              (idx) => Column(
+                                children: [
+                                  chartLabel(
+                                      bubbleColors[idx],
+                                      viewModel.report!.words[idx].name,
+                                      viewModel.report!.words[idx].count),
+                                  if (idx - 1 != viewModel.report!.words.length)
+                                    const SizedBox(
+                                      height: 16,
+                                    )
+                                ],
+                              ),
+                            ))
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 20),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "languageUsageRatio".tr(),
+                              style: BlaTxt.txt20B,
+                            ),
+                            const SizedBox(
+                              height: 8,
+                            ),
+                            Text(
+                              viewModel.report!.korRatio >
+                                      viewModel.report!.engRatio
+                                  ? "usesKoreanMore".tr()
+                                  : "usesEnglishMore".tr(),
+                              style: BlaTxt.txt12R
+                                  .copyWith(color: BlaColor.grey700),
+                            ),
+                            const SizedBox(
+                              height: 16,
+                            ),
+                            if (viewModel.report!.korRatio == 100 ||
+                                viewModel.report!.engRatio == 100)
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Container(
+                                    height: 24,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(12),
+                                      color: viewModel.report!.korRatio >
+                                              viewModel.report!.engRatio
+                                          ? BlaColor.orange
+                                          : BlaColor.green,
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    height: 12,
+                                  ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      Container(
+                                        width: 8,
+                                        height: 8,
+                                        decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          color: viewModel.report!.korRatio >
+                                                  viewModel.report!.engRatio
+                                              ? BlaColor.orange
+                                              : BlaColor.green,
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        width: 4,
+                                      ),
+                                      Text(
+                                        viewModel.report!.korRatio >
+                                                viewModel.report!.engRatio
+                                            ? "korean".tr()
+                                            : "english".tr(),
+                                        style: BlaTxt.txt12R
+                                            .copyWith(color: BlaColor.grey800),
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(
+                                    height: 4,
+                                  ),
+                                  Text(
+                                    viewModel.report!.korRatio >
+                                            viewModel.report!.engRatio
+                                        ? "${viewModel.report!.korRatio}%"
+                                        : "${viewModel.report!.engRatio}%",
+                                    style: BlaTxt.txt14B,
+                                  ),
+                                ],
+                              )
+                            else
+                              Row(
+                                children: [
+                                  Flexible(
+                                      flex: viewModel.report!.korRatio.toInt(),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Container(
+                                            height: 24,
+                                            decoration: const BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.horizontal(
+                                                        left:
+                                                            Radius.circular(12),
+                                                        right:
+                                                            Radius.circular(4)),
+                                                color: BlaColor.orange),
+                                          ),
+                                          const SizedBox(
+                                            height: 12,
+                                          ),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            children: [
+                                              Container(
+                                                width: 8,
+                                                height: 8,
+                                                decoration: const BoxDecoration(
+                                                    shape: BoxShape.circle,
+                                                    color: BlaColor.orange),
+                                              ),
+                                              const SizedBox(
+                                                width: 4,
+                                              ),
+                                              Text(
+                                                "korean".tr(),
+                                                style: BlaTxt.txt12R.copyWith(
+                                                    color: BlaColor.grey800),
+                                              ),
+                                            ],
+                                          ),
+                                          const SizedBox(
+                                            height: 4,
+                                          ),
+                                          Text(
+                                            "${viewModel.report!.korRatio}%",
+                                            style: BlaTxt.txt14B,
+                                          ),
+                                        ],
+                                      )),
+                                  const SizedBox(
+                                    width: 4,
+                                  ),
+                                  Flexible(
+                                    flex: viewModel.report!.engRatio.toInt(),
                                     child: Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
@@ -274,10 +337,10 @@ class ReportCrewView extends StatelessWidget {
                                           decoration: const BoxDecoration(
                                               borderRadius:
                                                   BorderRadius.horizontal(
-                                                      left: Radius.circular(12),
+                                                      left: Radius.circular(4),
                                                       right:
-                                                          Radius.circular(4)),
-                                              color: BlaColor.orange),
+                                                          Radius.circular(12)),
+                                              color: BlaColor.green),
                                         ),
                                         const SizedBox(
                                           height: 12,
@@ -293,13 +356,13 @@ class ReportCrewView extends StatelessWidget {
                                               height: 8,
                                               decoration: const BoxDecoration(
                                                   shape: BoxShape.circle,
-                                                  color: BlaColor.orange),
+                                                  color: BlaColor.green),
                                             ),
                                             const SizedBox(
                                               width: 4,
                                             ),
                                             Text(
-                                              "한국어",
+                                              "english".tr(),
                                               style: BlaTxt.txt12R.copyWith(
                                                   color: BlaColor.grey800),
                                             ),
@@ -309,113 +372,62 @@ class ReportCrewView extends StatelessWidget {
                                           height: 4,
                                         ),
                                         Text(
-                                          "${viewModel.report!.korRatio}%",
+                                          "${viewModel.report!.engRatio}%",
                                           style: BlaTxt.txt14B,
                                         ),
                                       ],
-                                    )),
-                                const SizedBox(
-                                  width: 4,
-                                ),
-                                Flexible(
-                                  flex: viewModel.report!.engRatio.toInt(),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Container(
-                                        height: 24,
-                                        decoration: const BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.horizontal(
-                                                    left: Radius.circular(4),
-                                                    right: Radius.circular(12)),
-                                            color: BlaColor.green),
-                                      ),
-                                      const SizedBox(
-                                        height: 12,
-                                      ),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        children: [
-                                          Container(
-                                            width: 8,
-                                            height: 8,
-                                            decoration: const BoxDecoration(
-                                                shape: BoxShape.circle,
-                                                color: BlaColor.green),
-                                          ),
-                                          const SizedBox(
-                                            width: 4,
-                                          ),
-                                          Text(
-                                            "영어",
-                                            style: BlaTxt.txt12R.copyWith(
-                                                color: BlaColor.grey800),
-                                          ),
-                                        ],
-                                      ),
-                                      const SizedBox(
-                                        height: 4,
-                                      ),
-                                      Text(
-                                        "${viewModel.report!.engRatio}%",
-                                        style: BlaTxt.txt14B,
-                                      ),
-                                    ],
-                                  ),
-                                )
-                              ],
-                            )
-                        ],
+                                    ),
+                                  )
+                                ],
+                              )
+                          ],
+                        ),
                       ),
-                    ),
-                    Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 20),
-                        child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "크루원 피드백",
-                                style: BlaTxt.txt20B,
-                              ),
-                              const SizedBox(
-                                height: 12,
-                              ),
-                              viewModel.report!.feedbacks.isEmpty
-                                  ? SizedBox(
-                                      width: MediaQuery.of(context).size.width,
-                                      child: Column(
-                                        children: [
-                                          Text(
-                                            "👻",
-                                            style: BlaTxt.txt20BL,
-                                          ),
-                                          const SizedBox(height: 4),
-                                          Text(
-                                            "크루원이 남긴 피드백이 없어요!",
-                                            style: BlaTxt.txt14R.copyWith(
-                                                color: BlaColor.grey800),
-                                          )
-                                        ],
-                                      ),
-                                    )
-                                  : Column(
-                                      children: List.generate(
-                                        viewModel.report!.feedbacks.length,
-                                        (idx) => ReportFeedbackWidget(
-                                            feedback: viewModel
-                                                .report!.feedbacks[idx]),
-                                      ),
-                                    )
-                            ])),
-                  ],
+                      Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 20),
+                          child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "crewMemberFeedback".tr(),
+                                  style: BlaTxt.txt20B,
+                                ),
+                                const SizedBox(
+                                  height: 12,
+                                ),
+                                viewModel.report!.feedbacks.isEmpty
+                                    ? SizedBox(
+                                        width:
+                                            MediaQuery.of(context).size.width,
+                                        child: Column(
+                                          children: [
+                                            Text(
+                                              "👻",
+                                              style: BlaTxt.txt20BL,
+                                            ),
+                                            const SizedBox(height: 4),
+                                            Text(
+                                              "noFeedback".tr(),
+                                              style: BlaTxt.txt14R.copyWith(
+                                                  color: BlaColor.grey800),
+                                            )
+                                          ],
+                                        ),
+                                      )
+                                    : Column(
+                                        children: List.generate(
+                                          viewModel.report!.feedbacks.length,
+                                          (idx) => ReportFeedbackWidget(
+                                              feedback: viewModel
+                                                  .report!.feedbacks[idx]),
+                                        ),
+                                      )
+                              ])),
+                    ],
+                  ),
                 ),
               ),
-            ),
+      ),
     );
   }
 
@@ -440,7 +452,7 @@ class ReportCrewView extends StatelessWidget {
           ],
         ),
         Text(
-          "$count회",
+          "$count${"times".tr()}",
           style: BlaTxt.txt14R.copyWith(color: BlaColor.grey700),
         ),
       ],
