@@ -4,6 +4,7 @@ import 'package:blabla/screens/practice/practice_view_model.dart';
 import 'package:blabla/styles/colors.dart';
 import 'package:blabla/styles/txt_style.dart';
 import 'package:blabla/widgets/chat_bubble_widget.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
@@ -74,7 +75,7 @@ class _PracticeVideoWritingViewState extends State<PracticeVideoWritingView> {
                 _txt = result.recognizedWords;
               }));
     } else {
-      showToast("잠시 뒤에 다시 시도해주세요.");
+      showToast("tryLater".tr());
     }
   }
 
@@ -91,9 +92,9 @@ class _PracticeVideoWritingViewState extends State<PracticeVideoWritingView> {
     int _feedbackDelaySecond = 1;
     await Future.delayed(Duration(seconds: _feedbackDelaySecond)).then((value) {
       setState(() {
-        feedBackBubbles.add(const ChatBubbleWidget(
+        feedBackBubbles.add(ChatBubbleWidget(
           type: ChatBubbleType.receiver,
-          txt: "AI가 영작한 문장을 분석하고 있어요!",
+          txt: "analyzingTranslatedSentence".tr(),
           isFirst: true,
         ));
       });
@@ -145,9 +146,9 @@ class _PracticeVideoWritingViewState extends State<PracticeVideoWritingView> {
     });
     await Future.delayed(Duration(seconds: _feedbackDelaySecond)).then((value) {
       setState(() {
-        feedBackBubbles.add(const ChatBubbleWidget(
+        feedBackBubbles.add(ChatBubbleWidget(
             type: ChatBubbleType.receiver,
-            txt: "좋은 시도에요!\n영어로 생각하는 습관이 길러지고 있어요!"));
+            txt: "greatAttempt".tr()));
         _isFeedbackEnded = true;
       });
     });
@@ -194,9 +195,9 @@ class _PracticeVideoWritingViewState extends State<PracticeVideoWritingView> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const ChatBubbleWidget(
+                ChatBubbleWidget(
                   type: ChatBubbleType.receiver,
-                  txt: "다음으로 올 문장을 영작해주세요!",
+                  txt: "translateFollowingSentence".tr(),
                   isFirst: true,
                 ),
                 ChatBubbleWidget(
@@ -291,9 +292,9 @@ class _PracticeVideoWritingViewState extends State<PracticeVideoWritingView> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const ChatBubbleWidget(
+                  ChatBubbleWidget(
                     type: ChatBubbleType.receiver,
-                    txt: "다음으로 올 문장을 영작해주세요!",
+                    txt: "translateFollowingSentence".tr(),
                     isFirst: true,
                   ),
                   ChatBubbleWidget(
@@ -396,9 +397,9 @@ class _PracticeVideoWritingViewState extends State<PracticeVideoWritingView> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const ChatBubbleWidget(
+                  ChatBubbleWidget(
                     type: ChatBubbleType.receiver,
-                    txt: "다음으로 올 문장을 영작해주세요!",
+                    txt: "translateFollowingSentence".tr(),
                     isFirst: true,
                   ),
                   ChatBubbleWidget(
@@ -470,9 +471,9 @@ class _PracticeVideoWritingViewState extends State<PracticeVideoWritingView> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const ChatBubbleWidget(
+                    ChatBubbleWidget(
                       type: ChatBubbleType.receiver,
-                      txt: "다음으로 올 문장을 영작해주세요!",
+                      txt: "translateFollowingSentence".tr(),
                       isFirst: true,
                     ),
                     ChatBubbleWidget(
@@ -517,7 +518,7 @@ class _PracticeVideoWritingViewState extends State<PracticeVideoWritingView> {
                         height: 12,
                       ),
                       Text(
-                        "영작 완료",
+                        "transaltionComplete".tr(),
                         style: BlaTxt.txt20SB,
                       ),
                     ],
@@ -539,7 +540,7 @@ class _PracticeVideoWritingViewState extends State<PracticeVideoWritingView> {
                         color: BlaColor.grey200,
                       ),
                       child: Text(
-                        "다시 시도하기",
+                        "translateAgain".tr(),
                         style: BlaTxt.txt16M.copyWith(color: BlaColor.grey700),
                       ),
                     ),
@@ -555,7 +556,7 @@ class _PracticeVideoWritingViewState extends State<PracticeVideoWritingView> {
                           _getFeedBack(context);
                         });
                       } else {
-                        showToast("문장을 입력해주세요");
+                        showToast("enterSentence".tr());
                       }
                     },
                     child: Container(
@@ -566,7 +567,7 @@ class _PracticeVideoWritingViewState extends State<PracticeVideoWritingView> {
                         color: BlaColor.orange,
                       ),
                       child: Text(
-                        "피드백 받기",
+                        "receiveFeedback".tr(),
                         style: BlaTxt.txt16B.copyWith(color: BlaColor.white),
                       ),
                     ),
@@ -612,9 +613,9 @@ class _PracticeVideoWritingViewState extends State<PracticeVideoWritingView> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const ChatBubbleWidget(
+                  ChatBubbleWidget(
                     type: ChatBubbleType.receiver,
-                    txt: "다음으로 올 문장을 영작해주세요!",
+                    txt: "translateFollowingSentence".tr(),
                     isFirst: true,
                   ),
                   ChatBubbleWidget(
@@ -657,15 +658,13 @@ class _PracticeVideoWritingViewState extends State<PracticeVideoWritingView> {
                         borderRadius: BorderRadius.circular(12),
                         color: BlaColor.orange,
                       ),
-                      child: Text("자세한 피드백 보러가기",
+                      child: Text("viewDetailedFeedback".tr(),
                           style: BlaTxt.txt16B.copyWith(color: BlaColor.white)),
                     ),
                   ),
                 )
               : null,
         );
-      // default:
-      //   return Container();
     }
   }
 }

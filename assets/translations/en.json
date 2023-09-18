@@ -1,4 +1,5 @@
 {
+    "signUpWithSNS": "Sign Up Easily with SNS Account",
     "inquiriesAboutLoggingIn": "Inquiries about Logging In",
     "languageWantToLearn": "Choose the language\nyou want to learn",
     "failToLogin": "Fail to login. Try again.",
@@ -93,5 +94,7 @@
     "later": "Later",
     "restart": "Restart",
     "yes": "Yes",
-    "no": "No"
-}
+    "no": "No",
+    "tryLater": "Please try again later",
+    "enterSentence": "Please enter a sentence"
+  }
