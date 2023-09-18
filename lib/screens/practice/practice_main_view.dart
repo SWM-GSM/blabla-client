@@ -204,7 +204,7 @@ class PracticeMainView extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Text(
-                            "마이 스페이스",
+                            "mySpace".tr(),
                             style: BlaTxt.txt18B,
                           ),
                           Text(
