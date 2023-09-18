@@ -70,7 +70,7 @@
     "enterUserName": "Please Enter Name(Nickname)",
     "checkValidity": "Check for validity",
     "twoToTwelveCharacters": "2~20 Characters",
-    "": "Language to learn",
+    "languageToLearn": "Language to learn",
     "crewReport": "Crew Report",
     "basicInfo": "Basic Information",
     "creationTime": "Creation Time",
@@ -99,5 +99,9 @@
     "enterSentence": "Please enter a sentence",
     "noHistory": "No history to display!",
     "withSpace": "With {} activities,",
-    "createHistory": "create your histories!"
+    "createHistory": "create your histories!",
+    "ifLeave": "If you leave the screen,\nYour changes will not be saved.\nWould you like to leave?",
+    "leave": "Leave",
+    "failToSave": "Fail to save. Try again",
+    "isDupNickname": "It's duplicated nickname"
   }

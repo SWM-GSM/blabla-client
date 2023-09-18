@@ -70,7 +70,7 @@
     "enterUserName": "이름(닉네임)을 입력해주세요",
     "checkValidity": "중복확인",
     "twoToTwelveCharacters": "2~20자 이내",
-    "": "배울 언어",
+    "languageToLearn": "학습 언어",
     "crewReport": "크루 리포트",
     "basicInfo": "기본 정보",
     "creationTime": "생성 시간",
@@ -99,5 +99,9 @@
     "enterSentence": "문장을 입력해주세요",
     "noHistory": "표시할 히스토리가 없습니다!",
     "withSpace": "{} 활동을 통해,",
-    "createHistory": "히스토리를 만들어보세요!"
+    "createHistory": "히스토리를 만들어보세요!",
+    "ifLeave": "화면을 나가면\n변경사항이 저장되지 않습니다.\n나가시겠습니까?",
+    "leave": "나가기",
+    "failToSave": "저장 실패. 다시 시도해주세요",
+    "isDupNickname": "중복된 닉네임입니다"
 }
