@@ -6,6 +6,7 @@ import 'package:blabla/styles/txt_style.dart';
 import 'package:blabla/utils/dotenv.dart';
 import 'package:blabla/widgets/setting_box_widget.dart';
 import 'package:blabla/widgets/setting_row_widget.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -24,7 +25,7 @@ class ProfileSettingView extends StatelessWidget {
       appBar: AppBar(
         toolbarHeight: 64,
         title: Text(
-          "설정",
+          "setting".tr(),
           style: BlaTxt.txt18B,
         ),
         backgroundColor: BlaColor.white,
@@ -54,7 +55,7 @@ class ProfileSettingView extends StatelessWidget {
               SettingBoxWidget(widgets: [
                 SettingRowWidget(
                   type: SettingRowType.toggle,
-                  txt: "알림",
+                  txt: "notification".tr(),
                   status: viewModel.allowNotification!,
                   onTap: () {
                     viewModel.changePushNotification();
@@ -66,7 +67,7 @@ class ProfileSettingView extends StatelessWidget {
                 widgets: [
                   SettingRowWidget(
                     type: SettingRowType.radio,
-                    txt: "한국어",
+                    txt: "korean".tr(),
                     status: viewModel.lang == "ko",
                     onTap: () {
                       if (viewModel.lang != "ko") {
@@ -75,13 +76,13 @@ class ProfileSettingView extends StatelessWidget {
                             context: context,
                             builder: (context) => CupertinoAlertDialog(
                                   title: Text(
-                                    "앱을 재시작해야\n설정 언어가 반영됩니다.\n바로 재시작 하시겠습니까?",
+                                    "restartApp".tr(),
                                     style: BlaTxt.txt14R,
                                   ),
                                   actions: [
                                     CupertinoDialogAction(
                                       child: Text(
-                                        "나중에",
+                                        "later".tr(),
                                         style: BlaTxt.txt14R,
                                       ),
                                       onPressed: () {
@@ -89,7 +90,7 @@ class ProfileSettingView extends StatelessWidget {
                                       },
                                     ),
                                     CupertinoDialogAction(
-                                      child: Text("재시작",
+                                      child: Text("restart".tr(),
                                           style: BlaTxt.txt14R
                                               .copyWith(color: BlaColor.black)),
                                       onPressed: () {
@@ -103,7 +104,7 @@ class ProfileSettingView extends StatelessWidget {
                   ),
                   SettingRowWidget(
                     type: SettingRowType.radio,
-                    txt: "영어",
+                    txt: "english".tr(),
                     status: viewModel.lang == "en",
                     onTap: () {
                       if (viewModel.lang != "en") {
@@ -112,13 +113,13 @@ class ProfileSettingView extends StatelessWidget {
                             context: context,
                             builder: (context) => CupertinoAlertDialog(
                                   title: Text(
-                                    "앱을 재시작해야\n설정 언어가 반영됩니다.\n바로 재시작 하시겠습니까?",
+                                    "restartApp".tr(),
                                     style: BlaTxt.txt14R,
                                   ),
                                   actions: [
                                     CupertinoDialogAction(
                                       child: Text(
-                                        "나중에",
+                                        "later".tr(),
                                         style: BlaTxt.txt14R,
                                       ),
                                       onPressed: () {
@@ -126,7 +127,7 @@ class ProfileSettingView extends StatelessWidget {
                                       },
                                     ),
                                     CupertinoDialogAction(
-                                      child: Text("재시작",
+                                      child: Text("restart".tr(),
                                           style: BlaTxt.txt14R
                                               .copyWith(color: BlaColor.black)),
                                       onPressed: () {
@@ -139,34 +140,36 @@ class ProfileSettingView extends StatelessWidget {
                     },
                   ),
                 ],
-                title: "UI 언어",
+                title: "uiLanguage".tr(),
               ),
               const SizedBox(height: 24),
               SettingBoxWidget(
                 widgets: [
                   SettingRowWidget(
                     type: SettingRowType.link,
-                    txt: "이용약관",
+                    txt: "termsOfUse".tr(),
                     onTap: () {
                       Navigator.of(context, rootNavigator: true).push(
                           MaterialPageRoute(
                               builder: (context) => ProfileSettingTermView(
-                                  title: "이용약관", url: env["TERM_URL"])));
+                                  title: "termsOfUse".tr(),
+                                  url: env["TERM_URL"])));
                     },
                   ),
                   SettingRowWidget(
                     type: SettingRowType.link,
-                    txt: "개인정보처리방침",
+                    txt: "privacyPolicy".tr(),
                     onTap: () {
                       Navigator.of(context, rootNavigator: true).push(
                           MaterialPageRoute(
                               builder: (context) => ProfileSettingTermView(
-                                  title: "개인정보처리방침", url: env["PRIVACY_URL"])));
+                                  title: "privacyPolicy".tr(),
+                                  url: env["PRIVACY_URL"])));
                     },
                   ),
                   SettingRowWidget(
                       type: SettingRowType.link,
-                      txt: "문의하기",
+                      txt: "contactUs".tr(),
                       onTap: () {
                         // 수정
                       })
@@ -177,19 +180,19 @@ class ProfileSettingView extends StatelessWidget {
                 widgets: [
                   SettingRowWidget(
                     type: SettingRowType.btn,
-                    txt: "로그아웃",
+                    txt: "logout".tr(),
                     onTap: () {
                       showCupertinoDialog(
                           context: context,
                           builder: (context) => CupertinoAlertDialog(
                                 title: Text(
-                                  "로그아웃 하시곘습니까?",
+                                  "areYouLogout".tr(),
                                   style: BlaTxt.txt14R,
                                 ),
                                 actions: [
                                   CupertinoDialogAction(
                                     child: Text(
-                                      "예",
+                                      "yes".tr(),
                                       style: BlaTxt.txt14R,
                                     ),
                                     onPressed: () async {
@@ -197,7 +200,6 @@ class ProfileSettingView extends StatelessWidget {
                                       switch (
                                           await storage.read(key: "platform")) {
                                         case "GOOGLE":
-                                          print("구글로그아웃");
                                           Login.google.service.logout();
                                         case "APPLE":
                                           Login.apple.service.logout();
@@ -206,7 +208,8 @@ class ProfileSettingView extends StatelessWidget {
                                     },
                                   ),
                                   CupertinoDialogAction(
-                                    child: Text("아니오", style: BlaTxt.txt14R),
+                                    child:
+                                        Text("no".tr(), style: BlaTxt.txt14R),
                                     onPressed: () {
                                       Navigator.pop(context);
                                     },
@@ -217,20 +220,20 @@ class ProfileSettingView extends StatelessWidget {
                   ),
                   SettingRowWidget(
                     type: SettingRowType.btn,
-                    txt: "탈퇴하기",
+                    txt: "quit".tr(),
                     txtColor: BlaColor.red,
                     onTap: () {
                       showCupertinoDialog(
                           context: context,
                           builder: (context) => CupertinoAlertDialog(
                                 title: Text(
-                                  "탈퇴하실 경우\n계정 정보가 모두 삭제 됩니다.\n탈퇴 하시겠습니까?",
+                                  "withdrawalWarning".tr(),
                                   style: BlaTxt.txt14R,
                                 ),
                                 actions: [
                                   CupertinoDialogAction(
                                     child: Text(
-                                      "탈퇴하기",
+                                      "quit".tr(),
                                       style: BlaTxt.txt14R
                                           .copyWith(color: BlaColor.red),
                                     ),
@@ -238,12 +241,13 @@ class ProfileSettingView extends StatelessWidget {
                                       if (await viewModel.withdrawal()) {
                                         Restart.restartApp(webOrigin: "/");
                                       } else {
-                                        showToast("회원 탈퇴 실패. 다시 시도 해주세요");
+                                        showToast("failToWithdrawal".tr());
                                       }
                                     },
                                   ),
                                   CupertinoDialogAction(
-                                    child: Text("취소", style: BlaTxt.txt14R),
+                                    child: Text("cancel".tr(),
+                                        style: BlaTxt.txt14R),
                                     onPressed: () {
                                       Navigator.pop(context);
                                     },

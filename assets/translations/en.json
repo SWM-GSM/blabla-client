@@ -87,8 +87,8 @@
     "privacyPolicy": "Privacy Policy",
     "contactUs": "Contact Us",
     "quit": "Quit",
-    "withdrawalWarning": "If you leave, all your account information will be deleted. Would you like to leave?",
-    "restartApp": "You must restart the app to reflect the setup language. Do you want to restart immediately?",
+    "withdrawalWarning": "If you leave,\nall your account information\nwill be deleted. Would you like to leave?",
+    "restartApp": "You must restart the app\nto reflect the setup language.\nDo you want to restart\nimmediately?",
     "areYouLogout": "Are you sure you want to log out?",
     "cancel": "Cancel",
     "later": "Later",
@@ -103,5 +103,9 @@
     "ifLeave": "If you leave the screen,\nYour changes will not be saved.\nWould you like to leave?",
     "leave": "Leave",
     "failToSave": "Fail to save. Try again",
-    "isDupNickname": "It's duplicated nickname"
+    "isDupNickname": "It's duplicated nickname",
+    "setting": "Setting",
+    "notification": "Notification",
+    "logout": "Logout",
+    "failToWithdrawal": "Fail to withdrawal. Try again"
   }
