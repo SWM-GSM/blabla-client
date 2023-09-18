@@ -65,7 +65,7 @@ class SquareScheduleWidget extends StatelessWidget {
               Row(
                 children: [
                   Text(
-                    "D-${schedule!.dday}",
+                    "D${schedule!.dday < 0 ? "+${(schedule!.dday) * (-1)}" : "-${schedule!.dday}"}",
                     style: BlaTxt.txt16B.copyWith(color: BlaColor.orange),
                   ),
                   const SizedBox(width: 8),
@@ -119,7 +119,7 @@ class SquareScheduleWidget extends StatelessWidget {
               Row(
                 children: [
                   Text(
-                    "D-${schedule.dday}",
+                    "D${schedule!.dday < 0 ? "+${(schedule!.dday) * (-1)}" : "-${schedule!.dday}"}",
                     style: BlaTxt.txt16B.copyWith(color: BlaColor.orange),
                   ),
                   const SizedBox(width: 8),
