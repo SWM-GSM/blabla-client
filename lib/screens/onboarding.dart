@@ -21,7 +21,7 @@ class OnBoarding extends StatelessWidget {
             child: Image.asset("assets/imgs/img_140_logo.png",
                 height: 140, width: 140)),
         Text(
-          "onboarding.signUpWithSNS".tr(),
+          "signUpWithSNS".tr(),
           style: BlaTxt.txt14R.copyWith(color: BlaColor.grey700),
         ),
         const SizedBox(height: 20),
@@ -61,7 +61,7 @@ class OnBoarding extends StatelessWidget {
                     break;
                   default:
                     print(e);
-                    showToast("onboarding.failToLogin".tr());
+                    showToast("failToLogin".tr());
                     break;
                 }
               }
@@ -96,7 +96,7 @@ class OnBoarding extends StatelessWidget {
                     break;
                   default:
                     print(e);
-                    showToast("onboarding.failToLogin".tr());
+                    showToast("failToLogin".tr());
                     break;
                 }
               }
@@ -108,7 +108,7 @@ class OnBoarding extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: 18),
           margin: const EdgeInsets.fromLTRB(0, 20, 0, 40),
           child: Text(
-            "onboarding.inquiriesAboutLoggingIn".tr(),
+            "inquiriesAboutLoggingIn".tr(),
             style: BlaTxt.txt14M.copyWith(
                 color: BlaColor.grey800, decoration: TextDecoration.underline),
           ),

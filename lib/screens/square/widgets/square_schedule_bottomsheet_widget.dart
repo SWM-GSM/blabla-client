@@ -8,15 +8,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 
-class SquareBottomSheetWidget extends StatefulWidget {
-  const SquareBottomSheetWidget({super.key});
+class SquareScheduleBottomSheetWidget extends StatefulWidget {
+  const SquareScheduleBottomSheetWidget({super.key});
 
   @override
-  State<SquareBottomSheetWidget> createState() =>
-      _SquareBottomSheetWidgetState();
+  State<SquareScheduleBottomSheetWidget> createState() =>
+      _SquareScheduleBottomSheetWidgetState();
 }
 
-class _SquareBottomSheetWidgetState extends State<SquareBottomSheetWidget> {
+class _SquareScheduleBottomSheetWidgetState extends State<SquareScheduleBottomSheetWidget> {
   String title = "";
   DateTime date =
       DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
