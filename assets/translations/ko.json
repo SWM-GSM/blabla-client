@@ -2,6 +2,11 @@
     "test": "테스트",
     "english": "English",
     "korean": "Korean",
+    "onboarding": {
+        "signUpWithSNS": "SNS 계정으로 간편하게 가입하기",
+        "inquiriesAboutLoggingIn": "로그인 관련 문의하기",
+        "failToLogin": "로그인 실패. 다시 시도해주세요"
+    },
     "square": {
         "upcomingEvents": "다가오는 일정"
     }

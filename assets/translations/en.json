@@ -2,6 +2,11 @@
     "test": "test",
     "english": "English",
     "korean": "Korean",
+    "onboarding": {
+        "signUpWithSNS": "Sign Up Easily with SNS Account",
+        "inquiriesAboutLoggingIn": "Inquiries about Logging In",
+        "failToLogin": "Fail to login. Try again."
+    },
     "square": {
         "upcomingEvents": "Upcoming Events"
     }
