@@ -4,6 +4,7 @@ import 'package:blabla/screens/practice/widgets/practice_video_widget.dart';
 import 'package:blabla/styles/colors.dart';
 import 'package:blabla/styles/txt_style.dart';
 import 'package:blabla/widgets/skeleton_ui_widget.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:flutter_svg/svg.dart';
@@ -62,11 +63,11 @@ class PracticeVideoListeningView extends StatelessWidget {
             height: 16,
           ),
           Text(
-            "상황을 잘 듣고",
+            "listenCarefully".tr(),
             style: BlaTxt.txt20R,
           ),
           Text(
-            "다음으로 올 말을 생각해보세요!",
+            "sayNext".tr(),
             style: BlaTxt.txt20B.copyWith(color: BlaColor.orange),
           ),
           Padding(
@@ -112,7 +113,7 @@ class PracticeVideoListeningView extends StatelessWidget {
                 ),
               );
             } else {
-              showToast("컨텐츠 로딩중입니다.");
+              showToast("loadingContent".tr());
             }
           },
           child: Container(
@@ -122,7 +123,7 @@ class PracticeVideoListeningView extends StatelessWidget {
               borderRadius: BorderRadius.circular(12),
               color: BlaColor.orange,
             ),
-            child: Text("다음",
+            child: Text("next".tr(),
                 style: BlaTxt.txt16B.copyWith(color: BlaColor.white)),
           ),
         ),
