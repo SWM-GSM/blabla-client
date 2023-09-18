@@ -4,6 +4,7 @@ import 'package:blabla/widgets/create_widget.dart';
 import 'package:blabla/screens/join/widgets/join_level_widget.dart';
 import 'package:blabla/styles/colors.dart';
 import 'package:blabla/styles/txt_style.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:provider/provider.dart';
@@ -17,10 +18,10 @@ class JoinLangView extends StatelessWidget {
     return Scaffold(
       body: Column(
         children: [
-          const CreateWidget(
+          CreateWidget(
             page: JoinPage.lang,
-            title: "배우고 싶은 언어를\n선택해주세요",
-            widgets: [
+            title: "languageWantToLearn".tr(),
+            widgets: const [
               SizedBox(height: 22),
             ],
           ),
@@ -29,8 +30,8 @@ class JoinLangView extends StatelessWidget {
               viewModel.setLang("ko");
             },
             child: JoinLangWidget(
-              title: "한국어",
-              desc: "한국어를 배우고 싶은 사용자입니다",
+              title: "korean".tr(),
+              desc: "koreanUser".tr(),
               selected: viewModel.lang == "ko" ? true : false,
             ),
           ),
@@ -39,8 +40,8 @@ class JoinLangView extends StatelessWidget {
               viewModel.setLang("en");
             },
             child: JoinLangWidget(
-              title: "영어",
-              desc: "영어를 배우고 싶은 사용자입니다",
+              title: "english".tr(),
+              desc: "englishUser".tr(),
               selected: viewModel.lang == "en" ? true : false,
             ),
           ),
@@ -55,7 +56,7 @@ class JoinLangView extends StatelessWidget {
                   MaterialPageRoute(builder: (context) => const Main()),
                   (route) => false);
             } else {
-              showToast("회원가입에 실패했습니다. 다시 시도해주세요.");
+              showToast("failToJoin".tr());
             }
           });
         },
@@ -74,8 +75,8 @@ class JoinLangView extends StatelessWidget {
               }
             }(),
           ),
-          child:
-              Text("블라블라 시작하기", style: BlaTxt.txt16B.copyWith(color: BlaColor.white)),
+          child: Text("startBlabla".tr(),
+              style: BlaTxt.txt16B.copyWith(color: BlaColor.white)),
         ),
       ),
     );
