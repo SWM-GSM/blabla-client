@@ -2,6 +2,7 @@ import 'package:blabla/screens/practice/practice_video_speaking_view.dart';
 import 'package:blabla/screens/practice/practice_view_model.dart';
 import 'package:blabla/styles/colors.dart';
 import 'package:blabla/styles/txt_style.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
@@ -36,7 +37,10 @@ class PracticeVideoFeedbackView extends StatelessWidget {
         ),
         leadingWidth: 64,
         actions: [
-          Container(width: 64, color: Colors.transparent,),
+          Container(
+            width: 64,
+            color: Colors.transparent,
+          ),
         ],
       ),
       body: Padding(
@@ -58,7 +62,7 @@ class PracticeVideoFeedbackView extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          "문장 유사도",
+                          "sentenceSimilarity".tr(),
                           style: BlaTxt.txt20B,
                         ),
                         starScore(viewModel.feedback!.starRating),
@@ -67,14 +71,14 @@ class PracticeVideoFeedbackView extends StatelessWidget {
                     const SizedBox(
                       height: 20,
                     ),
-                    Text("내가 영작한 문장",
+                    Text("myTranslatedSentence".tr(),
                         style: BlaTxt.txt12R.copyWith(color: BlaColor.grey700)),
                     const SizedBox(height: 4),
                     Text(viewModel.feedback!.userAnswer,
                         style: BlaTxt.txt16B
                             .copyWith(overflow: TextOverflow.visible)),
                     const SizedBox(height: 16),
-                    Text("정답 문장",
+                    Text("correctSentence".tr(),
                         style: BlaTxt.txt12R.copyWith(color: BlaColor.grey700)),
                     const SizedBox(height: 4),
                     Text(viewModel.feedback!.targetSentence,
@@ -118,7 +122,7 @@ class PracticeVideoFeedbackView extends StatelessWidget {
               borderRadius: BorderRadius.circular(12),
               color: BlaColor.orange,
             ),
-            child: Text("계속하기",
+            child: Text("continue".tr(),
                 style: BlaTxt.txt16B.copyWith(color: BlaColor.white)),
           ),
         ),
