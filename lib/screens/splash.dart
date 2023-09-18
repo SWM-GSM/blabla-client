@@ -1,11 +1,13 @@
 import 'package:blabla/main.dart';
 import 'package:blabla/screens/onboarding.dart';
+import 'package:blabla/screens/profile/profile_view_model.dart';
 import 'package:blabla/services/apis/api.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:provider/provider.dart';
 
 enum SplashPage { onboarding, home }
 
@@ -70,12 +72,17 @@ class _SplashState extends State<Splash> {
               page = SplashPage.home;
             });
             if (!await Permission.notification.isGranted) {
-              if ((await Permission.notification.request()) ==
-                  PermissionStatus.granted) {
-                await API().patchAllowNotification(true);
-              } else {
-                await API().patchAllowNotification(false);
-              }
+              WidgetsBinding.instance.addPostFrameCallback((_) async {
+                final profileViewModel = Provider.of<ProfileViewModel>(context);
+                if ((await Permission.notification.request()) ==
+                    PermissionStatus.granted) {
+                  await API().patchAllowNotification(true);
+                  profileViewModel.initProfile();
+                } else {
+                  await API().patchAllowNotification(false);
+                  profileViewModel.initProfile();
+                }
+              });
             }
           }
         } else {
