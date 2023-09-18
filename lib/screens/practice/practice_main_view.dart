@@ -4,6 +4,7 @@ import 'package:blabla/styles/colors.dart';
 import 'package:blabla/styles/txt_style.dart';
 import 'package:blabla/widgets/skeleton_ui_widget.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -207,7 +208,7 @@ class PracticeMainView extends StatelessWidget {
                             style: BlaTxt.txt18B,
                           ),
                           Text(
-                            viewModel.contentLangType.korName, // 수정 - 한국어 / 영어 구분
+                            viewModel.contentLangType.fullKey.tr(),
                             style: BlaTxt.txt14M,
                           ),
                         ],

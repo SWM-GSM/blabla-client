@@ -1,5 +1,7 @@
 {
     "test": "테스트",
+    "english": "English",
+    "korean": "Korean",
     "square": {
         "upcomingEvents": "다가오는 일정"
     }
