@@ -20,7 +20,7 @@ class ProfileViewModel with ChangeNotifier {
 
   ProfileViewModel() {
     initProfile();
-    initHistories(); // 수정
+    initHistories();
   }
 
   /* 유저 정보 */
