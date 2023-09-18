@@ -107,5 +107,6 @@
     "logout": "Logout",
     "failToWithdrawal": "Fail to withdrawal. Try again",
     "noFeedback": "No feedback left!",
-    "times": "times"
+    "times": "times",
+    "feedback": "Feedback"
   }

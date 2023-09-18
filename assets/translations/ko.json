@@ -107,5 +107,6 @@
     "logout": "로그아웃",
     "failToWithdrawal": "회원 탈퇴 실패. 다시 시도 해주세요",
     "noFeedback": "크루원이 남긴 피드백이 없어요!",
-    "times": "회"
+    "times": "회",
+    "feedback": "피드백"
 }
