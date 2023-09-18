@@ -1,5 +1,4 @@
 {
-  "Sign Up Easily with SNS Account": {
     "inquiriesAboutLoggingIn": "Inquiries about Logging In",
     "languageWantToLearn": "Choose the language\nyou want to learn",
     "failToLogin": "Fail to login. Try again.",
@@ -9,6 +8,7 @@
     "english": "English",
     "englishUser": "I'm a user who wants to learn English",
     "startBlabla": "Start blabla",
+    "alreadyLearned": "You already learned this content!",
     "mySpace": "My Space",
     "sayNext": "Listen to the situation well and think about what to say next!",
     "translateFollowingSentence": "Translate the following sentence into English!",
@@ -89,5 +89,4 @@
     "restart": "Restart",
     "yes": "Yes",
     "no": "No"
-  }
 }

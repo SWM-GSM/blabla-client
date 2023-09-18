@@ -3,6 +3,7 @@ import 'package:blabla/screens/practice/practice_view_model.dart';
 import 'package:blabla/screens/practice/widgets/practice_video_tile_widget.dart';
 import 'package:blabla/styles/colors.dart';
 import 'package:blabla/styles/txt_style.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
@@ -143,7 +144,7 @@ class _PracticeListViewState extends State<PracticeListView> {
                               .map((e) => GestureDetector(
                                   onTap: () {
                                     if (e.isCompleted) {
-                                      showToast("이미 학습한 컨텐츠 입니다!");
+                                      showToast("alreadyLearned".tr());
                                     } else {
                                       viewModel.getVideo(e.id);
                                       Navigator.push(
