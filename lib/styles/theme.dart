@@ -14,7 +14,8 @@ class BlaTheme {
           systemOverlayStyle: SystemUiOverlayStyle(
         systemNavigationBarColor: BlaColor.white,
         systemNavigationBarIconBrightness: Brightness.dark,
-        statusBarColor: Colors.white,
+        statusBarColor: Colors.transparent,
         statusBarIconBrightness: Brightness.dark,
+        statusBarBrightness: Brightness.dark,
       )));
 }
