@@ -8,10 +8,10 @@ enum JoinPage {
 enum Profile {
   bear,
   cat,
-  chicken,
+  chick,
   cow,
+  dino,
   dog,
-  dove,
   dragon,
   fox,
   hamster,
@@ -20,11 +20,13 @@ enum Profile {
   monkey,
   mouse,
   panda,
+  penguin,
   pig,
-  polar,
+  pigeon,
   rabbit,
   raccoon,
   tiger,
+  whitebear,
   wolf,
 }
 
@@ -37,9 +39,7 @@ class JoinViewModel with ChangeNotifier {
 
   String? get lang => _lang;
 
-  JoinViewModel() {
-    
-  }
+  JoinViewModel() {}
 
   void initPage(JoinPage page) {
     switch (page) {
