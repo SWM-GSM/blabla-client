@@ -7,12 +7,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 enum HistoryFilter {
-  personal("play_circle", "개인"),
-  crew("team", "크루");
+  personal("play_circle"),
+  crew("team");
 
-  const HistoryFilter(this.icon, this.tag);
+  const HistoryFilter(this.icon);
   final String icon;
-  final String tag;
 }
 
 class ProfileViewModel with ChangeNotifier {
@@ -117,6 +116,7 @@ class ProfileViewModel with ChangeNotifier {
             reports: history.reports
                 .where((historyReport) => historyReport.type == _filter.name)
                 .toList()))
+        .where((e) => e.reports.isNotEmpty)
         .toList();
     notifyListeners();
   }

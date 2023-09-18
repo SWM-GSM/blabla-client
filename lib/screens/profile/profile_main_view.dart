@@ -210,7 +210,7 @@ class ProfileMainView extends StatelessWidget {
                                   width: 8,
                                 ),
                                 Text(
-                                  HistoryFilter.values[idx].tag,
+                                  HistoryFilter.values[idx].name.tr(),
                                   style: viewModel.filter ==
                                           HistoryFilter.values[idx]
                                       ? BlaTxt.txt12B
