@@ -24,7 +24,7 @@ enum Profile {
   pig,
   pigeon,
   rabbit,
-  raccoon,
+  racoon,
   tiger,
   whitebear,
   wolf,

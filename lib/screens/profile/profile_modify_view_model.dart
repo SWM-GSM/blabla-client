@@ -50,9 +50,7 @@ class ProfileModifyViewModel with ChangeNotifier {
 
   void setProfileImage() {
     int idx = Random().nextInt(Profile.values.length);
-    _tempProfileImage =
-        Profile.values[idx].name.toString().substring(0, 1).toUpperCase() +
-            Profile.values[idx].name.toString().substring(1).toLowerCase();
+    _tempProfileImage = Profile.values[idx].name;
     notifyListeners();
   }
 
@@ -87,7 +85,8 @@ class ProfileModifyViewModel with ChangeNotifier {
   Future<bool> saveProfile() async {
     if (await api.patchProfile(UserProfile(
       nickname: _tempNickname,
-      profileImage: _tempProfileImage,
+      profileImage: _tempProfileImage.toString().substring(0, 1).toUpperCase() +
+          _tempProfileImage.toString().substring(1).toLowerCase(),
       language: _tempLanguage,
     ))) {
       return true;
