@@ -10,6 +10,7 @@ import 'package:blabla/styles/txt_style.dart';
 import 'package:blabla/widgets/profile_widget.dart';
 import 'package:blabla/widgets/skeleton_ui_widget.dart';
 import 'package:country_flags/country_flags.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -28,7 +29,7 @@ class ProfileMainView extends StatelessWidget {
         backgroundColor: BlaColor.white,
         elevation: 0,
         title: Text(
-          "마이페이지",
+          "myPage".tr(),
           style: BlaTxt.txt18B,
         ),
         centerTitle: true,
@@ -42,7 +43,7 @@ class ProfileMainView extends StatelessWidget {
                     MaterialPageRoute(
                         builder: (context) => const ProfileSettingView()));
               } else {
-                showToast("로딩 중입니다. 잠시후 다시 시도해주세요.");
+                showToast("tryLater".tr());
               }
             },
             child: Padding(
@@ -70,7 +71,7 @@ class ProfileMainView extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "오늘도 블라블라해요!",
+                        "keepBlablaing".tr(),
                         style: BlaTxt.txt16M.copyWith(color: BlaColor.orange),
                       ),
                       const SizedBox(
@@ -101,7 +102,9 @@ class ProfileMainView extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(12),
                               ),
                               child: Text(
-                                "${viewModel.user!.language == "ko" ? "한국어" : "영어"} 배우는 중!",
+                                viewModel.user!.language == "ko"
+                                    ? "learningKorean".tr()
+                                    : "learningEnglish".tr(),
                                 style: BlaTxt.txt12M
                                     .copyWith(color: BlaColor.orange),
                               ),
@@ -172,7 +175,7 @@ class ProfileMainView extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Text("히스토리", style: BlaTxt.txt20B),
+                  Text("history".tr(), style: BlaTxt.txt20B),
                   Wrap(
                     spacing: 12,
                     children: List.generate(
@@ -244,7 +247,11 @@ class ProfileMainView extends StatelessWidget {
                             height: 12,
                           ),
                           Text(
-                            "표시할 히스토리가 없습니다!\n${viewModel.filter == HistoryFilter.personal ? "마이" : "크루"} 스페이스 활동을 통해\n히스토리를 만들어보세요!",
+                            "${"noHistory".tr()}\n${"withSpace".tr(args: [
+                                  viewModel.filter == HistoryFilter.personal
+                                      ? "mySpace".tr()
+                                      : "crewSpace".tr()
+                                ])}\n${"createHistory".tr()}",
                             style:
                                 BlaTxt.txt14R.copyWith(color: BlaColor.grey800),
                             textAlign: TextAlign.center,

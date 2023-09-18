@@ -96,5 +96,8 @@
     "yes": "예",
     "no": "아니오",
     "tryLater": "잠시 뒤에 다시 시도해주세요",
-    "enterSentence": "문장을 입력해주세요"
+    "enterSentence": "문장을 입력해주세요",
+    "noHistory": "표시할 히스토리가 없습니다!",
+    "withSpace": "{} 활동을 통해,",
+    "createHistory": "히스토리를 만들어보세요!"
 }

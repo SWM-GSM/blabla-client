@@ -96,5 +96,8 @@
     "yes": "Yes",
     "no": "No",
     "tryLater": "Please try again later",
-    "enterSentence": "Please enter a sentence"
+    "enterSentence": "Please enter a sentence",
+    "noHistory": "No history to display!",
+    "withSpace": "With {} activities,",
+    "createHistory": "create your histories!"
   }
