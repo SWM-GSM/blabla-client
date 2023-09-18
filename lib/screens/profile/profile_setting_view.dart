@@ -1,4 +1,3 @@
-import 'package:blabla/screens/onboarding.dart';
 import 'package:blabla/screens/profile/profile_setting_web_view.dart';
 import 'package:blabla/screens/profile/profile_view_model.dart';
 import 'package:blabla/services/login.dart';
@@ -165,6 +164,12 @@ class ProfileSettingView extends StatelessWidget {
                                   title: "개인정보처리방침", url: env["PRIVACY_URL"])));
                     },
                   ),
+                  SettingRowWidget(
+                      type: SettingRowType.link,
+                      txt: "문의하기",
+                      onTap: () {
+                        // 수정
+                      })
                 ],
               ),
               const SizedBox(height: 24),
@@ -192,19 +197,12 @@ class ProfileSettingView extends StatelessWidget {
                                       switch (
                                           await storage.read(key: "platform")) {
                                         case "GOOGLE":
+                                          print("구글로그아웃");
                                           Login.google.service.logout();
                                         case "APPLE":
                                           Login.apple.service.logout();
                                       }
-                                      await storage.deleteAll();
-                                      if (context.mounted) {
-                                        Navigator.pushAndRemoveUntil(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    const OnBoarding()),
-                                            (route) => false);
-                                      }
+                                      Restart.restartApp(webOrigin: "/");
                                     },
                                   ),
                                   CupertinoDialogAction(
@@ -238,14 +236,7 @@ class ProfileSettingView extends StatelessWidget {
                                     ),
                                     onPressed: () async {
                                       if (await viewModel.withdrawal()) {
-                                        if (context.mounted) {
-                                          Navigator.pushAndRemoveUntil(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      const OnBoarding()),
-                                              (route) => false);
-                                        }
+                                        Restart.restartApp(webOrigin: "/");
                                       } else {
                                         showToast("회원 탈퇴 실패. 다시 시도 해주세요");
                                       }
