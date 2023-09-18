@@ -6,11 +6,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 enum ContentLangType {
-  ko("한국어"),
-  en("영어");
+  ko("Korean"),
+  en("English");
 
-  const ContentLangType(this.korName);
-  final String korName;
+  const ContentLangType(this.fullKey);
+  final String fullKey;
 }
 
 class PracticeViewModel with ChangeNotifier {

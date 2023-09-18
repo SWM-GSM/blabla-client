@@ -1,3 +1,4 @@
+import 'package:blabla/screens/profile/profile_view_model.dart';
 import 'package:blabla/screens/square/square_view_model.dart';
 import 'package:blabla/styles/colors.dart';
 import 'package:blabla/styles/txt_style.dart';
@@ -21,6 +22,7 @@ class SquareScheduleWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final viewModel = Provider.of<SquareViewModel>(context);
+    final profileViewModel = Provider.of<ProfileViewModel>(context);
     switch (type) {
       case ScheduleWidgetType.none:
         return Container(
@@ -69,7 +71,10 @@ class SquareScheduleWidget extends StatelessWidget {
                   const SizedBox(width: 8),
                   Text(
                     datetimeToStr(
-                        schedule!.meetingTime, StrDatetimeType.strDelimiter),
+                      schedule!.meetingTime,
+                      StrDatetimeType.strDelimiter,
+                      lang: profileViewModel.lang ?? "en",
+                    ),
                     style: BlaTxt.txt16R.copyWith(color: BlaColor.grey700),
                   ),
                 ],
@@ -120,7 +125,8 @@ class SquareScheduleWidget extends StatelessWidget {
                   const SizedBox(width: 8),
                   Text(
                     datetimeToStr(
-                        schedule!.meetingTime, StrDatetimeType.strDelimiter),
+                        schedule!.meetingTime, StrDatetimeType.strDelimiter,
+                        lang: profileViewModel.lang ?? "en"),
                     style: BlaTxt.txt16R.copyWith(color: BlaColor.grey700),
                   ),
                 ],

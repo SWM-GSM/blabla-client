@@ -1,3 +1,4 @@
+import 'package:blabla/screens/profile/profile_view_model.dart';
 import 'package:blabla/screens/square/square_view_model.dart';
 import 'package:blabla/styles/colors.dart';
 import 'package:blabla/styles/txt_style.dart';
@@ -11,7 +12,8 @@ class SquareBottomSheetWidget extends StatefulWidget {
   const SquareBottomSheetWidget({super.key});
 
   @override
-  State<SquareBottomSheetWidget> createState() => _SquareBottomSheetWidgetState();
+  State<SquareBottomSheetWidget> createState() =>
+      _SquareBottomSheetWidgetState();
 }
 
 class _SquareBottomSheetWidgetState extends State<SquareBottomSheetWidget> {
@@ -24,6 +26,7 @@ class _SquareBottomSheetWidgetState extends State<SquareBottomSheetWidget> {
   @override
   Widget build(BuildContext context) {
     final viewModel = Provider.of<SquareViewModel>(context);
+    final profileViewModel = Provider.of<ProfileViewModel>(context);
     return Container(
       height: 460,
       margin: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
@@ -115,9 +118,11 @@ class _SquareBottomSheetWidgetState extends State<SquareBottomSheetWidget> {
                   },
                   child: Text(
                       datetimeToStr(
-                          DateTime(date.year, date.month, date.day, time.hour,
-                              time.minute),
-                          StrDatetimeType.strDelOnlyDate),
+                        DateTime(date.year, date.month, date.day, time.hour,
+                            time.minute),
+                        StrDatetimeType.strDelOnlyDate,
+                        lang: profileViewModel.lang!,
+                      ),
                       style: dateVisible == true
                           ? BlaTxt.txt16B.copyWith(color: BlaColor.orange)
                           : BlaTxt.txt16R),
