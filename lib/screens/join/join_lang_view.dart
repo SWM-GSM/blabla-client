@@ -15,68 +15,76 @@ class JoinLangView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final viewModel = Provider.of<JoinViewModel>(context);
-    return Scaffold(
-      body: Column(
-        children: [
-          CreateWidget(
-            page: JoinPage.lang,
-            title: "languageWantToLearn".tr(),
-            widgets: const [
-              SizedBox(height: 22),
+    return WillPopScope(
+      onWillPop: () async {
+        viewModel.initPage(JoinPage.lang);
+        return true;
+      },
+      child: Scaffold(
+        body: Padding(
+          padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
+          child: Column(
+            children: [
+              CreateWidget(
+                page: JoinPage.lang,
+                title: "languageWantToLearn".tr(),
+                widgets: const [
+                  SizedBox(height: 22),
+                ],
+              ),
+              GestureDetector(
+                onTap: () {
+                  viewModel.setLang("ko");
+                },
+                child: JoinLangWidget(
+                  title: "korean".tr(),
+                  desc: "koreanUser".tr(),
+                  selected: viewModel.lang == "ko" ? true : false,
+                ),
+              ),
+              GestureDetector(
+                onTap: () {
+                  viewModel.setLang("en");
+                },
+                child: JoinLangWidget(
+                  title: "english".tr(),
+                  desc: "englishUser".tr(),
+                  selected: viewModel.lang == "en" ? true : false,
+                ),
+              ),
             ],
           ),
-          GestureDetector(
-            onTap: () {
-              viewModel.setLang("ko");
-            },
-            child: JoinLangWidget(
-              title: "korean".tr(),
-              desc: "koreanUser".tr(),
-              selected: viewModel.lang == "ko" ? true : false,
-            ),
-          ),
-          GestureDetector(
-            onTap: () {
-              viewModel.setLang("en");
-            },
-            child: JoinLangWidget(
-              title: "english".tr(),
-              desc: "englishUser".tr(),
-              selected: viewModel.lang == "en" ? true : false,
-            ),
-          ),
-        ],
-      ),
-      bottomSheet: GestureDetector(
-        onTap: () async {
-          await viewModel.join().then((value) {
-            if (value) {
-              Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(builder: (context) => const Main()),
-                  (route) => false);
-            } else {
-              showToast("failToJoin".tr());
-            }
-          });
-        },
-        child: Container(
-          margin: EdgeInsets.fromLTRB(
-              20, 12, 20, 10 + MediaQuery.of(context).viewPadding.bottom),
-          alignment: Alignment.center,
-          height: 56,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(12),
-            color: () {
-              if (viewModel.lang == null) {
-                return BlaColor.grey400;
+        ),
+        bottomSheet: GestureDetector(
+          onTap: () async {
+            await viewModel.join().then((value) {
+              if (value) {
+                Navigator.of(context).pushAndRemoveUntil(
+                    MaterialPageRoute(builder: (context) => const Main()),
+                    (route) => false);
               } else {
-                return BlaColor.orange;
+                showToast("failToJoin".tr());
               }
-            }(),
+            });
+          },
+          child: Container(
+            margin: EdgeInsets.fromLTRB(
+                20, 12, 20, 10 + MediaQuery.of(context).viewPadding.bottom),
+            alignment: Alignment.center,
+            height: 56,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(12),
+              color: () {
+                if (viewModel.lang == null) {
+                  return BlaColor.grey400;
+                } else {
+                  return BlaColor.orange;
+                }
+              }(),
+            ),
+            child: Text("startBlabla".tr(),
+                style: BlaTxt.txt16B.copyWith(color: BlaColor.white)),
           ),
-          child: Text("startBlabla".tr(),
-              style: BlaTxt.txt16B.copyWith(color: BlaColor.white)),
         ),
       ),
     );
