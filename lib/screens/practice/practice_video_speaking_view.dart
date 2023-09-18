@@ -6,6 +6,7 @@ import 'package:blabla/screens/practice/widgets/practice_video_record_widget.dar
 import 'package:blabla/screens/practice/widgets/practice_video_widget.dart';
 import 'package:blabla/styles/colors.dart';
 import 'package:blabla/styles/txt_style.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -48,7 +49,7 @@ class _PracticeVideoSpeakingViewState extends State<PracticeVideoSpeakingView> {
       try {
         await recorders[idx].start(path: "$dir/audio$idx.wav");
       } catch (e) {
-        showToast("녹음을 진행할 수 없습니다.");
+        showToast("unableToRecord".tr());
         setState(() {
           canRecord = false;
           statuses[idx] = RecordStatus.beforeRecord;
@@ -66,7 +67,6 @@ class _PracticeVideoSpeakingViewState extends State<PracticeVideoSpeakingView> {
   void startPlay(int idx, String path) async {
     await players[idx].play(UrlSource(path));
     players[idx].onPlayerComplete.listen((event) {
-      print("재생");
       setState(() {
         statuses[players.indexOf(players[idx])] = RecordStatus.afterRecord;
       });
@@ -87,12 +87,6 @@ class _PracticeVideoSpeakingViewState extends State<PracticeVideoSpeakingView> {
   @override
   void dispose() {
     super.dispose();
-    // for (final recorder in recorders) {
-    //   recorder.closeRecorder();
-    // }
-    // for (final player in players) {
-    //   player.closePlayer();
-    // }
     for (final recorder in recorders) {
       recorder.dispose();
     }
@@ -144,11 +138,11 @@ class _PracticeVideoSpeakingViewState extends State<PracticeVideoSpeakingView> {
               height: 16,
             ),
             Text(
-              "영상을 다시 듣고",
+              "practiceForListening".tr(),
               style: BlaTxt.txt20R,
             ),
             Text(
-              "직접 따라하며 연습해보세요!",
+              "practiceForRepeating".tr(),
               style: BlaTxt.txt20B.copyWith(color: BlaColor.orange),
             ),
             Padding(
@@ -246,7 +240,7 @@ class _PracticeVideoSpeakingViewState extends State<PracticeVideoSpeakingView> {
                                 builder: (context) => const Main()),
                             (route) => false);
                       } else {
-                        showToast("업로드 실패. 다시 시도해주세요");
+                        showToast("failToUpload".tr());
                       }
                     });
                   } else {
@@ -263,7 +257,7 @@ class _PracticeVideoSpeakingViewState extends State<PracticeVideoSpeakingView> {
                     borderRadius: BorderRadius.circular(12),
                     color: BlaColor.orange,
                   ),
-                  child: Text("완료",
+                  child: Text("complete".tr(),
                       style: BlaTxt.txt16B.copyWith(color: BlaColor.white)),
                 ),
               ),
