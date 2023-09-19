@@ -19,7 +19,6 @@ class CreateWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final joinViewModel = Provider.of<JoinViewModel>(context);
-    // final recruitViewModel = Provider.of<RecruitViewModel>(context);
 
     return Column(
       children: [
@@ -29,11 +28,7 @@ class CreateWidget extends StatelessWidget {
           height: 60,
           child: GestureDetector(
             onTap: () {
-              if (page is JoinPage) {
-                joinViewModel.initPage(page);
-              } else {
-                // recruitViewModel.initPage(page);
-              }
+              joinViewModel.initPage(page);
               Navigator.pop(context);
             },
             child: SvgPicture.asset(

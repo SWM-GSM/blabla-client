@@ -75,20 +75,6 @@ class SettingRowWidget extends StatelessWidget {
                       ),
                   ],
                 ),
-              // SizedBox(
-              //     height: 20,
-              //     width: 20,
-              //     child: FittedBox(
-              //       fit: BoxFit.contain,
-              //       child: Radio(
-              //         value: 0,
-              //         groupValue: 1,
-              //         onChanged: (value) {
-              //           print(value);
-              //         },
-              //       ),
-              //     ),
-              //   ),
               SettingRowType.link => SvgPicture.asset(
                   "assets/icons/ic_20_arrow_right.svg",
                   width: 20,
@@ -96,7 +82,7 @@ class SettingRowWidget extends StatelessWidget {
                   colorFilter:
                       const ColorFilter.mode(BlaColor.grey700, BlendMode.srcIn),
                 ),
-              SettingRowType.btn => SizedBox(),
+              SettingRowType.btn => const SizedBox(),
             }
           ],
         ),
