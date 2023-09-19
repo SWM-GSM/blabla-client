@@ -1,6 +1,7 @@
 import 'package:blabla/screens/profile/profile_modify_view_model.dart';
 import 'package:blabla/screens/profile/profile_view_model.dart';
 import 'package:blabla/screens/profile/widgets/profile_bottom_sheet_widget.dart';
+import 'package:blabla/screens/square/square_view_model.dart';
 import 'package:blabla/styles/colors.dart';
 import 'package:blabla/styles/txt_style.dart';
 import 'package:blabla/widgets/profile_widget.dart';
@@ -57,6 +58,7 @@ class _ProfileModifyViewState extends State<ProfileModifyView> {
   Widget build(BuildContext context) {
     final viewModel = Provider.of<ProfileModifyViewModel>(context);
     final profileViewModel = Provider.of<ProfileViewModel>(context);
+    final squareViewModel = Provider.of<SquareViewModel>(context);
     return WillPopScope(
       onWillPop: () async {
         if (viewModel.isProfileChanged()) {
@@ -176,7 +178,8 @@ class _ProfileModifyViewState extends State<ProfileModifyView> {
                             color: BlaColor.grey100),
                         child: Text(
                           "changeImage".tr(),
-                          style: BlaTxt.txt14SB.copyWith(color: BlaColor.grey800),
+                          style:
+                              BlaTxt.txt14SB.copyWith(color: BlaColor.grey800),
                         ),
                       ),
                     ],
@@ -351,14 +354,20 @@ class _ProfileModifyViewState extends State<ProfileModifyView> {
           ),
           child: GestureDetector(
             onTap: () {
-              viewModel.saveProfile().then((value) {
-                if (value) {
-                  profileViewModel.initProfile();
-                  Navigator.pop(context);
-                } else {
-                  showToast("failToSave".tr());
-                }
-              });
+              if (isNickLenValid && isNickDupValid) {
+                viewModel.saveProfile().then((value) {
+                  if (value) {
+                    profileViewModel.initProfile();
+                    squareViewModel.getUpcomingSchedule();
+                    squareViewModel.getSchedules();
+                    Navigator.pop(context);
+                  } else {
+                    showToast("failToSave".tr());
+                  }
+                });
+              } else {
+                showToast("checkValidation".tr());
+              }
             },
             child: Container(
               margin: EdgeInsets.fromLTRB(
