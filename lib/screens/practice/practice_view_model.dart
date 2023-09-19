@@ -51,15 +51,19 @@ class PracticeViewModel with ChangeNotifier {
     if (isLeft) {
       if (_contentLangType.index != 0) {
         _contentLangType = ContentLangType.values[_contentLangType.index - 1];
+        _contentList.clear();
+        _contentIdx = 0;
+        getContentList();
       }
     } else {
       if (_contentLangType.index < (ContentLangType.values.length - 1)) {
         _contentLangType = ContentLangType.values[_contentLangType.index + 1];
+        _contentList.clear();
+        _contentIdx = 0;
+        getContentList();
       }
     }
-    _contentList.clear();
-    _contentIdx = 0;
-    getContentList();
+
     notifyListeners();
   }
 
