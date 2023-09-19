@@ -162,19 +162,24 @@ class _ProfileModifyViewState extends State<ProfileModifyView> {
                   onTap: () {
                     viewModel.setProfileImage();
                   },
-                  child: Container(
-                    width: 104,
-                    alignment: Alignment.center,
-                    margin: const EdgeInsets.fromLTRB(0, 12, 0, 24),
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 12, horizontal: 20),
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(24),
-                        color: BlaColor.grey100),
-                    child: Text(
-                      "changeImage".tr(),
-                      style: BlaTxt.txt14SB.copyWith(color: BlaColor.grey800),
-                    ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Container(
+                        alignment: Alignment.center,
+                        margin: const EdgeInsets.fromLTRB(0, 12, 0, 24),
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 12, horizontal: 20),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(24),
+                            color: BlaColor.grey100),
+                        child: Text(
+                          "changeImage".tr(),
+                          style: BlaTxt.txt14SB.copyWith(color: BlaColor.grey800),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
                 const SizedBox(
