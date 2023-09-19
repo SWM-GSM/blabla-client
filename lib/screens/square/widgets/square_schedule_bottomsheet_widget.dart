@@ -3,6 +3,7 @@ import 'package:blabla/screens/square/square_view_model.dart';
 import 'package:blabla/styles/colors.dart';
 import 'package:blabla/styles/txt_style.dart';
 import 'package:blabla/utils/datetime_to_str.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -92,7 +93,7 @@ class _SquareScheduleBottomSheetWidgetState extends State<SquareScheduleBottomSh
             },
             style: BlaTxt.txt20SB,
             decoration: InputDecoration(
-              hintText: "제목",
+              hintText: "title".tr(),
               hintStyle: BlaTxt.txt20M.copyWith(color: BlaColor.grey500),
               border: InputBorder.none,
               contentPadding: EdgeInsets.zero,

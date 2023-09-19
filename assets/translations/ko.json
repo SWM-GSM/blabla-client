@@ -43,7 +43,7 @@
     "title": "제목",
     "cancelParticipation": "참여 취소하기",
     "inVoiceCall": "음성 통화 중",
-    "voiceRoom__1": "보이스룸이 종료되었습니다.",
+    "voiceRoomEnd": "보이스룸이 종료되었습니다.",
     "participants": "참여자",
     "members": "명",
     "enjoyExperience": "재밌게 즐기셨나요?",
@@ -108,5 +108,13 @@
     "failToWithdrawal": "회원 탈퇴 실패. 다시 시도 해주세요",
     "noFeedback": "크루원이 남긴 피드백이 없어요!",
     "times": "회",
-    "feedback": "피드백"
+    "feedback": "피드백",
+    "schedule": "일정",
+    "more": "더보기",
+    "allowMicPermission": "마이크 권한을 허용해주세요",
+    "failToJoinSchedule": "일정 가입 실패. 다시 시도 해주세요",
+    "failToUnsubscribe": "참여 취소 실패. 다시 시도 해주세요",
+    "participating": "명 참여 중",
+    "update": "업데이트",
+    "allowNotificationPermission": "알림 권한을 허용해주세요"
 }

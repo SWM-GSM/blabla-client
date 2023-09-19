@@ -4,6 +4,7 @@ import 'package:blabla/styles/colors.dart';
 import 'package:blabla/styles/txt_style.dart';
 import 'package:blabla/utils/datetime_to_str.dart';
 import 'package:blabla/widgets/profile_widget.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -172,7 +173,7 @@ class SquareScheduleWidget extends StatelessWidget {
                         color: BlaColor.grey300,
                       ),
                       child: Text(
-                        "참여 취소하기",
+                        "cancelParticipation".tr(),
                         style: BlaTxt.txt14B.copyWith(color: BlaColor.grey600),
                       ),
                     ))
@@ -189,7 +190,7 @@ class SquareScheduleWidget extends StatelessWidget {
                         color: BlaColor.lightOrange,
                       ),
                       child: Text(
-                        "참여하기",
+                        "join".tr(),
                         style: BlaTxt.txt14B.copyWith(color: BlaColor.orange),
                       ),
                     )),

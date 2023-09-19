@@ -15,7 +15,7 @@
     "sayNext": "and think about what to say next!",
     "loadingContent": "Loading Content",
     "translateFollowingSentence": "Translate the following sentence into English!",
-    "next": "next",
+    "next": "Next",
     "transaltionComplete": "Translation Complete",
     "translateAgain": "Translate Again",
     "receiveFeedback": "Receive Feedback",
@@ -43,7 +43,7 @@
     "title": "Title",
     "cancelParticipation": "Cancel Participation",
     "inVoiceCall": "In Voice Call",
-    "voiceRoom__1": "The voice room has ended.",
+    "voiceRoomEnd": "The voice room has ended.",
     "participants": "Participants",
     "members": "Members",
     "enjoyExperience": "Did you enjoy the experience?",
@@ -108,5 +108,13 @@
     "failToWithdrawal": "Fail to withdrawal. Try again",
     "noFeedback": "No feedback left!",
     "times": "times",
-    "feedback": "Feedback"
+    "feedback": "Feedback",
+    "schedule": "Schedule",
+    "more": "More",
+    "allowMicPermission": "Please allow me permission to use the mic",
+    "failToJoinSchedule": "Fail to join the schedule. Try again",
+    "failToUnsubscribe": "Failed to unsubscribe. Try again",
+    "participating": " members are participating",
+    "update": "Update",
+    "allowNotificationPermission": "Please allow notification permission"
   }
