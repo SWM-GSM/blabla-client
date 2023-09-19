@@ -10,6 +10,7 @@ import 'package:blabla/styles/txt_style.dart';
 import 'package:blabla/widgets/profile_widget.dart';
 import 'package:blabla/widgets/skeleton_ui_widget.dart';
 import 'package:country_flags/country_flags.dart';
+import 'package:date_format/date_format.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
@@ -275,7 +276,14 @@ class ProfileMainView extends StatelessWidget {
                                                   CrossAxisAlignment.center,
                                               children: [
                                                 Text(
-                                                  "${viewModel.histories[calendarIdx].datetime.month}월",
+                                                  viewModel.lang == "ko"
+                                                      ? "${viewModel.histories[calendarIdx].datetime.month}월"
+                                                      : formatDate(
+                                                          viewModel
+                                                              .histories[
+                                                                  calendarIdx]
+                                                              .datetime,
+                                                          [M]),
                                                   style: BlaTxt.txt12R.copyWith(
                                                       color: BlaColor.grey700),
                                                 ),

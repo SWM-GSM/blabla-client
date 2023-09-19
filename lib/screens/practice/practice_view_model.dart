@@ -6,8 +6,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 enum ContentLangType {
-  ko("Korean"),
-  en("English");
+  ko("korean"),
+  en("english");
 
   const ContentLangType(this.fullKey);
   final String fullKey;

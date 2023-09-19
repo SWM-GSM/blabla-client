@@ -1,6 +1,7 @@
 import 'package:blabla/screens/profile/profile_modify_view_model.dart';
 import 'package:blabla/styles/colors.dart';
 import 'package:blabla/styles/txt_style.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
@@ -12,7 +13,8 @@ class ProfileBottomSheetWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final viewModel = Provider.of<ProfileModifyViewModel>(context);
     return Container(
-      padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewPadding.bottom),
+      padding:
+          EdgeInsets.only(bottom: MediaQuery.of(context).viewPadding.bottom),
       decoration: const BoxDecoration(
           borderRadius: BorderRadius.only(
               topLeft: Radius.circular(24), topRight: Radius.circular(24)),
@@ -21,7 +23,7 @@ class ProfileBottomSheetWidget extends StatelessWidget {
         GestureDetector(
           child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-              child: Text("배울 언어", style: BlaTxt.txt18B)),
+              child: Text("languageToLearn".tr(), style: BlaTxt.txt18B)),
         ),
         GestureDetector(
           onTap: () {
@@ -34,7 +36,7 @@ class ProfileBottomSheetWidget extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Text(
-                    "한국어",
+                    "korean".tr(),
                     style: viewModel.tempLanguage == "ko"
                         ? BlaTxt.txt16B.copyWith(color: BlaColor.orange)
                         : BlaTxt.txt16R,
@@ -61,7 +63,7 @@ class ProfileBottomSheetWidget extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Text(
-                    "영어",
+                    "english".tr(),
                     style: viewModel.tempLanguage == "en"
                         ? BlaTxt.txt16B.copyWith(color: BlaColor.orange)
                         : BlaTxt.txt16R,

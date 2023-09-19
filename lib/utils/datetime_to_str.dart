@@ -31,7 +31,7 @@ datetimeToStr(DateTime datetime, StrDatetimeType type, {String lang = "ko"}) {
       return formatDate(
           datetime,
           lang == "ko"
-              ? [yyyy, "년 ", M, "월 ", dd, "일 "]
+              ? [yyyy, "년 ", m, "월 ", dd, "일 "]
               : [yyyy, " ", M, " ", dd],
           locale: lang == "ko"
               ? const KoreanDateLocale()
