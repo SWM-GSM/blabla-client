@@ -14,6 +14,7 @@ import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:restart_app/restart_app.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ProfileSettingView extends StatelessWidget {
   const ProfileSettingView({super.key});
@@ -170,8 +171,8 @@ class ProfileSettingView extends StatelessWidget {
                   SettingRowWidget(
                       type: SettingRowType.link,
                       txt: "contactUs".tr(),
-                      onTap: () {
-                        // 수정
+                      onTap: () async {
+                        await launchUrl(Uri.parse(env["TALK_URL"]!));
                       })
                 ],
               ),

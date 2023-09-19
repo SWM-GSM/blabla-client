@@ -103,14 +103,20 @@ class OnBoarding extends StatelessWidget {
             }),
           ],
         ),
-        Container(
-          alignment: Alignment.center,
-          padding: const EdgeInsets.symmetric(vertical: 18),
-          margin: const EdgeInsets.fromLTRB(0, 20, 0, 40),
-          child: Text(
-            "inquiriesAboutLoggingIn".tr(),
-            style: BlaTxt.txt14M.copyWith(
-                color: BlaColor.grey800, decoration: TextDecoration.underline),
+        GestureDetector(
+          onTap: () async {
+            await launchUrl(Uri.parse(env["TALK_URL"]!));
+          },
+          child: Container(
+            alignment: Alignment.center,
+            padding: const EdgeInsets.symmetric(vertical: 18),
+            margin: const EdgeInsets.fromLTRB(0, 20, 0, 40),
+            child: Text(
+              "inquiriesAboutLoggingIn".tr(),
+              style: BlaTxt.txt14M.copyWith(
+                  color: BlaColor.grey800,
+                  decoration: TextDecoration.underline),
+            ),
           ),
         )
       ],
