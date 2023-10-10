@@ -65,7 +65,7 @@ class PracticeVideoFeedbackView extends StatelessWidget {
                           "sentenceSimilarity".tr(),
                           style: BlaTxt.txt20B,
                         ),
-                        starScore(viewModel.feedback!.starRating),
+                        starScore(viewModel.feedback!.contextRating),
                       ],
                     ),
                     const SizedBox(
@@ -74,7 +74,7 @@ class PracticeVideoFeedbackView extends StatelessWidget {
                     Text("myTranslatedSentence".tr(),
                         style: BlaTxt.txt12R.copyWith(color: BlaColor.grey700)),
                     const SizedBox(height: 4),
-                    Text(viewModel.feedback!.userAnswer,
+                    Text(viewModel.feedback!.userSentence,
                         style: BlaTxt.txt16B
                             .copyWith(overflow: TextOverflow.visible)),
                     const SizedBox(height: 16),
@@ -108,8 +108,7 @@ class PracticeVideoFeedbackView extends StatelessWidget {
         ),
         child: GestureDetector(
           onTap: () {
-            Navigator.push(
-              context,
+            Navigator.of(context).push(
               MaterialPageRoute(
                 builder: (context) => const PracticeVideoSpeakingView(),
               ),

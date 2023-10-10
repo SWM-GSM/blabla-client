@@ -1,4 +1,3 @@
-import 'package:blabla/screens/practice/practice_video_speaking_view.dart';
 import 'package:blabla/screens/profile/profile_view_model.dart';
 import 'package:blabla/styles/colors.dart';
 import 'package:blabla/styles/txt_style.dart';
@@ -81,7 +80,7 @@ class ReportPersonalView extends StatelessWidget {
                                   "sentenceSimilarity".tr(),
                                   style: BlaTxt.txt20B,
                                 ),
-                                starScore(viewModel.feedback!.starRating),
+                                starScore(viewModel.feedback!.contextRating),
                               ],
                             ),
                             const SizedBox(
@@ -91,7 +90,7 @@ class ReportPersonalView extends StatelessWidget {
                                 style: BlaTxt.txt12R
                                     .copyWith(color: BlaColor.grey700)),
                             const SizedBox(height: 4),
-                            Text(viewModel.feedback!.userAnswer,
+                            Text(viewModel.feedback!.userSentence,
                                 style: BlaTxt.txt16B
                                     .copyWith(overflow: TextOverflow.visible)),
                             const SizedBox(height: 16),
@@ -116,35 +115,6 @@ class ReportPersonalView extends StatelessWidget {
                   ),
                 ),
               ),
-        bottomSheet: Container(
-          padding: EdgeInsets.fromLTRB(
-              20, 12, 20, 12 + MediaQuery.of(context).padding.bottom),
-          decoration: const BoxDecoration(
-            border: Border(
-              top: BorderSide(color: BlaColor.grey100, width: 1),
-            ),
-            color: BlaColor.white,
-          ),
-          child: GestureDetector(
-            onTap: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => const PracticeVideoSpeakingView(),
-                ),
-              );
-            },
-            child: Container(
-              alignment: Alignment.center,
-              height: 56,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(12),
-                color: BlaColor.orange,
-              ),
-              child: Text("continue".tr(),
-                  style: BlaTxt.txt16B.copyWith(color: BlaColor.white)),
-            ),
-          ),
-        ),
       ),
     );
   }
