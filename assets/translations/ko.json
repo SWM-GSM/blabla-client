@@ -116,5 +116,6 @@
     "failToUnsubscribe": "참여 취소 실패. 다시 시도 해주세요",
     "participating": "명 참여 중",
     "update": "업데이트",
-    "allowNotificationPermission": "알림 권한을 허용해주세요"
+    "allowNotificationPermission": "알림 권한을 허용해주세요",
+    "checkValidation": "닉네임이 유효한지 확인해주세요"
 }

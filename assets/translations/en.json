@@ -116,5 +116,6 @@
     "failToUnsubscribe": "Failed to unsubscribe. Try again",
     "participating": " members are participating",
     "update": "Update",
-    "allowNotificationPermission": "Please allow notification permission"
+    "allowNotificationPermission": "Please allow notification permission",
+    "checkValidation": "Please check your nickname"
   }

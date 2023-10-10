@@ -12,6 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:restart_app/restart_app.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -58,8 +59,18 @@ class ProfileSettingView extends StatelessWidget {
                   type: SettingRowType.toggle,
                   txt: "notification".tr(),
                   status: viewModel.allowNotification!,
-                  onTap: () {
-                    viewModel.changePushNotification();
+                  onTap: () async {
+                    if (viewModel.allowNotification!) {
+                      // 알람 켤 경우
+                      if (await Permission.notification.request() ==
+                          PermissionStatus.granted) {
+                        viewModel.changePushNotification();
+                      } else {
+                        showToast("allowNotificationPermission".tr());
+                      }
+                    } else {
+                      viewModel.changePushNotification();
+                    }
                   },
                 ),
               ]),
