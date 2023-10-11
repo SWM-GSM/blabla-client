@@ -10,6 +10,7 @@ import 'package:blabla/models/schedule.dart';
 import 'package:blabla/models/setting.dart';
 import 'package:blabla/models/user.dart';
 import 'package:blabla/screens/practice/practice_view_model.dart';
+import 'package:blabla/screens/square/square_view_model.dart';
 import 'package:blabla/utils/dotenv.dart';
 import 'package:dio/dio.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -166,6 +167,7 @@ class API {
           "socialLoginType": socialLoginType,
           "learningLanguage": language,
         }));
+    print(jsonDecode(utf8.decode(res.bodyBytes)));
     if (res.statusCode == 200) {
       await saveToken(res);
       return true;
@@ -205,7 +207,7 @@ class API {
     }
   }
 
-  Future<Agora> getAgoraToken(bool isActivated) async {
+  Future<Agora> getAgora(bool isActivated) async {
     const storage = FlutterSecureStorage();
     final res = await api("$baseUrl/crews/voice-room", HttpMethod.post,
         token: "Bearer ${await storage.read(key: "accessToken")}",
@@ -234,22 +236,25 @@ class API {
     }
   }
 
-  Future<bool> uploadVoiceFile(int reportId, String path) async {
+  Future<int> uploadVoiceFile(int reportId, String path) async {
     const storage = FlutterSecureStorage();
     final dio = Dio();
-    final formData =
-        FormData.fromMap({"file": MultipartFile.fromFileSync(path)});
-
-    final res = await dio.post("$baseUrl/crews/reports/$reportId/voice-file",
-        data: formData,
-        options: Options(headers: {
-          "Authorization": "Bearer ${await storage.read(key: "accessToken")}",
-        }));
+    final formData = FormData.fromMap({
+      "file": MultipartFile.fromFileSync(path),
+      "targetToken": await FirebaseMessaging.instance.getToken()
+    });
+    final res =
+        await dio.post("$baseUrl/crews/reports/$reportId/voice-file/request",
+            data: formData,
+            options: Options(headers: {
+              "Authorization":
+                  "Bearer ${await storage.read(key: "accessToken")}",
+            }));
     print(res.data);
     if (res.statusCode == 200) {
-      return true;
+      return res.data["data"]["voiceFileId"];
     } else {
-      return false;
+      return 0;
     }
   }
 
@@ -275,6 +280,8 @@ class API {
         "$baseUrl/crews/voice-room/previous/$reportId", HttpMethod.get,
         token: "Bearer ${await storage.read(key: "accessToken")}",
         needCheck: true);
+    print(jsonDecode(utf8.decode(res.bodyBytes))["data"]);
+    if (res.statusCode == 200) {
       return (jsonDecode(utf8.decode(res.bodyBytes))["data"]["previousMembers"]
               as List)
           .map((e) => MemberSimple.fromJson(e))
@@ -528,14 +535,15 @@ class API {
     }
   }
 
-  Future<ContentFeedback> getContentFeedback(
+  Future<ContentFeedback> postContentFeedback(
       int videoId, String userAnswer) async {
     const storage = FlutterSecureStorage();
     final res = await api(
         "$baseUrl/contents/detail/$videoId/feedback", HttpMethod.post,
         token: "Bearer ${await storage.read(key: "accessToken")}",
         needCheck: true,
-        body: jsonEncode({"userAnswer": userAnswer}));
+        body: jsonEncode({"userSentence": userAnswer}));
+    print(jsonDecode(utf8.decode(res.bodyBytes)));
     if (res.statusCode == 200) {
       return ContentFeedback.fromJson(
           jsonDecode(utf8.decode(res.bodyBytes))["data"]);
@@ -544,19 +552,20 @@ class API {
     }
   }
 
-  Future<bool> uploadRecords(int contentId, List<String> pathes) async {
+  Future<bool> uploadRecords(int videoId, List<String> pathes) async {
     const storage = FlutterSecureStorage();
     final dio = Dio();
-    final formData = FormData.fromMap({
-      "files": List.generate(
-          pathes.length, (idx) => MultipartFile.fromFileSync(pathes[idx]))
-    });
+    dio.options.contentType = "multipart/form-data";
+    dio.options.headers = {
+      "Authorization": "Bearer ${await storage.read(key: "accessToken")}"
+    };
 
-    final res = await dio.post("$baseUrl/contents/$contentId/practice",
-        data: formData,
-        options: Options(headers: {
-          "Authorization": "Bearer ${await storage.read(key: "accessToken")}",
-        }));
+    final files = List.generate(
+        pathes.length, (idx) => MultipartFile.fromFileSync(pathes[idx]));
+    final formData = FormData.fromMap({"files": files});
+
+    final res = await dio.post("$baseUrl/contents/detail/$videoId/practice",
+        data: formData);
     print(res.data);
     if (res.statusCode == 200) {
       return true;
@@ -574,13 +583,13 @@ class API {
       token: "Bearer ${await storage.read(key: "accessToken")}",
       needCheck: true,
     );
+    print(jsonDecode(utf8.decode(res.bodyBytes)));
     if (res.statusCode == 200) {
       return (jsonDecode(utf8.decode(res.bodyBytes))["data"]["histories"]
               as List)
           .map((e) => History.fromJson(e))
           .toList();
     } else {
-      // print(jsonDecode(utf8.decode(res.bodyBytes)));
       throw Exception("http error :(");
     }
   }
@@ -599,22 +608,36 @@ class API {
       throw Exception("http error :(");
     }
   }
+
+  // Future<void> makeFCMToken() async {
+  //   const storage = FlutterSecureStorage();
+  //   String? _fcmToken = await FirebaseMessaging.instance.getToken();
+  //   print("[FCM] token: $_fcmToken");
+  //   final res = await api("$baseUrl/admin/fcm", HttpMethod.post,
+  //       token: "Bearer ${await storage.read(key: "accessToken")}",
+  //       body: jsonEncode({
+  //         "targetToken": _fcmToken,
+  //         "title": "민감자 곧 묵사발 먹으러감",
+  //         "body": "안물어봤다면 클릭!"
+  //       }));
+  //   print(jsonDecode(utf8.decode(res.bodyBytes)));
+  //   if (res.statusCode == 200) {
+  //   } else {
+  //     throw Exception("http error :(");
+  //   }
+  // }
 }
 
 Future<void> saveToken(res) async {
   const storage = FlutterSecureStorage();
-  await Future.wait([
-    storage.write(
-        key: "accessToken", value: jsonDecode(res.body)["data"]["accessToken"]),
-    storage.write(
-        key: "refreshToken",
-        value: jsonDecode(res.body)["data"]["refreshToken"]),
-    storage.write(
-        key: "accessTokenExpiresIn",
-        value: jsonDecode(res.body)["data"]["accessTokenExpiresIn"].toString()),
-    storage.write(
-        key: "refreshTokenExpiresIn",
-        value:
-            jsonDecode(res.body)["data"]["refreshTokenExpiresIn"].toString()),
-  ]);
+  await storage.write(
+      key: "accessToken", value: jsonDecode(res.body)["data"]["accessToken"]);
+  await storage.write(
+      key: "refreshToken", value: jsonDecode(res.body)["data"]["refreshToken"]);
+  await storage.write(
+      key: "accessTokenExpiresIn",
+      value: jsonDecode(res.body)["data"]["accessTokenExpiresIn"].toString());
+  await storage.write(
+      key: "refreshTokenExpiresIn",
+      value: jsonDecode(res.body)["data"]["refreshTokenExpiresIn"].toString());
 }
