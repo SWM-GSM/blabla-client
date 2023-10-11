@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:blabla/models/agora.dart';
+import 'package:blabla/models/member.dart';
 import 'package:blabla/models/video.dart';
 import 'package:blabla/models/content.dart';
 import 'package:blabla/models/content_feedback.dart';
@@ -255,14 +256,66 @@ class API {
   Future<bool> requestCreateReport(int reportId) async {
     const storage = FlutterSecureStorage();
     final res = await api(
-        "$baseUrl/crews/reports/$reportId/request", HttpMethod.post,
-        token: "Bearer ${await storage.read(key: "accessToken")}",
-        needCheck: true);
+      "$baseUrl/crews/reports/$reportId/request",
+      HttpMethod.post,
+      token: "Bearer ${await storage.read(key: "accessToken")}",
+      needCheck: true,
+    );
     if (res.statusCode == 200) {
       return true;
     } else {
       print(res.body);
       throw Exception("http error :(");
+    }
+  }
+
+  Future<List<MemberSimple>> getPrevMember(int reportId) async {
+    const storage = FlutterSecureStorage();
+    final res = await api(
+        "$baseUrl/crews/voice-room/previous/$reportId", HttpMethod.get,
+        token: "Bearer ${await storage.read(key: "accessToken")}",
+        needCheck: true);
+      return (jsonDecode(utf8.decode(res.bodyBytes))["data"]["previousMembers"]
+              as List)
+          .map((e) => MemberSimple.fromJson(e))
+          .toList();
+    } else {
+      throw Exception("http error :(");
+    }
+  }
+
+  Future<bool> sendSquareFeedback(int voiceFileId, String feedback) async {
+    const storage = FlutterSecureStorage();
+    final res = await api(
+      "$baseUrl/voice-files/$voiceFileId/feedback",
+      HttpMethod.post,
+      token: "Bearer ${await storage.read(key: "accessToken")}",
+      needCheck: true,
+      body: jsonEncode({"content": feedback}),
+    );
+    if (res.statusCode == 200) {
+      return true;
+    } else {
+      throw Exception("http error :(");
+    }
+  }
+
+  Future<bool> accuseMember(
+      int reportee, Accuse accuse, String description) async {
+    const storage = FlutterSecureStorage();
+    final res = await api("$baseUrl/crews/voice-room/accuse", HttpMethod.post,
+        token: "Bearer ${await storage.read(key: "accessToken")}",
+        needCheck: true,
+        body: jsonEncode({
+          "category": accuse.name.toString().toUpperCase(),
+          "description": description,
+          "reporteeId": reportee,
+        }));
+    print(jsonDecode(utf8.decode(res.bodyBytes))["data"]);
+    if (res.statusCode == 200) {
+      return true;
+    } else {
+      return false;
     }
   }
 
