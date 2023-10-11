@@ -96,7 +96,7 @@ class _SplashState extends State<Splash> {
       case SplashPage.home:
         return const Main();
       default:
-        return const OnBoarding();
+        return Container();
     }
   }
 }
