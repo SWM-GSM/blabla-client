@@ -147,8 +147,7 @@ class _PracticeVideoWritingViewState extends State<PracticeVideoWritingView> {
     await Future.delayed(Duration(seconds: _feedbackDelaySecond)).then((value) {
       setState(() {
         feedBackBubbles.add(ChatBubbleWidget(
-            type: ChatBubbleType.receiver,
-            txt: "greatAttempt".tr()));
+            type: ChatBubbleType.receiver, txt: "greatAttempt".tr()));
         _isFeedbackEnded = true;
       });
     });
@@ -645,11 +644,9 @@ class _PracticeVideoWritingViewState extends State<PracticeVideoWritingView> {
                   ),
                   child: GestureDetector(
                     onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  const PracticeVideoFeedbackView()));
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) =>
+                              const PracticeVideoFeedbackView()));
                     },
                     child: Container(
                       alignment: Alignment.center,
