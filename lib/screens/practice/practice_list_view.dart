@@ -1,6 +1,7 @@
 import 'package:blabla/screens/practice/practice_video_listening_view.dart';
 import 'package:blabla/screens/practice/practice_view_model.dart';
 import 'package:blabla/screens/practice/widgets/practice_video_tile_widget.dart';
+import 'package:blabla/services/amplitude.dart';
 import 'package:blabla/styles/colors.dart';
 import 'package:blabla/styles/txt_style.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -149,8 +150,12 @@ class _PracticeListViewState extends State<PracticeListView> {
                                 .map((e) => GestureDetector(
                                     onTap: () {
                                       if (e.isCompleted) {
+                                        AnalyticsConfig().btnClick(
+                                            "Practice_Video_${e.id}_Completed");
                                         showToast("alreadyLearned".tr());
                                       } else {
+                                        AnalyticsConfig()
+                                            .btnClick("Practice_Video_${e.id}");
                                         viewModel.getVideo(e.id);
                                         Navigator.of(context).push(
                                             MaterialPageRoute(
