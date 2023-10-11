@@ -114,6 +114,7 @@ class MyApp extends StatelessWidget {
       toastAnimation: StyledToastAnimation.fade,
       reverseAnimation: StyledToastAnimation.fade,
       child: MaterialApp(
+        debugShowCheckedModeBanner: env["BASE_URL"].toString().contains("dev"),
         locale: context.locale,
         localizationsDelegates: context.localizationDelegates,
         supportedLocales: context.supportedLocales,
