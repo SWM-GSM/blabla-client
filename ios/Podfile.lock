@@ -1,32 +1,38 @@
 PODS:
-  - agora_rtc_engine (5.3.1):
-    - AgoraIrisRTC_iOS (= 3.7.0.3)
-    - AgoraRtcEngine_iOS (= 3.7.0.3)
+  - agora_rtc_engine (6.2.2):
+    - AgoraIrisRTC_iOS (= 4.2.2-build.1)
+    - AgoraRtcEngine_iOS (= 4.2.2)
     - Flutter
-  - AgoraIrisRTC_iOS (3.7.0.3)
-  - AgoraRtcEngine_iOS (3.7.0.3):
-    - AgoraRtcEngine_iOS/AINS (= 3.7.0.3)
-    - AgoraRtcEngine_iOS/AV1Dec (= 3.7.0.3)
-    - AgoraRtcEngine_iOS/ContentInspect (= 3.7.0.3)
-    - AgoraRtcEngine_iOS/FullAudioFormat (= 3.7.0.3)
-    - AgoraRtcEngine_iOS/ReplayKit (= 3.7.0.3)
-    - AgoraRtcEngine_iOS/ROIEnc (= 3.7.0.3)
-    - AgoraRtcEngine_iOS/RtcBasic (= 3.7.0.3)
-    - AgoraRtcEngine_iOS/SpatialAudio (= 3.7.0.3)
-    - AgoraRtcEngine_iOS/SuperResolution (= 3.7.0.3)
-    - AgoraRtcEngine_iOS/VideoPreprocess (= 3.7.0.3)
-    - AgoraRtcEngine_iOS/VirtualBackground (= 3.7.0.3)
-  - AgoraRtcEngine_iOS/AINS (3.7.0.3)
-  - AgoraRtcEngine_iOS/AV1Dec (3.7.0.3)
-  - AgoraRtcEngine_iOS/ContentInspect (3.7.0.3)
-  - AgoraRtcEngine_iOS/FullAudioFormat (3.7.0.3)
-  - AgoraRtcEngine_iOS/ReplayKit (3.7.0.3)
-  - AgoraRtcEngine_iOS/ROIEnc (3.7.0.3)
-  - AgoraRtcEngine_iOS/RtcBasic (3.7.0.3)
-  - AgoraRtcEngine_iOS/SpatialAudio (3.7.0.3)
-  - AgoraRtcEngine_iOS/SuperResolution (3.7.0.3)
-  - AgoraRtcEngine_iOS/VideoPreprocess (3.7.0.3)
-  - AgoraRtcEngine_iOS/VirtualBackground (3.7.0.3)
+  - AgoraIrisRTC_iOS (4.2.2-build.1)
+  - AgoraRtcEngine_iOS (4.2.2):
+    - AgoraRtcEngine_iOS/AIAEC (= 4.2.2)
+    - AgoraRtcEngine_iOS/AINS (= 4.2.2)
+    - AgoraRtcEngine_iOS/AudioBeauty (= 4.2.2)
+    - AgoraRtcEngine_iOS/ClearVision (= 4.2.2)
+    - AgoraRtcEngine_iOS/ContentInspect (= 4.2.2)
+    - AgoraRtcEngine_iOS/DRM (= 4.2.2)
+    - AgoraRtcEngine_iOS/FaceDetection (= 4.2.2)
+    - AgoraRtcEngine_iOS/ReplayKit (= 4.2.2)
+    - AgoraRtcEngine_iOS/RtcBasic (= 4.2.2)
+    - AgoraRtcEngine_iOS/SpatialAudio (= 4.2.2)
+    - AgoraRtcEngine_iOS/VideoCodecDec (= 4.2.2)
+    - AgoraRtcEngine_iOS/VideoCodecEnc (= 4.2.2)
+    - AgoraRtcEngine_iOS/VirtualBackground (= 4.2.2)
+    - AgoraRtcEngine_iOS/VQA (= 4.2.2)
+  - AgoraRtcEngine_iOS/AIAEC (4.2.2)
+  - AgoraRtcEngine_iOS/AINS (4.2.2)
+  - AgoraRtcEngine_iOS/AudioBeauty (4.2.2)
+  - AgoraRtcEngine_iOS/ClearVision (4.2.2)
+  - AgoraRtcEngine_iOS/ContentInspect (4.2.2)
+  - AgoraRtcEngine_iOS/DRM (4.2.2)
+  - AgoraRtcEngine_iOS/FaceDetection (4.2.2)
+  - AgoraRtcEngine_iOS/ReplayKit (4.2.2)
+  - AgoraRtcEngine_iOS/RtcBasic (4.2.2)
+  - AgoraRtcEngine_iOS/SpatialAudio (4.2.2)
+  - AgoraRtcEngine_iOS/VideoCodecDec (4.2.2)
+  - AgoraRtcEngine_iOS/VideoCodecEnc (4.2.2)
+  - AgoraRtcEngine_iOS/VirtualBackground (4.2.2)
+  - AgoraRtcEngine_iOS/VQA (4.2.2)
   - Amplitude (8.16.1):
     - AnalyticsConnector (~> 1.0.0)
   - amplitude_flutter (0.0.1):
@@ -39,6 +45,8 @@ PODS:
   - AppAuth/Core (1.6.2)
   - AppAuth/ExternalUserAgent (1.6.2):
     - AppAuth/Core
+  - audio_session (0.0.1):
+    - Flutter
   - Firebase/Auth (10.12.0):
     - Firebase/CoreOnly
     - FirebaseAuth (~> 10.12.0)
@@ -93,6 +101,8 @@ PODS:
   - flutter_inappwebview/Core (0.0.1):
     - Flutter
     - OrderedSet (~> 5.0)
+  - flutter_local_notifications (0.0.1):
+    - Flutter
   - flutter_native_splash (0.0.1):
     - Flutter
   - flutter_secure_storage (6.0.0):
@@ -135,6 +145,8 @@ PODS:
   - GTMSessionFetcher/Core (2.3.0)
   - image_picker_ios (0.0.1):
     - Flutter
+  - iris_method_channel (0.0.1):
+    - Flutter
   - nanopb (2.30909.0):
     - nanopb/decode (= 2.30909.0)
     - nanopb/encode (= 2.30909.0)
@@ -158,26 +170,35 @@ PODS:
     - Flutter
     - Try
   - Try (2.1.1)
+  - url_launcher_ios (0.0.1):
+    - Flutter
+  - webview_flutter_wkwebview (0.0.1):
+    - Flutter
 
 DEPENDENCIES:
   - agora_rtc_engine (from `.symlinks/plugins/agora_rtc_engine/ios`)
   - amplitude_flutter (from `.symlinks/plugins/amplitude_flutter/ios`)
+  - audio_session (from `.symlinks/plugins/audio_session/ios`)
   - firebase_auth (from `.symlinks/plugins/firebase_auth/ios`)
   - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
   - firebase_messaging (from `.symlinks/plugins/firebase_messaging/ios`)
   - Flutter (from `Flutter`)
   - flutter_inappwebview (from `.symlinks/plugins/flutter_inappwebview/ios`)
+  - flutter_local_notifications (from `.symlinks/plugins/flutter_local_notifications/ios`)
   - flutter_native_splash (from `.symlinks/plugins/flutter_native_splash/ios`)
   - flutter_secure_storage (from `.symlinks/plugins/flutter_secure_storage/ios`)
   - flutter_sound (from `.symlinks/plugins/flutter_sound/ios`)
   - google_sign_in_ios (from `.symlinks/plugins/google_sign_in_ios/ios`)
   - image_picker_ios (from `.symlinks/plugins/image_picker_ios/ios`)
+  - iris_method_channel (from `.symlinks/plugins/iris_method_channel/ios`)
   - path_provider_foundation (from `.symlinks/plugins/path_provider_foundation/darwin`)
   - permission_handler_apple (from `.symlinks/plugins/permission_handler_apple/ios`)
   - restart_app (from `.symlinks/plugins/restart_app/ios`)
   - shared_preferences_foundation (from `.symlinks/plugins/shared_preferences_foundation/darwin`)
   - sign_in_with_apple (from `.symlinks/plugins/sign_in_with_apple/ios`)
   - speech_to_text (from `.symlinks/plugins/speech_to_text/ios`)
+  - url_launcher_ios (from `.symlinks/plugins/url_launcher_ios/ios`)
+  - webview_flutter_wkwebview (from `.symlinks/plugins/webview_flutter_wkwebview/ios`)
 
 SPEC REPOS:
   trunk:
@@ -209,6 +230,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/agora_rtc_engine/ios"
   amplitude_flutter:
     :path: ".symlinks/plugins/amplitude_flutter/ios"
+  audio_session:
+    :path: ".symlinks/plugins/audio_session/ios"
   firebase_auth:
     :path: ".symlinks/plugins/firebase_auth/ios"
   firebase_core:
@@ -219,6 +242,8 @@ EXTERNAL SOURCES:
     :path: Flutter
   flutter_inappwebview:
     :path: ".symlinks/plugins/flutter_inappwebview/ios"
+  flutter_local_notifications:
+    :path: ".symlinks/plugins/flutter_local_notifications/ios"
   flutter_native_splash:
     :path: ".symlinks/plugins/flutter_native_splash/ios"
   flutter_secure_storage:
@@ -229,6 +254,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/google_sign_in_ios/ios"
   image_picker_ios:
     :path: ".symlinks/plugins/image_picker_ios/ios"
+  iris_method_channel:
+    :path: ".symlinks/plugins/iris_method_channel/ios"
   path_provider_foundation:
     :path: ".symlinks/plugins/path_provider_foundation/darwin"
   permission_handler_apple:
@@ -241,15 +268,20 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/sign_in_with_apple/ios"
   speech_to_text:
     :path: ".symlinks/plugins/speech_to_text/ios"
+  url_launcher_ios:
+    :path: ".symlinks/plugins/url_launcher_ios/ios"
+  webview_flutter_wkwebview:
+    :path: ".symlinks/plugins/webview_flutter_wkwebview/ios"
 
 SPEC CHECKSUMS:
-  agora_rtc_engine: 47e0ddc177bae1b85eb00d01a0ea546d87ce0b8b
-  AgoraIrisRTC_iOS: d802443ae16f043e7b2805c978880eb62ee8154c
-  AgoraRtcEngine_iOS: 549bb3853d5afb18fabca4197786f39f31141da8
+  agora_rtc_engine: 667a7de14f35858a31b0c64cd54042a2158ef198
+  AgoraIrisRTC_iOS: 7e71322c06db6c29ceaf89a964fb8b2700a75001
+  AgoraRtcEngine_iOS: c510de329cd905daff3f01fa4c872ea6d5eaee23
   Amplitude: fe18b3bbd880f2d9174b8109b79a77cd67687e2d
   amplitude_flutter: 6216e64320d2dbe4e5be2764381d93280499211f
   AnalyticsConnector: eccd7e1cd3dd18e6bd09ac2506e37d4ed43ba3f4
   AppAuth: 3bb1d1cd9340bd09f5ed189fb00b1cc28e1e8570
+  audio_session: 4f3e461722055d21515cf3261b64c973c062f345
   Firebase: 07150e75d142fb9399f6777fa56a187b17f833a0
   firebase_auth: 097a2440d40bed75f4dfe4cb91b4d98349509b47
   firebase_core: 4a3246a02f828a01c74a2c26427037786d90f17f
@@ -262,6 +294,7 @@ SPEC CHECKSUMS:
   FirebaseMessaging: bb2c4f6422a753038fe137d90ae7c1af57251316
   Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
   flutter_inappwebview: bfd58618f49dc62f2676de690fc6dcda1d6c3721
+  flutter_local_notifications: 0c0b1ae97e741e1521e4c1629a459d04b9aec743
   flutter_native_splash: 52501b97d1c0a5f898d687f1646226c1f93c56ef
   flutter_secure_storage: 23fc622d89d073675f2eaa109381aefbcf5a49be
   flutter_sound: c60effa2a350fb977885f0db2fbc4c1ad5160900
@@ -273,6 +306,7 @@ SPEC CHECKSUMS:
   GTMAppAuth: 0ff230db599948a9ad7470ca667337803b3fc4dd
   GTMSessionFetcher: 3a63d75eecd6aa32c2fc79f578064e1214dfdec2
   image_picker_ios: 4a8aadfbb6dc30ad5141a2ce3832af9214a705b5
+  iris_method_channel: 0617c689164d8154c020c50f63ca79f92b8a7b9d
   nanopb: b552cce312b6c8484180ef47159bc0f65a1f0431
   OrderedSet: aaeb196f7fef5a9edf55d89760da9176ad40b93c
   path_provider_foundation: 29f094ae23ebbca9d3d0cec13889cd9060c0e943
@@ -283,7 +317,9 @@ SPEC CHECKSUMS:
   sign_in_with_apple: f3bf75217ea4c2c8b91823f225d70230119b8440
   speech_to_text: b43a7d99aef037bd758ed8e45d79bbac035d2dfe
   Try: 5ef669ae832617b3cee58cb2c6f99fb767a4ff96
+  url_launcher_ios: 08a3dfac5fb39e8759aeb0abbd5d9480f30fc8b4
+  webview_flutter_wkwebview: 2e2d318f21a5e036e2c3f26171342e95908bd60a
 
-PODFILE CHECKSUM: 0266fc79593de9f969717bd9752a141fa092c162
+PODFILE CHECKSUM: a10dff7393aaaa48c511be04d2cf44cf99b10d58
 
 COCOAPODS: 1.12.1
