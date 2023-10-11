@@ -1,5 +1,5 @@
 import 'package:blabla/screens/square/square_view_model.dart';
-import 'package:blabla/screens/square/widgets/square_bottom_sheet_widget.dart';
+import 'package:blabla/screens/square/widgets/square_schedule_bottomsheet_widget.dart';
 import 'package:blabla/screens/square/widgets/square_schedule_widget.dart';
 import 'package:blabla/styles/colors.dart';
 import 'package:blabla/styles/txt_style.dart';
@@ -21,7 +21,7 @@ class SquareCalendarView extends StatelessWidget {
         backgroundColor: BlaColor.white,
         elevation: 0,
         title: Text(
-          "일정",
+          "schedule".tr(),
           style: BlaTxt.txt18B,
         ),
         centerTitle: true,
@@ -93,7 +93,7 @@ class SquareCalendarView extends StatelessWidget {
                     defaultTextStyle: BlaTxt.txt16R,
                     weekendTextStyle: BlaTxt.txt16R,
                   ),
-                  focusedDay: DateTime.now(),
+                  focusedDay: viewModel.focusedDate,
                   firstDay: DateTime(2023, 1, 1),
                   lastDay: DateTime(2030, 12, 31),
                   selectedDayPredicate: (day) => isSameDay(
@@ -102,6 +102,7 @@ class SquareCalendarView extends StatelessWidget {
                   ),
                   onDaySelected: (selectedDay, focusedDay) {
                     viewModel.setSelectedDate(selectedDay);
+                    viewModel.setFocusedDate(focusedDay);
                   },
                   eventLoader: (day) =>
                       viewModel.schedulesForCalendar[
@@ -165,7 +166,7 @@ class SquareCalendarView extends StatelessWidget {
             showModalBottomSheet(
                 isScrollControlled: true,
                 context: context,
-                builder: (context) => const SquareBottomSheetWidget());
+                builder: (context) => const SquareScheduleBottomSheetWidget());
           },
           child: Container(
             alignment: Alignment.center,
@@ -175,7 +176,7 @@ class SquareCalendarView extends StatelessWidget {
               color: BlaColor.orange,
             ),
             child: Text(
-              "일정 만들기",
+              "createSchedule".tr(),
               style: BlaTxt.txt16B.copyWith(color: BlaColor.white),
             ),
           ),

@@ -2,6 +2,7 @@ import 'package:blabla/screens/square/widgets/square_schedule_widget.dart';
 import 'package:blabla/screens/square/square_calendar_view.dart';
 import 'package:blabla/screens/square/square_view_model.dart';
 import 'package:blabla/screens/square/square_voiceroom_view.dart';
+import 'package:blabla/services/amplitude.dart';
 import 'package:blabla/styles/colors.dart';
 import 'package:blabla/styles/txt_style.dart';
 import 'package:blabla/utils/datetime_to_str.dart';
@@ -9,6 +10,7 @@ import 'package:blabla/widgets/profile_widget.dart';
 import 'package:blabla/widgets/skeleton_ui_widget.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
@@ -25,7 +27,7 @@ class SquareMainView extends StatelessWidget {
         backgroundColor: BlaColor.white,
         elevation: 0,
         title: Text(
-          "크루 스페이스",
+          "crewSpace".tr(),
           style: BlaTxt.txt18B,
         ),
         centerTitle: true,
@@ -39,7 +41,7 @@ class SquareMainView extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Text("square.upcomingEvents".tr(), style: BlaTxt.txt20B),
+                  Text("upcomingEvents".tr(), style: BlaTxt.txt20B),
                   GestureDetector(
                     onTap: () {
                       Navigator.of(context, rootNavigator: true).push(
@@ -51,7 +53,7 @@ class SquareMainView extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Text(
-                          "더보기",
+                          "more".tr(),
                           style:
                               BlaTxt.txt14ML.copyWith(color: BlaColor.grey600),
                         ),
@@ -63,7 +65,7 @@ class SquareMainView extends StatelessWidget {
                 ],
               ),
             ),
-            viewModel.upcomingSchedule == null
+            viewModel.schedules == null
                 ? SkeletonBoxWidget(
                     child: Container(
                       height: 144,
@@ -75,9 +77,12 @@ class SquareMainView extends StatelessWidget {
                       ),
                     ),
                   )
-                : SquareScheduleWidget(
-                    type: ScheduleWidgetType.upcodming,
-                    schedule: viewModel.upcomingSchedule),
+                : viewModel.upcomingSchedule == null
+                    ? const SquareScheduleWidget(
+                        type: ScheduleWidgetType.none, schedule: null)
+                    : SquareScheduleWidget(
+                        type: ScheduleWidgetType.upcodming,
+                        schedule: viewModel.upcomingSchedule),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
               child: Column(children: [
@@ -86,7 +91,7 @@ class SquareMainView extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Text(
-                      "보이스룸",
+                      "voiceRoom".tr(),
                       style: BlaTxt.txt20B,
                     ),
                     viewModel.updateTime == null
@@ -97,7 +102,7 @@ class SquareMainView extends StatelessWidget {
                                 padding:
                                     const EdgeInsets.symmetric(vertical: 4),
                                 child: Text(
-                                  "${datetimeToStr(viewModel.updateTime!, StrDatetimeType.hypenDelimiter)} 업데이트",
+                                  "${datetimeToStr(viewModel.updateTime!, StrDatetimeType.hypenDelimiter)} ${"update".tr()}",
                                   style: BlaTxt.txt12R
                                       .copyWith(color: BlaColor.grey700),
                                 ),
@@ -144,7 +149,7 @@ class SquareMainView extends StatelessWidget {
                               children: [
                                 Text("🔊", style: BlaTxt.txt20BL),
                                 const SizedBox(height: 8),
-                                Text("보이스룸을 시작해보세요!",
+                                Text("tryStartingVoiceRoom".tr(),
                                     style: BlaTxt.txt14R
                                         .copyWith(color: BlaColor.grey700)),
                               ],
@@ -191,18 +196,21 @@ class SquareMainView extends StatelessWidget {
                           ),
                 GestureDetector(
                   onTap: () async {
+                    AnalyticsConfig().btnClick("Square_JoinBtn");
                     final permission = await Permission.microphone.request();
                     if (permission == PermissionStatus.granted) {
+                      await viewModel.joinChannel();
                       if (context.mounted) {
-                        viewModel.joinChannel();
-                        Navigator.of(context, rootNavigator: true)
-                            .push(MaterialPageRoute(
-                                builder: (context) => SquareVoiceroomView(
-                                    )));
+                        Navigator.of(context, rootNavigator: true).push(
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    const SquareVoiceroomView()));
                       }
                     } else if (permission ==
                         PermissionStatus.permanentlyDenied) {
                       openAppSettings();
+                    } else {
+                      showToast("allowMicPermission".tr());
                     }
                   },
                   child: Container(
@@ -214,7 +222,7 @@ class SquareMainView extends StatelessWidget {
                       color: BlaColor.orange,
                     ),
                     child: Text(
-                      "참여하기",
+                      "join".tr(),
                       style: BlaTxt.txt14B.copyWith(color: BlaColor.white),
                     ),
                   ),
