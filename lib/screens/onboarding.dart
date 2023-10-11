@@ -3,10 +3,11 @@ import 'package:blabla/screens/join/join_lang_view.dart';
 import 'package:blabla/services/login.dart';
 import 'package:blabla/styles/colors.dart';
 import 'package:blabla/styles/txt_style.dart';
+import 'package:blabla/utils/dotenv.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class OnBoarding extends StatelessWidget {
   const OnBoarding({super.key});
@@ -29,6 +30,29 @@ class OnBoarding extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             loginBtn("apple", BlaColor.grey900, () async {
+              // try {
+              //   final alreadyJoined =
+              //       await Login.apple.service.socialLogin(context);
+              //   if (alreadyJoined) {
+              //     await Login.apple.service.login();
+              //     if (context.mounted) {
+              //       Navigator.of(context).pushAndRemoveUntil(
+              //           MaterialPageRoute(builder: (context) => const Main()),
+              //           (route) => false);
+              //     }
+              //   } else {
+              //     if (context.mounted) {
+              //       Navigator.of(context).push(MaterialPageRoute(
+              //           builder: (context) => const JoinLangView()));
+              //     }
+              //   }
+              // } catch (e) {
+              //   switch (e) {
+              //     default:
+              //       showToast("failToLogin".tr());
+              //       break;
+              //   }
+              // }
               try {
                 final socialLoginSuccess =
                     await Login.apple.service.socialLogin(context);
@@ -74,8 +98,7 @@ class OnBoarding extends StatelessWidget {
                   await Login.google.service.login().then((alreadyJoined) {
                     // 이미 가입된 유저
                     if (alreadyJoined) {
-                      Navigator.pushAndRemoveUntil(
-                          context,
+                      Navigator.of(context).pushAndRemoveUntil(
                           MaterialPageRoute(builder: (context) => const Main()),
                           (route) => false);
                     } else {
@@ -89,10 +112,8 @@ class OnBoarding extends StatelessWidget {
               } catch (e) {
                 switch (e) {
                   case "M002":
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const JoinLangView()));
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => const JoinLangView()));
                     break;
                   default:
                     print(e);
