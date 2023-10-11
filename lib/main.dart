@@ -12,6 +12,7 @@ import 'package:blabla/services/amplitude.dart';
 import 'package:blabla/styles/colors.dart';
 import 'package:blabla/styles/theme.dart';
 import 'package:blabla/styles/txt_style.dart';
+import 'package:blabla/utils/dotenv.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:blabla/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -23,6 +24,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
+// import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 void main() async {
   WidgetsBinding widgetBinding = WidgetsFlutterBinding.ensureInitialized();
@@ -36,9 +38,19 @@ void main() async {
 
   const storage = FlutterSecureStorage();
   final lang = await storage.read(key: "language");
-  print(lang);
 
   FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage? message) {
+    if (message != null) {
+      if (message.notification != null) {
+        print("[FCM] ${message.notification!.title}");
+        print("[FCM] ${message.notification!.body}");
+      }
+    }
+  });
+
+  // await _initLocalNotification();
+
+  FirebaseMessaging.onMessage.listen((RemoteMessage? message) {
     if (message != null) {
       if (message.notification != null) {
         print("[FCM] ${message.notification!.title}");
@@ -65,6 +77,26 @@ void main() async {
     ),
   );
 }
+
+// Future<void> _initLocalNotification() async {
+//   FlutterLocalNotificationsPlugin _localNotification =
+//       FlutterLocalNotificationsPlugin();
+//   AndroidInitializationSettings initSettingsAndroid =
+//       const AndroidInitializationSettings('@mipmap/ic_launcher');
+//   DarwinInitializationSettings initSettingsIOS =
+//       const DarwinInitializationSettings(
+//     requestSoundPermission: false,
+//     requestBadgePermission: false,
+//     requestAlertPermission: false,
+//   );
+//   InitializationSettings initSettings = InitializationSettings(
+//     android: initSettingsAndroid,
+//     iOS: initSettingsIOS,
+//   );
+//   await _localNotification.initialize(
+//     initSettings,
+//   );
+// }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
