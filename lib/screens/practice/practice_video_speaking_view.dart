@@ -1,19 +1,20 @@
-import 'package:audioplayers/audioplayers.dart';
+import 'package:audio_session/audio_session.dart';
 import 'package:blabla/main.dart';
 import 'package:blabla/providers/nav_provider.dart';
 import 'package:blabla/screens/practice/practice_view_model.dart';
 import 'package:blabla/screens/practice/widgets/practice_video_record_widget.dart';
 import 'package:blabla/screens/practice/widgets/practice_video_widget.dart';
+import 'package:blabla/screens/profile/profile_view_model.dart';
 import 'package:blabla/styles/colors.dart';
 import 'package:blabla/styles/txt_style.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_sound/flutter_sound.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
-import 'package:record/record.dart';
 
 class PracticeVideoSpeakingView extends StatefulWidget {
   const PracticeVideoSpeakingView({super.key});
@@ -24,20 +25,39 @@ class PracticeVideoSpeakingView extends StatefulWidget {
 }
 
 class _PracticeVideoSpeakingViewState extends State<PracticeVideoSpeakingView> {
-  late final List<Record> recorders;
-  late final List<AudioPlayer> players;
+  final recorders = List.generate(3, (idx) => FlutterSoundRecorder());
+  final players = List.generate(3, (idx) => FlutterSoundPlayer());
   final statuses = List.generate(3, (idx) => RecordStatus.beforeRecord);
   bool canRecord = true;
 
   Future<void> initRecorder() async {
-    recorders = List.generate(3, (idx) => Record());
+    for (final recorder in recorders) {
+      await recorder.openRecorder();
+      recorder.isEncoderSupported(Codec.pcm16WAV);
+    }
+    final session = await AudioSession.instance;
+    await session.configure(AudioSessionConfiguration(
+      avAudioSessionCategory: AVAudioSessionCategory.playAndRecord,
+      avAudioSessionCategoryOptions:
+          AVAudioSessionCategoryOptions.allowBluetooth |
+              AVAudioSessionCategoryOptions.defaultToSpeaker,
+      avAudioSessionMode: AVAudioSessionMode.spokenAudio,
+      avAudioSessionRouteSharingPolicy:
+          AVAudioSessionRouteSharingPolicy.defaultPolicy,
+      avAudioSessionSetActiveOptions: AVAudioSessionSetActiveOptions.none,
+      androidAudioAttributes: const AndroidAudioAttributes(
+        contentType: AndroidAudioContentType.speech,
+        flags: AndroidAudioFlags.none,
+        usage: AndroidAudioUsage.voiceCommunication,
+      ),
+      androidAudioFocusGainType: AndroidAudioFocusGainType.gain,
+      androidWillPauseWhenDucked: true,
+    ));
   }
 
   Future<void> initPlayer() async {
-    players = List.generate(3, (idx) => AudioPlayer());
-    for (var player in players) {
-      player = AudioPlayer();
-      player.setReleaseMode(ReleaseMode.stop);
+    for (final player in players) {
+      await player.openPlayer();
     }
   }
 
@@ -45,9 +65,10 @@ class _PracticeVideoSpeakingViewState extends State<PracticeVideoSpeakingView> {
     if (await Permission.microphone.status != PermissionStatus.granted) {
       await Permission.microphone.request();
     } else {
-      final dir = (await getTemporaryDirectory()).path;
       try {
-        await recorders[idx].start(path: "$dir/audio$idx.wav");
+        final dir = (await getTemporaryDirectory()).path;
+        await recorders[idx]
+            .startRecorder(toFile: "$dir/audio$idx.wav", codec: Codec.pcm16WAV);
       } catch (e) {
         showToast("unableToRecord".tr());
         setState(() {
@@ -59,22 +80,28 @@ class _PracticeVideoSpeakingViewState extends State<PracticeVideoSpeakingView> {
   }
 
   Future<String?> stopRecord(int idx) async {
-    String? path = await recorders[idx].stop();
-    print(path);
-    return path;
+    String? path = await recorders[idx].stopRecorder();
+    final dir = (await getTemporaryDirectory()).path;
+    if (path == "" || path == null) {
+      return "$dir/audio$idx.wav";
+    } else {
+      return path;
+    }
   }
 
   void startPlay(int idx, String path) async {
-    await players[idx].play(UrlSource(path));
-    players[idx].onPlayerComplete.listen((event) {
-      setState(() {
-        statuses[players.indexOf(players[idx])] = RecordStatus.afterRecord;
-      });
-    });
+    await players[idx].startPlayer(
+        codec: Codec.pcm16WAV,
+        fromURI: path,
+        whenFinished: () {
+          setState(() {
+            statuses[idx] = RecordStatus.afterRecord;
+          });
+        });
   }
 
   void stopPlay(int idx) async {
-    await players[idx].stop();
+    await players[idx].stopPlayer();
   }
 
   @override
@@ -88,16 +115,17 @@ class _PracticeVideoSpeakingViewState extends State<PracticeVideoSpeakingView> {
   void dispose() {
     super.dispose();
     for (final recorder in recorders) {
-      recorder.dispose();
+      recorder.closeRecorder();
     }
     for (final player in players) {
-      player.dispose();
+      player.closePlayer();
     }
   }
 
   @override
   Widget build(BuildContext context) {
     final viewModel = Provider.of<PracticeViewModel>(context);
+    final profileViewModel = Provider.of<ProfileViewModel>(context);
     final navProvider = Provider.of<NavProvider>(context);
     return Scaffold(
       appBar: AppBar(
@@ -234,8 +262,7 @@ class _PracticeVideoSpeakingViewState extends State<PracticeVideoSpeakingView> {
                     viewModel.uploadRecords().then((value) {
                       if (value) {
                         navProvider.changeIdx(2);
-                        Navigator.pushAndRemoveUntil(
-                            context,
+                        Navigator.of(context).pushAndRemoveUntil(
                             MaterialPageRoute(
                                 builder: (context) => const Main()),
                             (route) => false);
@@ -244,11 +271,11 @@ class _PracticeVideoSpeakingViewState extends State<PracticeVideoSpeakingView> {
                       }
                     });
                   } else {
-                    Navigator.pushAndRemoveUntil(
-                        context,
+                    Navigator.of(context).pushAndRemoveUntil(
                         MaterialPageRoute(builder: (context) => const Main()),
                         (route) => false);
                   }
+                  profileViewModel.initHistories();
                 },
                 child: Container(
                   alignment: Alignment.center,
