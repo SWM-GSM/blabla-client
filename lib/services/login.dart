@@ -54,8 +54,8 @@ class GoogleLoginService extends LoginService {
   @override
   Future<void> logout() async {
     const storage = FlutterSecureStorage();
-    await GoogleSignIn().signOut();
     await storage.deleteAll();
+    await GoogleSignIn().signOut();
   }
 }
 
@@ -93,6 +93,9 @@ class AppleLoginService extends LoginService {
 
       if (await storage.read(key: "socialToken") != null) {
         return true;
+        // print("credential State ${credential.state}");
+        // if (credential.state == "authorized") {
+        //   return true; // 이미 가입한 회원
       } else {
         return false;
       }
