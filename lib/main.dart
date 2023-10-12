@@ -18,6 +18,7 @@ import 'package:blabla/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -28,6 +29,15 @@ import 'package:provider/provider.dart';
 
 void main() async {
   WidgetsBinding widgetBinding = WidgetsFlutterBinding.ensureInitialized();
+
+  SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+    systemNavigationBarColor: BlaColor.white,
+    systemNavigationBarIconBrightness: Brightness.dark,
+    statusBarColor: Colors.transparent,
+    statusBarIconBrightness: Brightness.dark,
+    statusBarBrightness: Brightness.light,
+  ));
+
   await EasyLocalization.ensureInitialized();
   await dotenv.load();
   await Firebase.initializeApp(
