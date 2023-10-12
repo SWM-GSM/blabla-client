@@ -120,5 +120,6 @@
     "checkValidation": "Please check your nickname",
     "notifyUpdate": "Update Require",
     "recommendUpdate": "There are new features available, please update the app",
-    "goStore": "Update"
+    "goStore": "Update",
+    "failToAccuse": "신고 실패. 다시 시도해주세요"
   }

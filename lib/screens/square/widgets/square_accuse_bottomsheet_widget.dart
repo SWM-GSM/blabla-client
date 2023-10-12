@@ -39,7 +39,7 @@ class _SquareAccuseBottomSheetWidgetState
                 Column(mainAxisAlignment: MainAxisAlignment.start, children: [
               Padding(
                 padding: const EdgeInsets.all(20),
-                child: Text("신고하기", style: BlaTxt.txt18B),
+                child: Text("accuse".tr(), style: BlaTxt.txt18B),
               ),
               Expanded(
                 child: SingleChildScrollView(
@@ -53,7 +53,7 @@ class _SquareAccuseBottomSheetWidgetState
                       maxLines: null,
                       style: BlaTxt.txt16R,
                       decoration: InputDecoration(
-                        hintText: "신고 사유를 작성해주세요",
+                        hintText: "explainAccuse".tr(),
                         hintStyle:
                             BlaTxt.txt16R.copyWith(color: BlaColor.grey500),
                         border: InputBorder.none,
@@ -79,7 +79,7 @@ class _SquareAccuseBottomSheetWidgetState
                     borderRadius: BorderRadius.circular(12),
                     color: accuse != null ? BlaColor.orange : BlaColor.grey400,
                   ),
-                  child: Text("신고하기",
+                  child: Text("accuse".tr(),
                       style: BlaTxt.txt16B.copyWith(color: BlaColor.white)),
                 ),
               ),
@@ -97,7 +97,7 @@ class _SquareAccuseBottomSheetWidgetState
               children: [
                 Padding(
                   padding: const EdgeInsets.all(20),
-                  child: Text("신고하기", style: BlaTxt.txt18B),
+                  child: Text("accuse".tr(), style: BlaTxt.txt18B),
                 ),
                 Column(
                   children: List.generate(
@@ -148,7 +148,7 @@ class _SquareAccuseBottomSheetWidgetState
                             Navigator.pop(context);
                           }
                         } else {
-                          showToast("신고 실패. 다시 시도해주세요");
+                          showToast("failToAccuse".tr());
                         }
                       }
                     }
@@ -164,7 +164,7 @@ class _SquareAccuseBottomSheetWidgetState
                           accuse != null ? BlaColor.orange : BlaColor.grey400,
                     ),
                     child: Text(
-                      "신고하기",
+                      "accuse".tr(),
                       style: BlaTxt.txt16B.copyWith(color: BlaColor.white),
                     ),
                   ),

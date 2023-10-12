@@ -120,5 +120,6 @@
     "checkValidation": "닉네임이 유효한지 확인해주세요",
     "notifyUpdate": "업데이트 알림",
     "recommendUpdate": "안정적인 서비스 이용을 위해 최신 버전으로 업데이트 해주세요",
-    "goStore": "스토어 바로가기"
+    "goStore": "스토어 바로가기",
+    "failToAccuse": "신고 실패. 다시 시도해주세요"
 }
