@@ -20,6 +20,7 @@ class BlaColor {
   static const red = Color(0xFFFF5050);
   static const green = Color(0xFF14B393);
   static const defGreen = Color(0xFF40BD56);
+  static const defBlue = Color(0xFF0A84FF);
 
   static const coral100 = Color(0xFFFFF2ED);
   static const coral200 = Color(0xFFFFE5DC);

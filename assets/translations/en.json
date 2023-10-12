@@ -117,5 +117,8 @@
     "participating": " members are participating",
     "update": "Update",
     "allowNotificationPermission": "Please allow notification permission",
-    "checkValidation": "Please check your nickname"
+    "checkValidation": "Please check your nickname",
+    "notifyUpdate": "Update Require",
+    "recommendUpdate": "There are new features available, please update the app",
+    "goStore": "Update"
   }

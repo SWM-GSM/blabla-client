@@ -117,5 +117,8 @@
     "participating": "명 참여 중",
     "update": "업데이트",
     "allowNotificationPermission": "알림 권한을 허용해주세요",
-    "checkValidation": "닉네임이 유효한지 확인해주세요"
+    "checkValidation": "닉네임이 유효한지 확인해주세요",
+    "notifyUpdate": "업데이트 알림",
+    "recommendUpdate": "안정적인 서비스 이용을 위해 최신 버전으로 업데이트 해주세요",
+    "goStore": "스토어 바로가기"
 }

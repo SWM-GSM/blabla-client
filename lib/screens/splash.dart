@@ -1,13 +1,18 @@
 import 'package:blabla/main.dart';
 import 'package:blabla/screens/onboarding.dart';
 import 'package:blabla/services/apis/api.dart';
+import 'package:blabla/services/version.dart';
+import 'package:blabla/styles/colors.dart';
+import 'package:blabla/styles/txt_style.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:url_launcher/url_launcher.dart';
 
-enum SplashPage { onboarding, home }
+enum SplashPage { onboarding, home, blank }
 
 class Splash extends StatefulWidget {
   const Splash({super.key});
@@ -38,6 +43,54 @@ class _SplashState extends State<Splash> {
         await storage.write(key: "language", value: context.locale.toString());
       });
     }
+
+    WidgetsBinding.instance.addPostFrameCallback(
+      (_) async {
+        if (await needForceUpdate()) {
+          setState(() {
+            page = SplashPage.blank;
+          });
+          WidgetsBinding.instance.addPostFrameCallback(
+            (_) {
+              showDialog(
+                context: context,
+                barrierDismissible: false,
+                builder: (context) => WillPopScope(
+                  onWillPop: () async => false,
+                  child: CupertinoAlertDialog(
+                    title: Text(
+                      "notifyUpdate".tr(),
+                      style: BlaTxt.txt16B,
+                    ),
+                    content: Padding(
+                      padding: const EdgeInsets.only(top: 10),
+                      child: Text(
+                        "recommendUpdate".tr(),
+                        style: BlaTxt.txt14R
+                            .copyWith(overflow: TextOverflow.visible),
+                      ),
+                    ),
+                    actions: [
+                      CupertinoDialogAction(
+                        child: Text(
+                          "goStore".tr(),
+                          style:
+                              BlaTxt.txt14M.copyWith(color: BlaColor.defBlue),
+                        ),
+                        onPressed: () async {
+                          await launchUrl(getStoreUrl(),
+                              mode: LaunchMode.externalApplication);
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            },
+          );
+        }
+      },
+    );
 
     print(
         "accessToken: $accessToken / refresToken: $refreshToken /  accessExpireDate: $accessExpireDate / refreshExpireDate: $refreshExpireDate");
@@ -95,6 +148,10 @@ class _SplashState extends State<Splash> {
         return const OnBoarding();
       case SplashPage.home:
         return const Main();
+      case SplashPage.blank:
+        return Container(
+          color: BlaColor.white,
+        );
       default:
         return Container();
     }
