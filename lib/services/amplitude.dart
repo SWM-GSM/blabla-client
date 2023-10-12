@@ -1,5 +1,4 @@
 import 'package:amplitude_flutter/amplitude.dart';
-import 'package:blabla/services/apis/api.dart';
 import 'package:blabla/utils/dotenv.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -12,9 +11,8 @@ class AnalyticsConfig {
     final key = kReleaseMode
         ? env["AMPLITUDE_PROD_API_KEY"]
         : env["AMPLITUDE_DEV_API_KEY"];
-    final id = await API().getMyId();
-    analytics.init(key, userId: id.toString());
 
+    analytics.init(key);
     analytics.logEvent("Start_App");
   }
 
