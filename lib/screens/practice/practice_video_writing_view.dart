@@ -431,6 +431,29 @@ class _PracticeVideoWritingViewState extends State<PracticeVideoWritingView> {
               ),
             ),
           ),
+          bottomSheet: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
+            child: GestureDetector(
+              onTap: () {
+                setState(() {
+                  _status = WritingStatus.afterWriting;
+                });
+              },
+              child: Container(
+                alignment: Alignment.center,
+                height: 56,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                  color: BlaColor.orange,
+                ),
+                child: Text(
+                  "complete".tr(),
+                  style: BlaTxt.txt16B.copyWith(color: BlaColor.white),
+                ),
+              ),
+            ),
+          ),
+          resizeToAvoidBottomInset: false,
         );
       case WritingStatus.afterWriting:
         return Scaffold(
