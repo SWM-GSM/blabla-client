@@ -71,7 +71,7 @@ class Feedback {
 
   factory Feedback.fromJson(Map<String, dynamic> json) => Feedback(
         nickname: json["nickname"],
-        profileImage: json["profileImage"],
+        profileImage: json["profileImage"].toString().toLowerCase(),
         comment: json["comment"],
       );
 }

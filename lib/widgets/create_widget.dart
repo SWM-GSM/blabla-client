@@ -1,11 +1,8 @@
 import 'package:blabla/screens/join/join_view_model.dart';
-import 'package:blabla/screens/recruit/recruit_view_model.dart';
-import 'package:blabla/styles/colors.dart';
 import 'package:blabla/styles/txt_style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:provider/provider.dart';
 
 class CreateWidget extends StatelessWidget {
@@ -22,7 +19,6 @@ class CreateWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final joinViewModel = Provider.of<JoinViewModel>(context);
-    final recruitViewModel = Provider.of<RecruitViewModel>(context);
 
     return Column(
       children: [
@@ -32,11 +28,7 @@ class CreateWidget extends StatelessWidget {
           height: 60,
           child: GestureDetector(
             onTap: () {
-              if (page is JoinPage) {
-                joinViewModel.initPage(page);
-              } else {
-                recruitViewModel.initPage(page);
-              }
+              joinViewModel.initPage(page);
               Navigator.pop(context);
             },
             child: SvgPicture.asset(
@@ -55,21 +47,7 @@ class CreateWidget extends StatelessWidget {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  LinearPercentIndicator(
-                    padding: const EdgeInsets.all(0),
-                    backgroundColor: BlaColor.grey100,
-                    progressColor: BlaColor.grey900,
-                    lineHeight: 4,
-                    percent: 1 /
-                        (page is JoinPage
-                            ? JoinPage.values.length
-                            : RecruitPage.values.length) *
-                        (page.index + 1),
-                    barRadius: const Radius.circular(4),
-                    animation: true,
-                    animateFromLastPercent: true,
-                  ),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 24),
                   Text(title, style: BlaTxt.txt28B),
                   ...widgets,
                 ],

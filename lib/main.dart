@@ -1,42 +1,73 @@
 import 'package:blabla/providers/nav_provider.dart';
-import 'package:blabla/screens/crew_space/crews_joined_view.dart';
-import 'package:blabla/screens/crew_space/crews_view_model.dart';
-import 'package:blabla/screens/home/crew_view_model.dart';
-import 'package:blabla/screens/home/home_view.dart';
-import 'package:blabla/screens/home/home_view_model.dart';
 import 'package:blabla/screens/join/join_view_model.dart';
-import 'package:blabla/screens/my_space/mys_main_view.dart';
-import 'package:blabla/screens/my_space/mys_view_model.dart';
+import 'package:blabla/screens/practice/practice_main_view.dart';
+import 'package:blabla/screens/practice/practice_view_model.dart';
 import 'package:blabla/screens/profile/profile_main_view.dart';
 import 'package:blabla/screens/profile/profile_modify_view_model.dart';
 import 'package:blabla/screens/profile/profile_view_model.dart';
-import 'package:blabla/screens/recruit/recruit_view_model.dart';
-import 'package:blabla/screens/report/report_main_view.dart';
-import 'package:blabla/screens/report/report_view_model.dart';
 import 'package:blabla/screens/splash.dart';
+import 'package:blabla/screens/square/square_main_view.dart';
+import 'package:blabla/screens/square/square_view_model.dart';
 import 'package:blabla/services/amplitude.dart';
 import 'package:blabla/styles/colors.dart';
 import 'package:blabla/styles/theme.dart';
 import 'package:blabla/styles/txt_style.dart';
+import 'package:blabla/utils/dotenv.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:blabla/firebase_options.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
+// import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 void main() async {
   WidgetsBinding widgetBinding = WidgetsFlutterBinding.ensureInitialized();
+
+  SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+    systemNavigationBarColor: BlaColor.white,
+    systemNavigationBarIconBrightness: Brightness.dark,
+    statusBarColor: Colors.transparent,
+    statusBarIconBrightness: Brightness.dark,
+    statusBarBrightness: Brightness.light,
+  ));
+
   await EasyLocalization.ensureInitialized();
   await dotenv.load();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   FlutterNativeSplash.preserve(widgetsBinding: widgetBinding);
   AnalyticsConfig().init();
 
   const storage = FlutterSecureStorage();
   final lang = await storage.read(key: "language");
-  print(lang);
+
+  FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage? message) {
+    if (message != null) {
+      if (message.notification != null) {
+        print("[FCM] ${message.notification!.title}");
+        print("[FCM] ${message.notification!.body}");
+      }
+    }
+  });
+
+  // await _initLocalNotification();
+
+  FirebaseMessaging.onMessage.listen((RemoteMessage? message) {
+    if (message != null) {
+      if (message.notification != null) {
+        print("[FCM] ${message.notification!.title}");
+        print("[FCM] ${message.notification!.body}");
+      }
+    }
+  });
 
   runApp(
     EasyLocalization(
@@ -47,25 +78,42 @@ void main() async {
       useOnlyLangCode: true,
       child: MultiProvider(providers: [
         ChangeNotifierProvider(create: (_) => JoinViewModel()),
-        ChangeNotifierProvider(create: (_) => RecruitViewModel()),
         ChangeNotifierProvider(create: (_) => NavProvider()),
-        ChangeNotifierProvider(create: (_) => HomeViewModel()),
-        ChangeNotifierProvider(create: (_) => CrewViewModel()),
-        ChangeNotifierProvider(create: (_) => CrewsViewModel()),
-        ChangeNotifierProvider(create: (_) => ReportViewModel()),
         ChangeNotifierProvider(create: (_) => ProfileModifyViewModel()),
         ChangeNotifierProvider(create: (_) => ProfileViewModel()),
-        ChangeNotifierProvider(create: (_) => MysViewModel()),
+        ChangeNotifierProvider(create: (_) => PracticeViewModel()),
+        ChangeNotifierProvider(create: (_) => SquareViewModel()),
       ], child: const MyApp()),
     ),
   );
 }
+
+// Future<void> _initLocalNotification() async {
+//   FlutterLocalNotificationsPlugin _localNotification =
+//       FlutterLocalNotificationsPlugin();
+//   AndroidInitializationSettings initSettingsAndroid =
+//       const AndroidInitializationSettings('@mipmap/ic_launcher');
+//   DarwinInitializationSettings initSettingsIOS =
+//       const DarwinInitializationSettings(
+//     requestSoundPermission: false,
+//     requestBadgePermission: false,
+//     requestAlertPermission: false,
+//   );
+//   InitializationSettings initSettings = InitializationSettings(
+//     android: initSettingsAndroid,
+//     iOS: initSettingsIOS,
+//   );
+//   await _localNotification.initialize(
+//     initSettings,
+//   );
+// }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
+    print("locale 테스트 ${context.locale}");
     return StyledToast(
       locale: context.locale,
       textStyle: BlaTxt.txt16R.copyWith(color: BlaColor.white),
@@ -76,6 +124,7 @@ class MyApp extends StatelessWidget {
       toastAnimation: StyledToastAnimation.fade,
       reverseAnimation: StyledToastAnimation.fade,
       child: MaterialApp(
+        debugShowCheckedModeBanner: env["BASE_URL"].toString().contains("dev"),
         locale: context.locale,
         localizationsDelegates: context.localizationDelegates,
         supportedLocales: context.supportedLocales,
@@ -93,14 +142,12 @@ class Main extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final navProvider = Provider.of<NavProvider>(context);
-    final navKeyList = List.generate(5, (idx) => GlobalKey<NavigatorState>());
-    final botNavList = ["home", "team", "play", "notepad", "person"];
+    final navKeyList = List.generate(3, (idx) => GlobalKey<NavigatorState>());
+    final botNavList = ["team", "play", "person"];
     final pageList = [
-      HomeView(),
-      CrewsJoinedView(),
-      MysMainView(),
-      ReportMainView(),
-      ProfileMainView(),
+      const SquareMainView(),
+      const PracticeMainView(),
+      const ProfileMainView(),
     ];
 
     return Scaffold(
