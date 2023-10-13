@@ -17,9 +17,12 @@ class PracticeViewModel with ChangeNotifier {
   final api = API();
   static const storage = FlutterSecureStorage();
 
+  /* 유저 정보 */
+  String? _learningLang;
+
   /* 컨텐츠 리스트 */
-  ContentLangType _contentLangType = ContentLangType.ko;
-  ContentLangType get contentLangType => _contentLangType;
+  ContentLangType? _contentLangType;
+  ContentLangType? get contentLangType => _contentLangType;
 
   List<Content> _contentList = [];
   List<Content> get contentList => _contentList;
@@ -44,20 +47,29 @@ class PracticeViewModel with ChangeNotifier {
   List<String> get recordPathes => _recordPathes;
 
   PracticeViewModel() {
+    initContentLangType();
+  }
+
+  void initContentLangType() async {
+    _learningLang = (await api.getMyProfile()).language;
+    print(_learningLang);
+    _contentLangType =
+        _learningLang == "ko" ? ContentLangType.ko : ContentLangType.en;
     getContentList();
+    notifyListeners();
   }
 
   void changeContentLangType(bool isLeft) {
     if (isLeft) {
-      if (_contentLangType.index != 0) {
-        _contentLangType = ContentLangType.values[_contentLangType.index - 1];
+      if (_contentLangType!.index != 0) {
+        _contentLangType = ContentLangType.values[_contentLangType!.index - 1];
         _contentList.clear();
         _contentIdx = 0;
         getContentList();
       }
     } else {
-      if (_contentLangType.index < (ContentLangType.values.length - 1)) {
-        _contentLangType = ContentLangType.values[_contentLangType.index + 1];
+      if (_contentLangType!.index < (ContentLangType.values.length - 1)) {
+        _contentLangType = ContentLangType.values[_contentLangType!.index + 1];
         _contentList.clear();
         _contentIdx = 0;
         getContentList();
@@ -68,7 +80,7 @@ class PracticeViewModel with ChangeNotifier {
   }
 
   void getContentList() async {
-    _contentList = await api.getContentList(_contentLangType);
+    _contentList = await api.getContentList(_contentLangType!);
     notifyListeners();
   }
 

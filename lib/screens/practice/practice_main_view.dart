@@ -47,7 +47,8 @@ class PracticeMainView extends StatelessWidget {
                       itemBuilder: (context, itemIdx, pageViewIdx) {
                         return GestureDetector(
                           onTap: () {
-                            AnalyticsConfig().btnClick("Practice_Content_${viewModel.contentList[itemIdx].id}");
+                            AnalyticsConfig().btnClick(
+                                "Practice_Content ${viewModel.contentList[itemIdx].id}");
                             viewModel.getVideoList(
                                 viewModel.contentList[itemIdx].id);
                             Navigator.of(context, rootNavigator: true).push(
@@ -197,19 +198,26 @@ class PracticeMainView extends StatelessWidget {
                 children: [
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: GestureDetector(
-                      onTap: () {
-                        viewModel.changeContentLangType(true);
-                      },
-                      child: SvgPicture.asset(
-                        "assets/icons/ic_24_tri_left.svg",
-                        colorFilter: ColorFilter.mode(
-                            viewModel.contentLangType.index == 0
-                                ? BlaColor.grey700
-                                : BlaColor.black,
-                            BlendMode.srcIn),
-                      ),
-                    ),
+                    child: viewModel.contentList.isEmpty ||
+                            viewModel.contentLangType == null
+                        ? SvgPicture.asset(
+                            "assets/icons/ic_24_tri_left.svg",
+                            colorFilter: const ColorFilter.mode(
+                                BlaColor.grey700, BlendMode.srcIn),
+                          )
+                        : GestureDetector(
+                            onTap: () {
+                              viewModel.changeContentLangType(true);
+                            },
+                            child: SvgPicture.asset(
+                              "assets/icons/ic_24_tri_left.svg",
+                              colorFilter: ColorFilter.mode(
+                                  viewModel.contentLangType!.index == 0
+                                      ? BlaColor.grey700
+                                      : BlaColor.black,
+                                  BlendMode.srcIn),
+                            ),
+                          ),
                   ),
                   Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -219,28 +227,38 @@ class PracticeMainView extends StatelessWidget {
                         "mySpace".tr(),
                         style: BlaTxt.txt18B,
                       ),
-                      Text(
-                        viewModel.contentLangType.fullKey.tr(),
-                        style: BlaTxt.txt14M,
-                      ),
+                      viewModel.contentList.isEmpty ||
+                              viewModel.contentLangType == null
+                          ? SkeletonTxtWidget(style: BlaTxt.txt14M, width: 56)
+                          : Text(
+                              viewModel.contentLangType!.fullKey.tr(),
+                              style: BlaTxt.txt14M,
+                            ),
                     ],
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: GestureDetector(
-                      onTap: () {
-                        viewModel.changeContentLangType(false);
-                      },
-                      child: SvgPicture.asset(
-                        "assets/icons/ic_24_tri_right.svg",
-                        colorFilter: ColorFilter.mode(
-                            viewModel.contentLangType.index ==
-                                    ContentLangType.values.length - 1
-                                ? BlaColor.grey700
-                                : BlaColor.black,
-                            BlendMode.srcIn),
-                      ),
-                    ),
+                    child: viewModel.contentList.isEmpty ||
+                            viewModel.contentLangType == null
+                        ? SvgPicture.asset(
+                            "assets/icons/ic_24_tri_right.svg",
+                            colorFilter: const ColorFilter.mode(
+                                BlaColor.grey700, BlendMode.srcIn),
+                          )
+                        : GestureDetector(
+                            onTap: () {
+                              viewModel.changeContentLangType(false);
+                            },
+                            child: SvgPicture.asset(
+                              "assets/icons/ic_24_tri_right.svg",
+                              colorFilter: ColorFilter.mode(
+                                  viewModel.contentLangType!.index ==
+                                          ContentLangType.values.length - 1
+                                      ? BlaColor.grey700
+                                      : BlaColor.black,
+                                  BlendMode.srcIn),
+                            ),
+                          ),
                   ),
                 ],
               ),
