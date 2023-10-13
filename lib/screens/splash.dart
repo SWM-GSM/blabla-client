@@ -44,97 +44,89 @@ class _SplashState extends State<Splash> {
       });
     }
 
-    WidgetsBinding.instance.addPostFrameCallback(
-      (_) async {
-        if (await needForceUpdate()) {
-          setState(() {
-            page = SplashPage.blank;
-          });
-          WidgetsBinding.instance.addPostFrameCallback(
-            (_) {
-              showDialog(
-                context: context,
-                barrierDismissible: false,
-                builder: (context) => WillPopScope(
-                  onWillPop: () async => false,
-                  child: CupertinoAlertDialog(
-                    title: Text(
-                      "notifyUpdate".tr(),
-                      style: BlaTxt.txt16B,
-                    ),
-                    content: Padding(
-                      padding: const EdgeInsets.only(top: 10),
-                      child: Text(
-                        "recommendUpdate".tr(),
-                        style: BlaTxt.txt14R
-                            .copyWith(overflow: TextOverflow.visible),
-                      ),
-                    ),
-                    actions: [
-                      CupertinoDialogAction(
-                        child: Text(
-                          "goStore".tr(),
-                          style:
-                              BlaTxt.txt14M.copyWith(color: BlaColor.defBlue),
-                        ),
-                        onPressed: () async {
-                          await launchUrl(getStoreUrl(),
-                              mode: LaunchMode.externalApplication);
-                        },
-                      ),
-                    ],
-                  ),
-                ),
-              );
-            },
-          );
-        }
-      },
-    );
-
-    print(
-        "accessToken: $accessToken / refresToken: $refreshToken /  accessExpireDate: $accessExpireDate / refreshExpireDate: $refreshExpireDate");
-    if (accessToken == null ||
-        refreshToken == null ||
-        accessExpireDate == null ||
-        refreshExpireDate == null) {
+    if (await needForceUpdate()) {
       setState(() {
-        page = SplashPage.onboarding;
+        page = SplashPage.blank;
+      });
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (context) => WillPopScope(
+            onWillPop: () async => false,
+            child: CupertinoAlertDialog(
+              title: Text(
+                "notifyUpdate".tr(),
+                style: BlaTxt.txt16B,
+              ),
+              content: Padding(
+                padding: const EdgeInsets.only(top: 10),
+                child: Text(
+                  "recommendUpdate".tr(),
+                  style: BlaTxt.txt14R.copyWith(overflow: TextOverflow.visible),
+                ),
+              ),
+              actions: [
+                CupertinoDialogAction(
+                  child: Text(
+                    "goStore".tr(),
+                    style: BlaTxt.txt14M.copyWith(color: BlaColor.defBlue),
+                  ),
+                  onPressed: () async {
+                    await launchUrl(getStoreUrl(),
+                        mode: LaunchMode.externalApplication);
+                  },
+                ),
+              ],
+            ),
+          ),
+        );
       });
     } else {
-      if (!await Permission.notification.isGranted) {
-        // 푸쉬 알림 권한 설정
-        if ((await Permission.notification.request()) ==
-            PermissionStatus.granted) {
-          await API().patchAllowNotification(true);
-        } else {
-          await API().patchAllowNotification(false);
-        }
-      }
-
-      if (DateTime.fromMillisecondsSinceEpoch(int.parse(
-              refreshExpireDate)) // refreshToken이 만료시간까지 4시간보다 넉넉하게 남아있지 않을 경우 재로그인 필요
-          .isBefore(DateTime.now().add(const Duration(hours: 4)))) {
+      print(
+          "accessToken: $accessToken / refresToken: $refreshToken /  accessExpireDate: $accessExpireDate / refreshExpireDate: $refreshExpireDate");
+      if (accessToken == null ||
+          refreshToken == null ||
+          accessExpireDate == null ||
+          refreshExpireDate == null) {
         setState(() {
           page = SplashPage.onboarding;
         });
       } else {
-        if (DateTime.fromMillisecondsSinceEpoch(// accessToken이 만료시 재발급
-            int.parse(accessExpireDate)).isBefore(DateTime.now())) {
-          if (!await API().reissue()) {
-            print("시작 전 재발급 실패"); // 재발급 실패시
-            setState(() {
-              page = SplashPage.onboarding;
-            });
+        if (!await Permission.notification.isGranted) {
+          // 푸쉬 알림 권한 설정
+          if ((await Permission.notification.request()) ==
+              PermissionStatus.granted) {
+            await API().patchAllowNotification(true);
+          } else {
+            await API().patchAllowNotification(false);
+          }
+        }
+
+        if (DateTime.fromMillisecondsSinceEpoch(int.parse(
+                refreshExpireDate)) // refreshToken이 만료시간까지 4시간보다 넉넉하게 남아있지 않을 경우 재로그인 필요
+            .isBefore(DateTime.now().add(const Duration(hours: 4)))) {
+          setState(() {
+            page = SplashPage.onboarding;
+          });
+        } else {
+          if (DateTime.fromMillisecondsSinceEpoch(// accessToken이 만료시 재발급
+              int.parse(accessExpireDate)).isBefore(DateTime.now())) {
+            if (!await API().reissue()) {
+              print("시작 전 재발급 실패"); // 재발급 실패시
+              setState(() {
+                page = SplashPage.onboarding;
+              });
+            } else {
+              setState(() {
+                page = SplashPage.home;
+              });
+            }
           } else {
             setState(() {
               page = SplashPage.home;
             });
           }
-        } else {
-          setState(() {
-            page = SplashPage.home;
-          });
         }
       }
     }
