@@ -49,6 +49,7 @@ class PracticeMainView extends StatelessWidget {
                           onTap: () {
                             AnalyticsConfig().btnClick(
                                 "Practice_Content ${viewModel.contentList[itemIdx].id}");
+                            viewModel.initVideoList();
                             viewModel.getVideoList(
                                 viewModel.contentList[itemIdx].id);
                             Navigator.of(context, rootNavigator: true).push(

@@ -4,6 +4,7 @@ import 'package:blabla/screens/practice/widgets/practice_video_tile_widget.dart'
 import 'package:blabla/services/amplitude.dart';
 import 'package:blabla/styles/colors.dart';
 import 'package:blabla/styles/txt_style.dart';
+import 'package:blabla/widgets/skeleton_ui_widget.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
@@ -55,24 +56,27 @@ class _PracticeListViewState extends State<PracticeListView> {
         return true;
       },
       child: Scaffold(
-        body: viewModel.videoList == null
-            ? const Center(
-                child: CircularProgressIndicator(
-                color: BlaColor.orange,
-              ))
-            : NestedScrollView(
-                controller: _scrollCtr,
-                headerSliverBuilder: (context, bool isScrolled) {
-                  return [
-                    SliverAppBar(
-                      backgroundColor: BlaColor.white,
-                      expandedHeight:
-                          widget.imgWidth - MediaQuery.of(context).padding.top,
-                      toolbarHeight: 64,
-                      floating: false,
-                      pinned: true,
-                      flexibleSpace: FlexibleSpaceBar(
-                        background: Stack(children: [
+        body: NestedScrollView(
+          controller: _scrollCtr,
+          headerSliverBuilder: (context, bool isScrolled) {
+            return [
+              SliverAppBar(
+                backgroundColor: BlaColor.white,
+                expandedHeight:
+                    widget.imgWidth - MediaQuery.of(context).padding.top,
+                toolbarHeight: 64,
+                floating: false,
+                pinned: true,
+                flexibleSpace: FlexibleSpaceBar(
+                  background: viewModel.videoList == null
+                      ? SkeletonBoxWidget(
+                          child: Container(
+                            height: widget.imgWidth,
+                            width: widget.imgWidth,
+                            color: BlaColor.grey100,
+                          ),
+                        )
+                      : Stack(children: [
                           ExtendedImage.network(
                             viewModel.videoList!.thumbnailUrl,
                             fit: BoxFit.cover,
@@ -91,90 +95,121 @@ class _PracticeListViewState extends State<PracticeListView> {
                                 ])),
                           ),
                         ]),
-                      ),
-                      collapsedHeight: 64,
-                      elevation: 0.1,
-                      leadingWidth: 64,
-                      leading: GestureDetector(
-                        onTap: () {
-                          viewModel.initVideoList();
-                          Navigator.pop(context);
-                        },
-                        child: Container(
-                          width: 44,
-                          height: 44,
-                          margin: const EdgeInsets.symmetric(horizontal: 10),
-                          padding: const EdgeInsets.all(10),
-                          decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: BlaColor.white.withOpacity(0.3)),
-                          child: SvgPicture.asset(
-                            "assets/icons/ic_32_arrow_left.svg",
-                            width: 24,
-                            height: 24,
-                            colorFilter: ColorFilter.mode(
-                                _appBarCollapsed
-                                    ? BlaColor.black
-                                    : BlaColor.white,
-                                BlendMode.srcIn),
-                          ),
-                        ),
-                      ),
+                ),
+                collapsedHeight: 64,
+                elevation: 0.1,
+                leadingWidth: 64,
+                leading: GestureDetector(
+                  onTap: () {
+                    viewModel.initVideoList();
+                    Navigator.pop(context);
+                  },
+                  child: Container(
+                    width: 44,
+                    height: 44,
+                    margin: const EdgeInsets.symmetric(horizontal: 10),
+                    padding: const EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: BlaColor.white.withOpacity(0.3)),
+                    child: SvgPicture.asset(
+                      "assets/icons/ic_32_arrow_left.svg",
+                      width: 24,
+                      height: 24,
+                      colorFilter: ColorFilter.mode(
+                          _appBarCollapsed || viewModel.videoList == null
+                              ? BlaColor.black
+                              : BlaColor.white,
+                          BlendMode.srcIn),
                     ),
-                  ];
-                },
-                body: SingleChildScrollView(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(top: 20, bottom: 12),
-                          child: Text(
+                  ),
+                ),
+              ),
+            ];
+          },
+          body: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(top: 20, bottom: 12),
+                    child: viewModel.videoList == null
+                        ? SkeletonTxtWidget(
+                            style: BlaTxt.txt28B,
+                            width: 100,
+                          )
+                        : Text(
                             viewModel.videoList!.title,
                             style: BlaTxt.txt28B,
                           ),
-                        ),
-                        Text(
+                  ),
+                  viewModel.videoList == null
+                      ? Column(
+                          children: List.generate(
+                              3,
+                              (_) => SkeletonTxtWidget(
+                                  style: BlaTxt.txt14R,
+                                  width:
+                                      MediaQuery.of(context).size.width - 40)))
+                      : Text(
                           viewModel.videoList!.description,
                           style: BlaTxt.txt14R.copyWith(
                               color: BlaColor.grey800,
                               overflow: TextOverflow.visible),
                         ),
-                        const SizedBox(
-                          height: 12,
-                        ),
-                        Column(
-                            children: viewModel.videoList!.contentDetails
-                                .map((e) => GestureDetector(
-                                    onTap: () {
-                                      if (e.isCompleted) {
-                                        AnalyticsConfig().btnClick(
-                                            "Practice_Video_${e.id}_Completed");
-                                        showToast("alreadyLearned".tr());
-                                      } else {
-                                        AnalyticsConfig()
-                                            .btnClick("Practice_Video_${e.id}");
-                                        viewModel.getVideo(e.id);
-                                        Navigator.of(context).push(
-                                            MaterialPageRoute(
-                                                builder: ((context) =>
-                                                    PracticeVideoListeningView(
-                                                        videoId: e.id,
-                                                        title: e.title))));
-                                      }
-                                    },
-                                    child: PracticeVideoTileWidget(video: e)))
-                                .toList()),
-                        const SizedBox(
-                          height: 40,
-                        ),
-                      ],
-                    ),
+                  const SizedBox(
+                    height: 12,
                   ),
-                ),
+                  viewModel.videoList == null
+                      ? Column(
+                          children: List.generate(
+                              6,
+                              (_) => SkeletonBoxWidget(
+                                    child: Container(
+                                      margin: const EdgeInsets.symmetric(
+                                          vertical: 12),
+                                      width: MediaQuery.of(context).size.width -
+                                          40,
+                                      height: 200,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(12),
+                                        color: BlaColor.grey100,
+                                      ),
+                                    ),
+                                  )),
+                        )
+                      : Column(
+                          children: viewModel.videoList!.contentDetails
+                              .map((e) => GestureDetector(
+                                  onTap: () {
+                                    if (e.isCompleted) {
+                                      AnalyticsConfig().btnClick(
+                                          "Practice_Video_${e.id}_Completed");
+                                      showToast("alreadyLearned".tr());
+                                    } else {
+                                      AnalyticsConfig()
+                                          .btnClick("Practice_Video_${e.id}");
+                                      viewModel.getVideo(e.id);
+                                      Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                              builder: ((context) =>
+                                                  PracticeVideoListeningView(
+                                                      videoId: e.id,
+                                                      title: e.title))));
+                                    }
+                                  },
+                                  child: PracticeVideoTileWidget(video: e)))
+                              .toList()),
+                  const SizedBox(
+                    height: 40,
+                  ),
+                ],
               ),
+            ),
+          ),
+        ),
       ),
     );
   }
