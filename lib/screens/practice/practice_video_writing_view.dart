@@ -5,6 +5,7 @@ import 'package:blabla/styles/colors.dart';
 import 'package:blabla/styles/txt_style.dart';
 import 'package:blabla/widgets/chat_bubble_widget.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
@@ -610,7 +611,7 @@ class _PracticeVideoWritingViewState extends State<PracticeVideoWritingView> {
             centerTitle: true,
             leading: GestureDetector(
               onTap: () {
-                Navigator.pop(context);
+                showToast("feedbackGenerating".tr());
               },
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),

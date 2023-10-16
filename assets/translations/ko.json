@@ -121,5 +121,6 @@
     "notifyUpdate": "업데이트 알림",
     "recommendUpdate": "안정적인 서비스 이용을 위해 최신 버전으로 업데이트 해주세요",
     "goStore": "스토어 바로가기",
-    "failToAccuse": "신고 실패. 다시 시도해주세요"
+    "failToAccuse": "신고 실패. 다시 시도해주세요",
+    "feedbackGenerating": "피드백 생성중"
 }
