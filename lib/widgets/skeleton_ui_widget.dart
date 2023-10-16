@@ -31,7 +31,7 @@ class SkeletonTxtWidget extends StatelessWidget {
           child: Container(
             height: style.fontSize!,
             width: width,
-            color: BlaColor.black,
+            color: BlaColor.grey100,
           )),
     );
   }
